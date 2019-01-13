@@ -1,0 +1,75 @@
+  <div class="toggle">
+    <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
+  </div>
+  <div class="form" ng-init="limpiarCaracteristicasTipoInmueble()">
+    <center><h2 style="font-family:Verdana;">CARACTER&Iacute;STICAS INMUEBLES</h2></center>
+    <br /><br />
+    <form name="formularioCaracteristicasInmuebles" id="formularioCaracteristicasInmuebles" method="post">      
+      <label>Tipo inmueble (*)</label>
+      <select name="tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="caracteristicasInmuebles.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(caracteristicasInmuebles.tipoInmueble.id_tipo_inmueble,caracteristicasInmuebles.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>    
+      </select>  
+      <label>Caracter&iacute;stica (*)</label>
+      <select name="tipo_caracteristica" ng-options="id_tipo_caracteristicaInm as id_tipo_caracteristicaInm.name for id_tipo_caracteristicaInm in ids_tipo_caracteristicasInm track by id_tipo_caracteristicaInm.id_tipo_caracteristica" ng-model="caracteristicasInmuebles.tipoCaracteristica"/>        
+      </select> 
+      <label>Tipo dato (*)</label>
+      <select name="tipo_caracteristica" ng-options="id_tipo_caracteristica_inmueble as id_tipo_caracteristica_inmueble.name for id_tipo_caracteristica_inmueble in ids_tipo_caracteristicas_inmuebles track by id_tipo_caracteristica_inmueble.id_tipo_caracteristica_inmueble" ng-model="caracteristicasInmuebles.tipoCaracteristicaInmueble" ng-init="getTiposCaracteristicasInmuebles()"/>        
+      </select>   
+      <label>Criterio diligenciamiento (*)</label>
+      <select name="criterio_diligenciamiento" ng-options="id_criterio_diligenciamiento as id_criterio_diligenciamiento.name for id_criterio_diligenciamiento in ids_criterios_diligenciamiento track by id_criterio_diligenciamiento.id_criterio_diligenciamiento" ng-model="caracteristicasInmuebles.criterio_diligenciamiento" ng-init="getCriteriosDiligenciamiento()"/>        
+      </select> 
+      <label>Descripci&oacute;n</label> 
+      <textarea name="descripcion" id="descripcion" ng-model="caracteristicasInmuebles.descripcion"></textarea>
+      <br />
+      <label>(*) Informaci&oacute;n requerida</label> 
+      <br />    
+      <center>    
+      <button style="width:15em;" class="cotizaciones" ng-click="guardarCaracteristicaTipoInmueble()">Guardar</button>
+      <br />
+      <br />
+      <button style="width:15em;" class="limpiar" ng-click="limpiarCaracteristicasTipoInmueble()">Limpiar</button>
+      <br />
+      <br />
+      <button style="width:15em;" class="volver" ng-click="showAdministracionIndex()">Volver</button></center>
+    </form>
+  </div>  
+  <div class="form1" ng-if="cant_caract_inm!='0'" style="top:-3em;position: relative;">           
+    <div class="container">    
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <center>          
+            <h3>Tipo de inmueble: {{caracteristicasInmuebles.tipoInmueble.name}}</h3>
+          </center>
+          <table ng-init='configPages1()' style="width: 80%;">
+            <thead>
+              <tr>                
+                <th style="width: 14%;">Caracter&iacute;stica</th> 
+                <th style="width: 18%;">Tipo de dato</th>  
+                <th style="width: 14%;">Criterio</th>   
+                <th style="width: 50%;">Descripci&oacute;n</th>    
+                <th style="width: 4%;">Borrar</th>      
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat='lista_caracteristica_inmueble in lista_caracteristicas_inmueble | startFromGrid: currentPage1 * pageSize1 | limitTo: pageSize1'>                      
+                <td style="text-align: left;">{{lista_caracteristica_inmueble.tipo_caracteristica}}</td>  
+                <td style="text-align: left;">{{lista_caracteristica_inmueble.tipo_caracteristica_inmueble}}</td>    
+                <td style="text-align: left;">{{lista_caracteristica_inmueble.criterio_diligenciamiento}}</td> 
+                <td style="text-align: left;">{{lista_caracteristica_inmueble.descripcion}}</td>   
+                <td style="text-align: center;"><a href="#" ng-click="borrarCaracteristicaTipoInmueble(lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble)"><img src="../../form-images/cross.png"></a></td>      
+              </tr>
+            </tbody>
+          </table>
+          <center>
+          <div class='btn-group'>
+            <button type='button' class='butt' ng-disabled='currentPage1 == 0' ng-click='currentPage1 = currentPage1 - 1'>&laquo;</button>
+            <button type='button' class='butt' ng-disabled='currentPage1 == page.no - 1' ng-click='setPage1(page.no)' ng-repeat='page in pages'>{{page.no}}</button>
+            <button type='button' class='butt' ng-disabled='currentPage1 >= usuarios.length/pageSize1 - 1' , ng-click='currentPage1 = currentPage1  + 1'>&raquo;</button>
+          </div>
+        </center>
+        </div>
+      </div>      
+    </div>
+  </div>
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>

@@ -1,0 +1,61 @@
+<div ng-controller="siniController1">
+  <div class="toggle">
+    <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
+  </div>
+  <div class="form">
+    <center><h2 style="font-family:Verdana;">GESTI&Oacute;N CLIENTES</h2></center>
+    <br />
+    <form name="formularioCliente" ng-model="cliente" id="formularioCliente" method="post" NOVALIDATE>
+      <label>Tipo cliente (*)</label>
+      <select name="cliente_tipo_cliente" ng-options="id_tipo_cliente as id_tipo_cliente.descripcion for id_tipo_cliente in ids_tipo_clientes track by id_tipo_cliente.id_tipo_cliente" ng-model="cliente.tipoCliente"/>        
+      </select>
+      <label>Nombres (*)</label><input name="cliente_nombres" type="text" ng-model="cliente.nombres"/>      
+      <label>Apellidos (*)</label><input name="cliente_apellidos" type="text" ng-model="cliente.apellidos"/>      
+      <label>Tipo identificaci&oacute;n (*)</label>
+      <select name="cliente_tipo_identificacion" ng-change="showClientsByID()" ng-options="id_tipo_id as id_tipo_id.descripcion for id_tipo_id in ids_tipo_id track by id_tipo_id.id_tipo_identificacion" ng-model="cliente.tipoIdentificacion"/>        
+      </select>      
+      <label>N&uacute;mero identificaci&oacute;n (*)</label><input name="cliente_numero_identificacion" type="number" string-to-number ng-model="cliente.numeroIdentificacion"/>
+      <label>Tipo notificaci&oacute;n (*)</label>
+      <select name="cliente_tipo_notificacion" ng-options="id_tipo_notificacion as id_tipo_notificacion.descripcion for id_tipo_notificacion in ids_tipo_notificacion track by id_tipo_notificacion.id_tipo_notificacion" ng-model="cliente.tipoNotificacion"/>        
+      </select> 
+      <label>Tel&eacute;fono m&oacute;vil</label><input name="cliente_telefono_movil" type="text" ng-model="cliente.telefono_movil"/>      
+      <label>Tel&eacute;fono fijo</label><input name="cliente_telefono_fijo" type="text" ng-model="cliente.telefono_fijo"/>      
+      <label>Correo electr&oacute;nico</label><input name="cliente_correo_electronico" type="email" ng-model="cliente.correo_electronico"/>
+      <label>Direcci&oacute;n de residencia</label><input name="cliente_direccion" type="text" ng-model="cliente.direccion"/>
+      <label>Pa&iacute;s</label>
+      <select name="cliente_codigoPais" id="codigoPais" ng-model="cliente.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosCliente(cliente.codigoPais.id_pais)"/>       
+      </select>
+      <label>Departamento</label>
+      <select name="cliente_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(cliente.codigoDepartamento)" ng-model="cliente.codigoDepartamento"/>
+      </select>
+      <label>Ciudad</label>
+      <select name="cliente_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="cliente.codigoCiudad" ng-change="getZonasSectores(cliente.codigoCiudad)"/>        
+      </select>
+      <input type="hidden" name="cliente_id_cliente" ng-model="cliente.id_cliente">    
+      <br />
+      <label>(*) Informaci&oacute;n requerida</label>
+      <br />
+      <center>      
+      <button style="width:15em;" class="volver" ng-click="saveClientes('1')" >Guardar</button>
+      <br />
+      <br />      
+      <button style="width:15em;" class="consultar" ng-click="saveClientes('2')" ng-show="cliente.tipoCliente.id_tipo_cliente=='1'">Solicitud de Compra</button>      
+      <button style="width:15em;" class="consultar" ng-click="saveClientes('3')" ng-show="cliente.tipoCliente.id_tipo_cliente=='2'">Registrar Inmueble</button>
+      <button style="width:15em;" class="consultar" ng-click="" ng-show="cliente.tipoCliente.id_tipo_cliente=='3'">Oferta de Arrendamiento</button>
+      <button style="width:15em;" class="consultar" ng-click="" ng-show="cliente.tipoCliente.id_tipo_cliente=='4'">Solicitud de Arrendamiento</button>
+      <br />
+      <br />
+      <button style="width:15em;" class="limpiar" ng-click="limpiarClientes()">Limpiar</button>
+      <br />
+      <br />
+      <button style="width:15em;" ng-click="saveClientes('4')" class="crear_cliente">M&aacute;s Informaci&oacute;n</button>
+      <br />
+      <br />
+      <button style="width:15em;" class="volver" ng-click="showClientsIndex()">Volver</button></center>
+    </form>
+  </div>
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>
+</div>
+ 

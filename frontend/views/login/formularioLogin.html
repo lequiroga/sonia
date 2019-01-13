@@ -1,0 +1,21 @@
+  <div class="toggle">    
+  </div>
+  <div class="form" >
+    <center><h2 style="font-family:Verdana;">INICIAR SESI&Oacute;N</h2></center>
+    <br />
+    <form name="loginFormulario" ng-model="loginFormulario" id="loginFormulario" NOVALIDATE>
+      <label>Usuario (*)</label><input name="user" type="text" ng-model="loginForm.user" required/> 
+      <br />     
+      <label>Contrase&ntilde;a (*)</label><input name="password" ng-model="loginForm.password" type="password" required/>     
+      <br />
+      <label>(*) Informaci&oacute;n requerida</label>
+      <br />
+      <center>      
+      <button type="submit" name="Ingresar" value="Ingresar" style="width:15em;" class="crear_cliente" ng-click="validateSession(loginForm.user,loginForm.password)">Ingresar</button>
+      </center>
+    </form>
+  </div>
+  <div class="tooltip1" style="color:black;font-weight:bold;font-family:Verdana;font-size:0.9em;"><center>Recuperar datos de inicio</center><br/><br/></div>
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>

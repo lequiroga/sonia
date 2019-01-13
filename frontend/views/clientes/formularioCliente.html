@@ -1,0 +1,70 @@
+<div ng-controller="siniController1">
+
+  <div class="toggle">
+    <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
+  </div>
+  <div class="form" ng-show="cant_clie_busq=='1'">
+    <center><h2 style="font-family:Verdana;">CLIENTES</h2></center>
+    <br />
+    <form name="formularioBusqCliente" id="formularioBusqCliente" ng-model="cliente_busq" method="post" NOVALIDATE>
+      <label>N&uacute;mero identificaci&oacute;n</label><input name="cliente_busq_numero_identificacion" id="cliente_busq_numero_identificacion" type="number" ng-model="cliente_busq.numero_identificacion" value="0"/>
+      <label>Nombres</label><input name="cliente_busq_nombres" id="cliente_busq_nombres" ng-model="cliente_busq.nombres" type="text"/>
+      <label>Apellidos</label><input name="cliente_busq_apellidos" id="cliente_busq_apellidos" ng-model="cliente_busq.apellidos" type="text"/>
+      <label>N&uacute;mero telef&oacute;nico</label><input name="cliente_busq_telefono" id="cliente_busq_telefono" ng-model="cliente_busq.telefono" type="text"/>
+      <br />
+      <center><button style="width:15em;" type="submit" ng-click="consultarClientes()" class="consultar">Consultar</button>
+      <br />
+      <br />  
+      <button style="width:15em;" class="limpiar" ng-click="limpiarClientesBusq()">Limpiar consulta</button>  
+      <br />
+      <br />  
+      <button style="width:15em;" class="crear_cliente" ng-click="showClientsCreate()">Gesti&oacute;n cliente</button>
+      <br />
+      <br />
+      <button style="width:15em;" class="volver" ng-click="returnMenuIndex()");return false">Volver</button></center>
+    </form>
+  </div>
+  <div class="form1" ng-show="cant_clie_busq=='0'">
+    <center><h2 style="font-family:Verdana;">LISTA CLIENTES</h2></center>       
+    <div class="container">    
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <br />
+          <table ng-init='configPages()' style="width:80%;">
+            <thead>
+              <tr>                
+                <th style="width:15%;">Identificaci&oacute;n</th>
+                <th style="width:35%;">Cliente</th> 
+                <th style="width:35%;">Tel&eacute;fono(s)</th>   
+                <th style="width:15%;">Solicitudes</th>           
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat='lista_cliente_busq in lista_clientes_busq | startFromGrid: currentPage * pageSize | limitTo: pageSize'>         
+                <td style="text-align: left;" ng-click='seleccionarCliente(lista_cliente_busq.id_cliente)'>{{lista_cliente_busq.identificacion}}</td>
+                <td style="text-align: left;" ng-click='seleccionarCliente(lista_cliente_busq.id_cliente)'>{{lista_cliente_busq.cliente}}</td>  
+                <td style="text-align: left;" ng-click='seleccionarCliente(lista_cliente_busq.id_cliente)'>{{lista_cliente_busq.telefonos}}</td>   
+                <td style="text-align: center;"><a href="#" ng-click="verSolicitudesCliente(lista_cliente_busq.id_cliente)">Solicitudes</a></td>         
+              </tr>
+            </tbody>
+          </table>
+          <center>
+          <div class='btn-group'>
+            <button type='button' class='butt' ng-disabled='currentPage == 0' ng-click='currentPage = currentPage - 1'>&laquo;</button>
+            <button type='button' class='butt' ng-disabled='currentPage == page.no - 1' ng-click='setPage(page.no)' ng-repeat='page in pages'>{{page.no}}</button>
+            <button type='button' class='butt' ng-disabled='currentPage >= usuarios.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'>&raquo;</button>
+          </div>
+        </center>
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <center><button style="width:15em;" class="volver" ng-click="volverBusqClientes()">Nueva B&uacute;squeda</button></center>
+    </div>
+  </div>  
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>
+
+</div>
