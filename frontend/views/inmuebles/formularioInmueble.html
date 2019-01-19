@@ -5,13 +5,13 @@
     <center><h2 style="font-family:Verdana;">INMUEBLES</h2></center>
     <br />
     <form name="formularioInmueble" id="formularioInmueble" ng-model="formularioInmueble" method="post" NOVALIDATE>
-      <label>Pa&iacute;s</label>
+      <label>Pa&iacute;s (*)</label>
       <select name="inmueble_codigoPais" id="codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmueble.codigoPais" ng-change="getDepartamentos(inmueble.codigoPais)" ng-init="getPaises()"/>        
       </select>
-      <label>Departamento</label>
+      <label>Departamento (*)</label>
       <select name="inmueble_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmueble.codigoDepartamento)" ng-model="inmueble.codigoDepartamento"/>
       </select>
-      <label>Ciudad</label>
+      <label>Ciudad (*)</label>
       <select name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/>        
       </select>
       <label>Sector</label>
@@ -20,14 +20,14 @@
       <label>Zona / Localidad</label>
       <select name="inmueble_zona" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmueble.codigoZona"/>        
       </select>      
-      <label>Tipo inmueble</label>
+      <label>Tipo inmueble (*)</label>
       <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>        
       </select> 
       <label>Precio</label><input name="inmueble_precio" type="number" ng-model="inmueble.precio"/>
       <label>Moneda</label>
       <select name="inmueble_moneda" ng-options="id_moneda as id_moneda.denominacion for id_moneda in ids_monedas track by id_moneda.id_moneda" ng-model="inmueble.moneda" ng-init="getMonedas()" ng-change="getConversionPesos(inmueble.moneda.id_moneda)"/>     
       </select>
-      <label>{{conversion_pesos}}</label>   
+      <label ng-if="inmueble.moneda">{{conversion_pesos}}</label>   
       <br />
       <center ng-if="cant_caract_inm!='0'"><label style="font-weight: bolder;font-size: 16px;">Caracter&iacute;sticas</label></center>       
       <table ng-init='configPages1()' style="width: 70%;" ng-if="cant_caract_inm_obl!='0'">            
@@ -79,6 +79,9 @@
       <center><button style="width:15em;" type="submit" class="consultar" ng-click="consultarInmueblesCaracteristicas()">Consultar</button>
       <br />
       <br />  
+      <button style="width:15em;" class="limpiar" ng-click="limpiarCaracteristicasTipoInmueble()">Limpiar</button>
+      <br />
+      <br /> 
       <button style="width:15em;" class="crear_cliente" ng-click="showInmueblesCreate()">Crear inmueble</button>
       <br />
       <br />
