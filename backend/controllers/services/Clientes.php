@@ -16,6 +16,11 @@
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 		}
 
+		function getListaRedesSociales(){
+		    $output = $this->objClientes->getListaRedesSociales();
+	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);	
+		}
+
 		function getTiposClientes(){        
 
             $autAPI   = new AutenticaAPI();

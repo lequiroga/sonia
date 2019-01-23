@@ -48,6 +48,49 @@
         echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
     }
 
+    //Por ahora funciona únicamente para la ciudad de Cali
+    function getComunasEstratosCiudad($codigoCiudad){          
+
+      if($codigoCiudad=='132'){
+
+        $autAPI   = new AutenticaAPI();
+        $datosAPI = $autAPI->retornarDatosAPI('DatosAbiertos','comunas_barrios_cali');
+        $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"]),true );
+
+        print_r($data);
+        print_r('\n\n');
+
+        $datosAPI = $autAPI->retornarDatosAPI('DatosAbiertos','estratos_barrios_cali');
+
+        $data1 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"]), true );
+
+        print_r($data1);exit;
+
+        $data1 = array();
+
+        for($i=0;$i<count($data);$i++){
+
+          if(isset($data[$i]['id_property_type'])){
+
+            $data1[$i]=new stdClass();
+            $data1[$i]->id_tipo_inmueble=$data[$i]['id_property_type'];
+            $data1[$i]->name=$data[$i]['name'];
+
+          }    
+
+        }
+
+        $data = json_encode($data1);
+
+        echo $data;
+
+      }
+      else
+        echo 0;
+        /*$output = $this->objInmuebles->getComunasEstratosCiudad($codigoCiudad);
+        echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);*/
+    }
+
     function guardarCaracteristicaTipoInmueble($datosCaracteristicaTipoInmueble){        
         $output = $this->objInmuebles->guardarCaracteristicaTipoInmueble($datosCaracteristicaTipoInmueble);
         echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);

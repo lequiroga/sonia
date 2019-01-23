@@ -20,7 +20,8 @@
 
 			$query = "SELECT 
 	            		id_tipo_ident AS id_tipo_identificacion,
-	            		desc_tipo_id AS descripcion 
+	            		desc_tipo_id AS descripcion,
+                  abreviatura AS abreviatura 
 	          		  FROM 
 	            		tipos.tb_tiposidentificacion";
 
@@ -32,6 +33,7 @@
 	  			while($row = pg_fetch_array($result, null)){	  	
 	    			$output[$i]['id_tipo_identificacion'] = $row['id_tipo_identificacion'];
 	    			$output[$i]['descripcion']  = $row['descripcion'];
+            $output[$i]['abreviatura']  = $row['abreviatura'];
 	    			$i++;	    
 	  			}	
 
@@ -41,6 +43,38 @@
 			}
 
 			return $output;       
+
+    }
+
+    function getListaRedesSociales(){                            
+
+      $output = array();
+
+      $query = "SELECT 
+                  id_red_social AS id_red_social,
+                  nombre AS nombre,
+                  imagen AS imagen 
+                FROM 
+                  generales.tb_redes_sociales";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());     
+
+      if(pg_num_rows($result)>0){
+
+          $i = 0; 
+          while($row = pg_fetch_array($result, null)){      
+            $output[$i]['id_red_social'] = $row['id_red_social'];
+            $output[$i]['nombre']  = $row['nombre'];
+            $output[$i]['imagen']  = $row['imagen'];
+            $i++;     
+          } 
+
+                // Liberando el conjunto de resultados
+        pg_free_result($result);          
+
+      }
+
+      return $output;       
 
     }
 

@@ -13,16 +13,25 @@
       </select>
       <label>Ciudad (*)</label>
       <select name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/>        
-      </select>
-      <label>Sector</label>
-      <select name="inmueble_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-model="inmueble.codigoSector"/>        
-      </select>
-      <label>Zona / Localidad</label>
-      <select name="inmueble_zona" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmueble.codigoZona"/>        
       </select>      
-      <label>Tipo inmueble (*)</label>
-      <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>        
+      <label ng-if="1==2">Sector</label>
+      <select ng-if="1==2" name="inmueble_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-model="inmueble.codigoSector"/>        
+      </select>
+      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Estrato</label>
+      <select name="inmueble_codigoEstratoCali" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(inmueble.codigoEstrato)" ng-model="inmueble.codigoEstrato"/>    
+      </select>
+      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'||inmueble.codigoCiudad.id_ciudad=='794'">Zona / Localidad / Comuna</label>
+      <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmueble.codigoZona"/>        
       </select> 
+      <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>       
+      </select>   
+      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Barrio</label>
+      <select name="inmueble_barrio" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-model="inmueble.codigoBarrio"/>        
+      </select>   
+      <label>Tipo inmueble (*)</label>
+      <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>  
+      </select> 
+      <label>&Aacute;rea&nbsp;(m2)</label><input name="inmueble_area" type="number" ng-model="inmueble.area"/>
       <label>Precio</label><input name="inmueble_precio" type="number" ng-model="inmueble.precio"/>
       <label>Moneda</label>
       <select name="inmueble_moneda" ng-options="id_moneda as id_moneda.denominacion for id_moneda in ids_monedas track by id_moneda.id_moneda" ng-model="inmueble.moneda" ng-init="getMonedas()" ng-change="getConversionPesos(inmueble.moneda.id_moneda)"/>     

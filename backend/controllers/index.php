@@ -44,6 +44,12 @@
       $obj->datosClientePorID($request->id_cliente);
     }
 
+    if($request->accion=='listaRedesSociales'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->getListaRedesSociales();
+    }
+
     if($request->accion=='caracteristicasTiposInmuebles'){
       require_once('services/Inmuebles.php');        
       $obj = new Inmuebles();       
@@ -129,6 +135,11 @@
       $obj = new Sectores(); 
       $obj->listaSectores($request->id_ciudad);
   	}
+    if($request->accion=='getComunasEstratosCiudad'){
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles(); 
+      $obj->getComunasEstratosCiudad($request->id_ciudad);
+    }
   	if($request->accion=='tiposNotificacion'){
   	  require_once('services/Clientes.php');
   	  $obj = new Clientes();

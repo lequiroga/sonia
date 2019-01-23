@@ -5,7 +5,7 @@
 -- Dumped from database version 10.6
 -- Dumped by pg_dump version 10.6
 
--- Started on 2019-01-18 22:57:24
+-- Started on 2019-01-22 23:30:39
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -18,7 +18,16 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 7 (class 2615 OID 16595)
+-- TOC entry 3172 (class 0 OID 0)
+-- Dependencies: 3171
+-- Name: DATABASE sonia_bd; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE sonia_bd IS 'Base de datos sonia';
+
+
+--
+-- TOC entry 6 (class 2615 OID 17152)
 -- Name: clientes; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -28,8 +37,8 @@ CREATE SCHEMA clientes;
 ALTER SCHEMA clientes OWNER TO postgres;
 
 --
--- TOC entry 3319 (class 0 OID 0)
--- Dependencies: 7
+-- TOC entry 3173 (class 0 OID 0)
+-- Dependencies: 6
 -- Name: SCHEMA clientes; Type: COMMENT; Schema: -; Owner: postgres
 --
 
@@ -37,7 +46,7 @@ COMMENT ON SCHEMA clientes IS 'Esquema que reune la información de los clientes
 
 
 --
--- TOC entry 6 (class 2615 OID 16486)
+-- TOC entry 7 (class 2615 OID 17153)
 -- Name: generales; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -47,8 +56,8 @@ CREATE SCHEMA generales;
 ALTER SCHEMA generales OWNER TO postgres;
 
 --
--- TOC entry 3320 (class 0 OID 0)
--- Dependencies: 6
+-- TOC entry 3174 (class 0 OID 0)
+-- Dependencies: 7
 -- Name: SCHEMA generales; Type: COMMENT; Schema: -; Owner: postgres
 --
 
@@ -56,7 +65,7 @@ COMMENT ON SCHEMA generales IS 'Esquema que agrupa las tablas que contienen la i
 
 
 --
--- TOC entry 14 (class 2615 OID 16577)
+-- TOC entry 12 (class 2615 OID 17154)
 -- Name: inmuebles; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -66,8 +75,8 @@ CREATE SCHEMA inmuebles;
 ALTER SCHEMA inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3321 (class 0 OID 0)
--- Dependencies: 14
+-- TOC entry 3175 (class 0 OID 0)
+-- Dependencies: 12
 -- Name: SCHEMA inmuebles; Type: COMMENT; Schema: -; Owner: postgres
 --
 
@@ -75,7 +84,7 @@ COMMENT ON SCHEMA inmuebles IS 'Esquema que agrupa la información de los inmueb
 
 
 --
--- TOC entry 13 (class 2615 OID 16538)
+-- TOC entry 9 (class 2615 OID 17155)
 -- Name: rrhh; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -85,8 +94,8 @@ CREATE SCHEMA rrhh;
 ALTER SCHEMA rrhh OWNER TO postgres;
 
 --
--- TOC entry 3323 (class 0 OID 0)
--- Dependencies: 13
+-- TOC entry 3177 (class 0 OID 0)
+-- Dependencies: 9
 -- Name: SCHEMA rrhh; Type: COMMENT; Schema: -; Owner: postgres
 --
 
@@ -94,7 +103,7 @@ COMMENT ON SCHEMA rrhh IS 'Esquema que agrupa las tablas con información relaci
 
 
 --
--- TOC entry 9 (class 2615 OID 16435)
+-- TOC entry 14 (class 2615 OID 17156)
 -- Name: session; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -104,8 +113,8 @@ CREATE SCHEMA session;
 ALTER SCHEMA session OWNER TO postgres;
 
 --
--- TOC entry 3324 (class 0 OID 0)
--- Dependencies: 9
+-- TOC entry 3178 (class 0 OID 0)
+-- Dependencies: 14
 -- Name: SCHEMA session; Type: COMMENT; Schema: -; Owner: postgres
 --
 
@@ -113,7 +122,7 @@ COMMENT ON SCHEMA session IS 'Esquema que agrupa las tablas que intervienen en l
 
 
 --
--- TOC entry 8 (class 2615 OID 16586)
+-- TOC entry 8 (class 2615 OID 17157)
 -- Name: solicitudes; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -123,7 +132,7 @@ CREATE SCHEMA solicitudes;
 ALTER SCHEMA solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3325 (class 0 OID 0)
+-- TOC entry 3179 (class 0 OID 0)
 -- Dependencies: 8
 -- Name: SCHEMA solicitudes; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -132,7 +141,7 @@ COMMENT ON SCHEMA solicitudes IS 'Esquema que agrupa las solicitudes y su inform
 
 
 --
--- TOC entry 4 (class 2615 OID 16426)
+-- TOC entry 4 (class 2615 OID 17158)
 -- Name: tipos; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
@@ -142,7 +151,7 @@ CREATE SCHEMA tipos;
 ALTER SCHEMA tipos OWNER TO postgres;
 
 --
--- TOC entry 3326 (class 0 OID 0)
+-- TOC entry 3180 (class 0 OID 0)
 -- Dependencies: 4
 -- Name: SCHEMA tipos; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -159,7 +168,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 3327 (class 0 OID 0)
+-- TOC entry 3181 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -172,7 +181,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 225 (class 1259 OID 16596)
+-- TOC entry 203 (class 1259 OID 17159)
 -- Name: tb_clientes; Type: TABLE; Schema: clientes; Owner: postgres
 --
 
@@ -206,8 +215,8 @@ CREATE TABLE clientes.tb_clientes (
 ALTER TABLE clientes.tb_clientes OWNER TO postgres;
 
 --
--- TOC entry 3328 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3182 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: TABLE tb_clientes; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -215,8 +224,8 @@ COMMENT ON TABLE clientes.tb_clientes IS 'Tabla que contiene la información de 
 
 
 --
--- TOC entry 3329 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3183 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_cliente; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -224,8 +233,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_cliente IS 'Id de la tabla de clientes
 
 
 --
--- TOC entry 3330 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3184 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.nombres; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -233,8 +242,8 @@ COMMENT ON COLUMN clientes.tb_clientes.nombres IS 'Nombres del cliente';
 
 
 --
--- TOC entry 3331 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3185 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.apellidos; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -242,8 +251,8 @@ COMMENT ON COLUMN clientes.tb_clientes.apellidos IS 'Apellidos del cliente';
 
 
 --
--- TOC entry 3332 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3186 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_tipo_identificacion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -251,8 +260,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_tipo_identificacion IS 'LLave que rela
 
 
 --
--- TOC entry 3333 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3187 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.numero_identificacion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -260,8 +269,8 @@ COMMENT ON COLUMN clientes.tb_clientes.numero_identificacion IS 'Número de iden
 
 
 --
--- TOC entry 3334 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3188 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.numero_telefono; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -269,8 +278,8 @@ COMMENT ON COLUMN clientes.tb_clientes.numero_telefono IS 'Número de teléfono 
 
 
 --
--- TOC entry 3335 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3189 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.numero_celular; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -278,8 +287,8 @@ COMMENT ON COLUMN clientes.tb_clientes.numero_celular IS 'Número de teléfono c
 
 
 --
--- TOC entry 3336 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3190 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.correo_electronico; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -287,8 +296,8 @@ COMMENT ON COLUMN clientes.tb_clientes.correo_electronico IS 'Correo electrónic
 
 
 --
--- TOC entry 3337 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3191 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.profesion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -296,8 +305,8 @@ COMMENT ON COLUMN clientes.tb_clientes.profesion IS 'Profesión del cliente';
 
 
 --
--- TOC entry 3338 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3192 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.ocupacion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -305,8 +314,8 @@ COMMENT ON COLUMN clientes.tb_clientes.ocupacion IS 'Ocupación u oficio de la p
 
 
 --
--- TOC entry 3339 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3193 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes."fecha_cumpleaños"; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -314,8 +323,8 @@ COMMENT ON COLUMN clientes.tb_clientes."fecha_cumpleaños" IS 'Fecha de cumplea�
 
 
 --
--- TOC entry 3340 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3194 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_estado_civil; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -323,8 +332,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_estado_civil IS 'Estado civil de la pe
 
 
 --
--- TOC entry 3341 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3195 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.otra_info; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -332,8 +341,8 @@ COMMENT ON COLUMN clientes.tb_clientes.otra_info IS 'Otra información del clien
 
 
 --
--- TOC entry 3342 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3196 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_tipo_notificacion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -341,8 +350,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_tipo_notificacion IS 'Llave foránea q
 
 
 --
--- TOC entry 3343 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3197 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_user; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -350,8 +359,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_user IS 'Llave foránea que relaciona 
 
 
 --
--- TOC entry 3344 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3198 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.direccion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -359,8 +368,8 @@ COMMENT ON COLUMN clientes.tb_clientes.direccion IS 'Dirección actual en la que
 
 
 --
--- TOC entry 3345 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3199 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_ciudad; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -368,8 +377,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_ciudad IS 'Llave foránea que relacion
 
 
 --
--- TOC entry 3346 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3200 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_departamento; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -377,8 +386,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_departamento IS 'Departamento en el qu
 
 
 --
--- TOC entry 3347 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3201 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_pais; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -386,8 +395,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_pais IS 'Llave foránea que relaciona 
 
 
 --
--- TOC entry 3348 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3202 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_tipo_cliente; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -395,8 +404,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_tipo_cliente IS 'Llave foránea que re
 
 
 --
--- TOC entry 3349 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3203 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.fecha_creacion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -404,8 +413,8 @@ COMMENT ON COLUMN clientes.tb_clientes.fecha_creacion IS 'Fecha en la que se cre
 
 
 --
--- TOC entry 3350 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3204 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.id_user_mod; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -413,8 +422,8 @@ COMMENT ON COLUMN clientes.tb_clientes.id_user_mod IS 'Llave foránea que relaci
 
 
 --
--- TOC entry 3351 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 3205 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: COLUMN tb_clientes.fecha_modificacion; Type: COMMENT; Schema: clientes; Owner: postgres
 --
 
@@ -422,7 +431,7 @@ COMMENT ON COLUMN clientes.tb_clientes.fecha_modificacion IS 'Fecha en la que se
 
 
 --
--- TOC entry 226 (class 1259 OID 16599)
+-- TOC entry 204 (class 1259 OID 17166)
 -- Name: tb_clientes_id_cliente_seq; Type: SEQUENCE; Schema: clientes; Owner: postgres
 --
 
@@ -438,8 +447,8 @@ CREATE SEQUENCE clientes.tb_clientes_id_cliente_seq
 ALTER TABLE clientes.tb_clientes_id_cliente_seq OWNER TO postgres;
 
 --
--- TOC entry 3352 (class 0 OID 0)
--- Dependencies: 226
+-- TOC entry 3206 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: tb_clientes_id_cliente_seq; Type: SEQUENCE OWNED BY; Schema: clientes; Owner: postgres
 --
 
@@ -447,7 +456,92 @@ ALTER SEQUENCE clientes.tb_clientes_id_cliente_seq OWNED BY clientes.tb_clientes
 
 
 --
--- TOC entry 268 (class 1259 OID 17013)
+-- TOC entry 280 (class 1259 OID 17409)
+-- Name: tb_redes_sociales_cliente; Type: TABLE; Schema: clientes; Owner: postgres
+--
+
+CREATE TABLE clientes.tb_redes_sociales_cliente (
+    id_redes_sociales_cliente integer NOT NULL,
+    id_cliente integer,
+    id_red_social integer,
+    cuenta character varying(150)
+);
+
+
+ALTER TABLE clientes.tb_redes_sociales_cliente OWNER TO postgres;
+
+--
+-- TOC entry 3207 (class 0 OID 0)
+-- Dependencies: 280
+-- Name: TABLE tb_redes_sociales_cliente; Type: COMMENT; Schema: clientes; Owner: postgres
+--
+
+COMMENT ON TABLE clientes.tb_redes_sociales_cliente IS 'Tabla que contiene la información de las redes sociales que maneja el cliente';
+
+
+--
+-- TOC entry 3208 (class 0 OID 0)
+-- Dependencies: 280
+-- Name: COLUMN tb_redes_sociales_cliente.id_redes_sociales_cliente; Type: COMMENT; Schema: clientes; Owner: postgres
+--
+
+COMMENT ON COLUMN clientes.tb_redes_sociales_cliente.id_redes_sociales_cliente IS 'ID Llave primaria de la tabla que contiene la información de las redes sociales que maneja el cliente';
+
+
+--
+-- TOC entry 3209 (class 0 OID 0)
+-- Dependencies: 280
+-- Name: COLUMN tb_redes_sociales_cliente.id_cliente; Type: COMMENT; Schema: clientes; Owner: postgres
+--
+
+COMMENT ON COLUMN clientes.tb_redes_sociales_cliente.id_cliente IS 'Llave foránea que relaciona al cliente';
+
+
+--
+-- TOC entry 3210 (class 0 OID 0)
+-- Dependencies: 280
+-- Name: COLUMN tb_redes_sociales_cliente.id_red_social; Type: COMMENT; Schema: clientes; Owner: postgres
+--
+
+COMMENT ON COLUMN clientes.tb_redes_sociales_cliente.id_red_social IS 'Llave foránea que relaciona la red social';
+
+
+--
+-- TOC entry 3211 (class 0 OID 0)
+-- Dependencies: 280
+-- Name: COLUMN tb_redes_sociales_cliente.cuenta; Type: COMMENT; Schema: clientes; Owner: postgres
+--
+
+COMMENT ON COLUMN clientes.tb_redes_sociales_cliente.cuenta IS 'Descripción o ID de la cuenta de la red social indicada';
+
+
+--
+-- TOC entry 279 (class 1259 OID 17407)
+-- Name: tb_redes_sociales_cliente_id_redes_sociales_cliente_seq; Type: SEQUENCE; Schema: clientes; Owner: postgres
+--
+
+CREATE SEQUENCE clientes.tb_redes_sociales_cliente_id_redes_sociales_cliente_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE clientes.tb_redes_sociales_cliente_id_redes_sociales_cliente_seq OWNER TO postgres;
+
+--
+-- TOC entry 3212 (class 0 OID 0)
+-- Dependencies: 279
+-- Name: tb_redes_sociales_cliente_id_redes_sociales_cliente_seq; Type: SEQUENCE OWNED BY; Schema: clientes; Owner: postgres
+--
+
+ALTER SEQUENCE clientes.tb_redes_sociales_cliente_id_redes_sociales_cliente_seq OWNED BY clientes.tb_redes_sociales_cliente.id_redes_sociales_cliente;
+
+
+--
+-- TOC entry 205 (class 1259 OID 17168)
 -- Name: tb_aut_externas; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -463,8 +557,8 @@ CREATE TABLE generales.tb_aut_externas (
 ALTER TABLE generales.tb_aut_externas OWNER TO postgres;
 
 --
--- TOC entry 3353 (class 0 OID 0)
--- Dependencies: 268
+-- TOC entry 3213 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: TABLE tb_aut_externas; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -472,8 +566,8 @@ COMMENT ON TABLE generales.tb_aut_externas IS 'Tabla que contiene los datos de a
 
 
 --
--- TOC entry 3354 (class 0 OID 0)
--- Dependencies: 268
+-- TOC entry 3214 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: COLUMN tb_aut_externas.id_aut_externas; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -481,8 +575,8 @@ COMMENT ON COLUMN generales.tb_aut_externas.id_aut_externas IS 'Llave primaria I
 
 
 --
--- TOC entry 3355 (class 0 OID 0)
--- Dependencies: 268
+-- TOC entry 3215 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: COLUMN tb_aut_externas.id_api; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -490,8 +584,8 @@ COMMENT ON COLUMN generales.tb_aut_externas.id_api IS 'Valor de ID para acceder 
 
 
 --
--- TOC entry 3356 (class 0 OID 0)
--- Dependencies: 268
+-- TOC entry 3216 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: COLUMN tb_aut_externas.token_api; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -499,8 +593,8 @@ COMMENT ON COLUMN generales.tb_aut_externas.token_api IS 'Valor del token de acc
 
 
 --
--- TOC entry 3357 (class 0 OID 0)
--- Dependencies: 268
+-- TOC entry 3217 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: COLUMN tb_aut_externas.provider; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -508,8 +602,8 @@ COMMENT ON COLUMN generales.tb_aut_externas.provider IS 'Nombre del proveedor o 
 
 
 --
--- TOC entry 3358 (class 0 OID 0)
--- Dependencies: 268
+-- TOC entry 3218 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: COLUMN tb_aut_externas.uri; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -517,7 +611,7 @@ COMMENT ON COLUMN generales.tb_aut_externas.uri IS 'URI del Endpoint del web ser
 
 
 --
--- TOC entry 267 (class 1259 OID 17011)
+-- TOC entry 206 (class 1259 OID 17174)
 -- Name: tb_aut_externas_id_aut_externas_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -533,8 +627,8 @@ CREATE SEQUENCE generales.tb_aut_externas_id_aut_externas_seq
 ALTER TABLE generales.tb_aut_externas_id_aut_externas_seq OWNER TO postgres;
 
 --
--- TOC entry 3359 (class 0 OID 0)
--- Dependencies: 267
+-- TOC entry 3219 (class 0 OID 0)
+-- Dependencies: 206
 -- Name: tb_aut_externas_id_aut_externas_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -542,7 +636,7 @@ ALTER SEQUENCE generales.tb_aut_externas_id_aut_externas_seq OWNED BY generales.
 
 
 --
--- TOC entry 270 (class 1259 OID 17024)
+-- TOC entry 207 (class 1259 OID 17176)
 -- Name: tb_aut_externas_services; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -557,8 +651,8 @@ CREATE TABLE generales.tb_aut_externas_services (
 ALTER TABLE generales.tb_aut_externas_services OWNER TO postgres;
 
 --
--- TOC entry 3360 (class 0 OID 0)
--- Dependencies: 270
+-- TOC entry 3220 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: TABLE tb_aut_externas_services; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -566,8 +660,8 @@ COMMENT ON TABLE generales.tb_aut_externas_services IS 'Tabla que contiene el co
 
 
 --
--- TOC entry 3361 (class 0 OID 0)
--- Dependencies: 270
+-- TOC entry 3221 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: COLUMN tb_aut_externas_services.id_aut_externas_services; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -575,8 +669,8 @@ COMMENT ON COLUMN generales.tb_aut_externas_services.id_aut_externas_services IS
 
 
 --
--- TOC entry 3362 (class 0 OID 0)
--- Dependencies: 270
+-- TOC entry 3222 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: COLUMN tb_aut_externas_services.name_service; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -584,8 +678,8 @@ COMMENT ON COLUMN generales.tb_aut_externas_services.name_service IS 'Nombre del
 
 
 --
--- TOC entry 3363 (class 0 OID 0)
--- Dependencies: 270
+-- TOC entry 3223 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: COLUMN tb_aut_externas_services.uri_compl; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -593,8 +687,8 @@ COMMENT ON COLUMN generales.tb_aut_externas_services.uri_compl IS 'Complemento d
 
 
 --
--- TOC entry 3364 (class 0 OID 0)
--- Dependencies: 270
+-- TOC entry 3224 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: COLUMN tb_aut_externas_services.id_aut_externas; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -602,7 +696,7 @@ COMMENT ON COLUMN generales.tb_aut_externas_services.id_aut_externas IS 'Llave f
 
 
 --
--- TOC entry 269 (class 1259 OID 17022)
+-- TOC entry 208 (class 1259 OID 17182)
 -- Name: tb_aut_externas_services_id_aut_externas_services_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -618,8 +712,8 @@ CREATE SEQUENCE generales.tb_aut_externas_services_id_aut_externas_services_seq
 ALTER TABLE generales.tb_aut_externas_services_id_aut_externas_services_seq OWNER TO postgres;
 
 --
--- TOC entry 3365 (class 0 OID 0)
--- Dependencies: 269
+-- TOC entry 3225 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: tb_aut_externas_services_id_aut_externas_services_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -627,7 +721,7 @@ ALTER SEQUENCE generales.tb_aut_externas_services_id_aut_externas_services_seq O
 
 
 --
--- TOC entry 257 (class 1259 OID 16818)
+-- TOC entry 209 (class 1259 OID 17184)
 -- Name: tb_cargos; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -640,8 +734,8 @@ CREATE TABLE generales.tb_cargos (
 ALTER TABLE generales.tb_cargos OWNER TO postgres;
 
 --
--- TOC entry 3366 (class 0 OID 0)
--- Dependencies: 257
+-- TOC entry 3226 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: TABLE tb_cargos; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -649,8 +743,8 @@ COMMENT ON TABLE generales.tb_cargos IS 'Tabla que contiene la información de l
 
 
 --
--- TOC entry 3367 (class 0 OID 0)
--- Dependencies: 257
+-- TOC entry 3227 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: COLUMN tb_cargos.id_cargo; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -658,8 +752,8 @@ COMMENT ON COLUMN generales.tb_cargos.id_cargo IS 'Id llave primaria de la tabla
 
 
 --
--- TOC entry 3368 (class 0 OID 0)
--- Dependencies: 257
+-- TOC entry 3228 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: COLUMN tb_cargos.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -667,7 +761,7 @@ COMMENT ON COLUMN generales.tb_cargos.descripcion IS 'Descripción o denominaci�
 
 
 --
--- TOC entry 256 (class 1259 OID 16816)
+-- TOC entry 210 (class 1259 OID 17187)
 -- Name: tb_cargos_id_cargo_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -683,8 +777,8 @@ CREATE SEQUENCE generales.tb_cargos_id_cargo_seq
 ALTER TABLE generales.tb_cargos_id_cargo_seq OWNER TO postgres;
 
 --
--- TOC entry 3369 (class 0 OID 0)
--- Dependencies: 256
+-- TOC entry 3229 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: tb_cargos_id_cargo_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -692,7 +786,7 @@ ALTER SEQUENCE generales.tb_cargos_id_cargo_seq OWNED BY generales.tb_cargos.id_
 
 
 --
--- TOC entry 217 (class 1259 OID 16505)
+-- TOC entry 211 (class 1259 OID 17189)
 -- Name: tb_ciudades; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -707,8 +801,8 @@ CREATE TABLE generales.tb_ciudades (
 ALTER TABLE generales.tb_ciudades OWNER TO postgres;
 
 --
--- TOC entry 3370 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3230 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: TABLE tb_ciudades; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -716,8 +810,8 @@ COMMENT ON TABLE generales.tb_ciudades IS 'Tabla que contiene las ciudades';
 
 
 --
--- TOC entry 3371 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3231 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: COLUMN tb_ciudades.id_ciudad; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -725,8 +819,8 @@ COMMENT ON COLUMN generales.tb_ciudades.id_ciudad IS 'Llave primaria de la tabla
 
 
 --
--- TOC entry 3372 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3232 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: COLUMN tb_ciudades.codigo_ciudad; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -734,8 +828,8 @@ COMMENT ON COLUMN generales.tb_ciudades.codigo_ciudad IS 'Código CGN de la ciud
 
 
 --
--- TOC entry 3373 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3233 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: COLUMN tb_ciudades.nombre_ciudad; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -743,8 +837,8 @@ COMMENT ON COLUMN generales.tb_ciudades.nombre_ciudad IS 'Nombre de la ciudad';
 
 
 --
--- TOC entry 3374 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 3234 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: COLUMN tb_ciudades.id_departamento; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -752,7 +846,7 @@ COMMENT ON COLUMN generales.tb_ciudades.id_departamento IS 'Llave foránea hacia
 
 
 --
--- TOC entry 216 (class 1259 OID 16503)
+-- TOC entry 212 (class 1259 OID 17192)
 -- Name: tb_ciudades_id_ciudad_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -768,8 +862,8 @@ CREATE SEQUENCE generales.tb_ciudades_id_ciudad_seq
 ALTER TABLE generales.tb_ciudades_id_ciudad_seq OWNER TO postgres;
 
 --
--- TOC entry 3375 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 3235 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: tb_ciudades_id_ciudad_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -777,7 +871,7 @@ ALTER SEQUENCE generales.tb_ciudades_id_ciudad_seq OWNED BY generales.tb_ciudade
 
 
 --
--- TOC entry 276 (class 1259 OID 17132)
+-- TOC entry 213 (class 1259 OID 17194)
 -- Name: tb_criterios_diligenciamiento; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -790,8 +884,8 @@ CREATE TABLE generales.tb_criterios_diligenciamiento (
 ALTER TABLE generales.tb_criterios_diligenciamiento OWNER TO postgres;
 
 --
--- TOC entry 3376 (class 0 OID 0)
--- Dependencies: 276
+-- TOC entry 3236 (class 0 OID 0)
+-- Dependencies: 213
 -- Name: TABLE tb_criterios_diligenciamiento; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -799,8 +893,8 @@ COMMENT ON TABLE generales.tb_criterios_diligenciamiento IS 'Tabla que contiene 
 
 
 --
--- TOC entry 3377 (class 0 OID 0)
--- Dependencies: 276
+-- TOC entry 3237 (class 0 OID 0)
+-- Dependencies: 213
 -- Name: COLUMN tb_criterios_diligenciamiento.id_criterio_diligenciamiento; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -808,8 +902,8 @@ COMMENT ON COLUMN generales.tb_criterios_diligenciamiento.id_criterio_diligencia
 
 
 --
--- TOC entry 3378 (class 0 OID 0)
--- Dependencies: 276
+-- TOC entry 3238 (class 0 OID 0)
+-- Dependencies: 213
 -- Name: COLUMN tb_criterios_diligenciamiento.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -817,7 +911,7 @@ COMMENT ON COLUMN generales.tb_criterios_diligenciamiento.descripcion IS 'Descri
 
 
 --
--- TOC entry 275 (class 1259 OID 17130)
+-- TOC entry 214 (class 1259 OID 17197)
 -- Name: tb_criterios_diligenciamiento_id_criterio_diligenciamiento_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -833,8 +927,8 @@ CREATE SEQUENCE generales.tb_criterios_diligenciamiento_id_criterio_diligenciami
 ALTER TABLE generales.tb_criterios_diligenciamiento_id_criterio_diligenciamiento_seq OWNER TO postgres;
 
 --
--- TOC entry 3379 (class 0 OID 0)
--- Dependencies: 275
+-- TOC entry 3239 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: tb_criterios_diligenciamiento_id_criterio_diligenciamiento_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -842,7 +936,7 @@ ALTER SEQUENCE generales.tb_criterios_diligenciamiento_id_criterio_diligenciamie
 
 
 --
--- TOC entry 213 (class 1259 OID 16489)
+-- TOC entry 215 (class 1259 OID 17199)
 -- Name: tb_departamentos; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -857,8 +951,8 @@ CREATE TABLE generales.tb_departamentos (
 ALTER TABLE generales.tb_departamentos OWNER TO postgres;
 
 --
--- TOC entry 3380 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 3240 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: TABLE tb_departamentos; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -866,8 +960,8 @@ COMMENT ON TABLE generales.tb_departamentos IS 'Tabla de departamentos';
 
 
 --
--- TOC entry 3381 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 3241 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: COLUMN tb_departamentos.id_departamento; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -875,8 +969,8 @@ COMMENT ON COLUMN generales.tb_departamentos.id_departamento IS 'Id de la tabla 
 
 
 --
--- TOC entry 3382 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 3242 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: COLUMN tb_departamentos.codigo_departamento; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -884,8 +978,8 @@ COMMENT ON COLUMN generales.tb_departamentos.codigo_departamento IS 'Código CGN
 
 
 --
--- TOC entry 3383 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 3243 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: COLUMN tb_departamentos.nombre_departamento; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -893,8 +987,8 @@ COMMENT ON COLUMN generales.tb_departamentos.nombre_departamento IS 'Nombre del 
 
 
 --
--- TOC entry 3384 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 3244 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: COLUMN tb_departamentos.id_pais; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -902,7 +996,7 @@ COMMENT ON COLUMN generales.tb_departamentos.id_pais IS 'Llave foránea que rela
 
 
 --
--- TOC entry 212 (class 1259 OID 16487)
+-- TOC entry 216 (class 1259 OID 17202)
 -- Name: tb_departamentos_id_departamento_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -918,8 +1012,8 @@ CREATE SEQUENCE generales.tb_departamentos_id_departamento_seq
 ALTER TABLE generales.tb_departamentos_id_departamento_seq OWNER TO postgres;
 
 --
--- TOC entry 3385 (class 0 OID 0)
--- Dependencies: 212
+-- TOC entry 3245 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: tb_departamentos_id_departamento_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -927,7 +1021,7 @@ ALTER SEQUENCE generales.tb_departamentos_id_departamento_seq OWNED BY generales
 
 
 --
--- TOC entry 258 (class 1259 OID 16859)
+-- TOC entry 217 (class 1259 OID 17204)
 -- Name: tb_estado_agenda; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -940,8 +1034,8 @@ CREATE TABLE generales.tb_estado_agenda (
 ALTER TABLE generales.tb_estado_agenda OWNER TO postgres;
 
 --
--- TOC entry 3386 (class 0 OID 0)
--- Dependencies: 258
+-- TOC entry 3246 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: TABLE tb_estado_agenda; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -949,8 +1043,8 @@ COMMENT ON TABLE generales.tb_estado_agenda IS 'Tabla que contiene los datos de 
 
 
 --
--- TOC entry 3387 (class 0 OID 0)
--- Dependencies: 258
+-- TOC entry 3247 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: COLUMN tb_estado_agenda.id_estado_agenda; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -958,8 +1052,8 @@ COMMENT ON COLUMN generales.tb_estado_agenda.id_estado_agenda IS 'Id llave prima
 
 
 --
--- TOC entry 3388 (class 0 OID 0)
--- Dependencies: 258
+-- TOC entry 3248 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: COLUMN tb_estado_agenda.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -967,7 +1061,7 @@ COMMENT ON COLUMN generales.tb_estado_agenda.descripcion IS 'Descripción o deno
 
 
 --
--- TOC entry 259 (class 1259 OID 16862)
+-- TOC entry 218 (class 1259 OID 17207)
 -- Name: tb_estado_agenda_id_estado_agenda_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -983,8 +1077,8 @@ CREATE SEQUENCE generales.tb_estado_agenda_id_estado_agenda_seq
 ALTER TABLE generales.tb_estado_agenda_id_estado_agenda_seq OWNER TO postgres;
 
 --
--- TOC entry 3389 (class 0 OID 0)
--- Dependencies: 259
+-- TOC entry 3249 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: tb_estado_agenda_id_estado_agenda_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -992,7 +1086,7 @@ ALTER SEQUENCE generales.tb_estado_agenda_id_estado_agenda_seq OWNED BY generale
 
 
 --
--- TOC entry 228 (class 1259 OID 16610)
+-- TOC entry 219 (class 1259 OID 17209)
 -- Name: tb_estados_civiles; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1005,8 +1099,8 @@ CREATE TABLE generales.tb_estados_civiles (
 ALTER TABLE generales.tb_estados_civiles OWNER TO postgres;
 
 --
--- TOC entry 3390 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3250 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: TABLE tb_estados_civiles; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1014,8 +1108,8 @@ COMMENT ON TABLE generales.tb_estados_civiles IS 'Tabla que contiene los estados
 
 
 --
--- TOC entry 3391 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3251 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: COLUMN tb_estados_civiles.id_estado_civil; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1023,8 +1117,8 @@ COMMENT ON COLUMN generales.tb_estados_civiles.id_estado_civil IS 'Id de estado 
 
 
 --
--- TOC entry 3392 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3252 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: COLUMN tb_estados_civiles.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1032,7 +1126,7 @@ COMMENT ON COLUMN generales.tb_estados_civiles.descripcion IS 'Descripción o de
 
 
 --
--- TOC entry 227 (class 1259 OID 16608)
+-- TOC entry 220 (class 1259 OID 17212)
 -- Name: tb_estados_civiles_id_estado_civil_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1048,8 +1142,8 @@ CREATE SEQUENCE generales.tb_estados_civiles_id_estado_civil_seq
 ALTER TABLE generales.tb_estados_civiles_id_estado_civil_seq OWNER TO postgres;
 
 --
--- TOC entry 3393 (class 0 OID 0)
--- Dependencies: 227
+-- TOC entry 3253 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: tb_estados_civiles_id_estado_civil_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1057,7 +1151,7 @@ ALTER SEQUENCE generales.tb_estados_civiles_id_estado_civil_seq OWNED BY general
 
 
 --
--- TOC entry 262 (class 1259 OID 16947)
+-- TOC entry 221 (class 1259 OID 17214)
 -- Name: tb_formas_pago; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1070,8 +1164,8 @@ CREATE TABLE generales.tb_formas_pago (
 ALTER TABLE generales.tb_formas_pago OWNER TO postgres;
 
 --
--- TOC entry 3394 (class 0 OID 0)
--- Dependencies: 262
+-- TOC entry 3254 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: TABLE tb_formas_pago; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1079,8 +1173,8 @@ COMMENT ON TABLE generales.tb_formas_pago IS 'Tabla que contiene las formas de p
 
 
 --
--- TOC entry 3395 (class 0 OID 0)
--- Dependencies: 262
+-- TOC entry 3255 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: COLUMN tb_formas_pago.id_forma_pago; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1088,8 +1182,8 @@ COMMENT ON COLUMN generales.tb_formas_pago.id_forma_pago IS 'Id llave primaria d
 
 
 --
--- TOC entry 3396 (class 0 OID 0)
--- Dependencies: 262
+-- TOC entry 3256 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: COLUMN tb_formas_pago.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1097,7 +1191,7 @@ COMMENT ON COLUMN generales.tb_formas_pago.descripcion IS 'Descripción o denomi
 
 
 --
--- TOC entry 261 (class 1259 OID 16945)
+-- TOC entry 222 (class 1259 OID 17217)
 -- Name: tb_formas_pago_id_forma_pago_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1113,8 +1207,8 @@ CREATE SEQUENCE generales.tb_formas_pago_id_forma_pago_seq
 ALTER TABLE generales.tb_formas_pago_id_forma_pago_seq OWNER TO postgres;
 
 --
--- TOC entry 3397 (class 0 OID 0)
--- Dependencies: 261
+-- TOC entry 3257 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: tb_formas_pago_id_forma_pago_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1122,7 +1216,7 @@ ALTER SEQUENCE generales.tb_formas_pago_id_forma_pago_seq OWNED BY generales.tb_
 
 
 --
--- TOC entry 249 (class 1259 OID 16710)
+-- TOC entry 223 (class 1259 OID 17219)
 -- Name: tb_inmuebles_estados; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1135,8 +1229,8 @@ CREATE TABLE generales.tb_inmuebles_estados (
 ALTER TABLE generales.tb_inmuebles_estados OWNER TO postgres;
 
 --
--- TOC entry 3398 (class 0 OID 0)
--- Dependencies: 249
+-- TOC entry 3258 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: TABLE tb_inmuebles_estados; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1144,8 +1238,8 @@ COMMENT ON TABLE generales.tb_inmuebles_estados IS 'Tabla que contiene la inform
 
 
 --
--- TOC entry 3399 (class 0 OID 0)
--- Dependencies: 249
+-- TOC entry 3259 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: COLUMN tb_inmuebles_estados.id_inmueble_estado; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1153,8 +1247,8 @@ COMMENT ON COLUMN generales.tb_inmuebles_estados.id_inmueble_estado IS 'Id llave
 
 
 --
--- TOC entry 3400 (class 0 OID 0)
--- Dependencies: 249
+-- TOC entry 3260 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: COLUMN tb_inmuebles_estados.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1162,7 +1256,7 @@ COMMENT ON COLUMN generales.tb_inmuebles_estados.descripcion IS 'Descripción de
 
 
 --
--- TOC entry 248 (class 1259 OID 16708)
+-- TOC entry 224 (class 1259 OID 17222)
 -- Name: tb_inmuebles_estados_id_inmueble_estado_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1178,8 +1272,8 @@ CREATE SEQUENCE generales.tb_inmuebles_estados_id_inmueble_estado_seq
 ALTER TABLE generales.tb_inmuebles_estados_id_inmueble_estado_seq OWNER TO postgres;
 
 --
--- TOC entry 3401 (class 0 OID 0)
--- Dependencies: 248
+-- TOC entry 3261 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: tb_inmuebles_estados_id_inmueble_estado_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1187,7 +1281,7 @@ ALTER SEQUENCE generales.tb_inmuebles_estados_id_inmueble_estado_seq OWNED BY ge
 
 
 --
--- TOC entry 238 (class 1259 OID 16658)
+-- TOC entry 225 (class 1259 OID 17224)
 -- Name: tb_intereses; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1200,8 +1294,8 @@ CREATE TABLE generales.tb_intereses (
 ALTER TABLE generales.tb_intereses OWNER TO postgres;
 
 --
--- TOC entry 3402 (class 0 OID 0)
--- Dependencies: 238
+-- TOC entry 3262 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: TABLE tb_intereses; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1209,8 +1303,8 @@ COMMENT ON TABLE generales.tb_intereses IS 'Tabla que contiene los intereses que
 
 
 --
--- TOC entry 3403 (class 0 OID 0)
--- Dependencies: 238
+-- TOC entry 3263 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: COLUMN tb_intereses.id_interes; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1218,8 +1312,8 @@ COMMENT ON COLUMN generales.tb_intereses.id_interes IS 'Id de la tabla de intere
 
 
 --
--- TOC entry 3404 (class 0 OID 0)
--- Dependencies: 238
+-- TOC entry 3264 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: COLUMN tb_intereses.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1227,7 +1321,7 @@ COMMENT ON COLUMN generales.tb_intereses.descripcion IS 'Descripción o nombre d
 
 
 --
--- TOC entry 237 (class 1259 OID 16656)
+-- TOC entry 226 (class 1259 OID 17227)
 -- Name: tb_intereses_id_interes_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1243,8 +1337,8 @@ CREATE SEQUENCE generales.tb_intereses_id_interes_seq
 ALTER TABLE generales.tb_intereses_id_interes_seq OWNER TO postgres;
 
 --
--- TOC entry 3405 (class 0 OID 0)
--- Dependencies: 237
+-- TOC entry 3265 (class 0 OID 0)
+-- Dependencies: 226
 -- Name: tb_intereses_id_interes_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1252,7 +1346,7 @@ ALTER SEQUENCE generales.tb_intereses_id_interes_seq OWNED BY generales.tb_inter
 
 
 --
--- TOC entry 253 (class 1259 OID 16726)
+-- TOC entry 227 (class 1259 OID 17229)
 -- Name: tb_jornadas; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1265,8 +1359,8 @@ CREATE TABLE generales.tb_jornadas (
 ALTER TABLE generales.tb_jornadas OWNER TO postgres;
 
 --
--- TOC entry 3406 (class 0 OID 0)
--- Dependencies: 253
+-- TOC entry 3266 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: TABLE tb_jornadas; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1274,8 +1368,8 @@ COMMENT ON TABLE generales.tb_jornadas IS 'Tabla que contiene la información de
 
 
 --
--- TOC entry 3407 (class 0 OID 0)
--- Dependencies: 253
+-- TOC entry 3267 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: COLUMN tb_jornadas.id_jornada; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1283,8 +1377,8 @@ COMMENT ON COLUMN generales.tb_jornadas.id_jornada IS 'ID llave primaria de la t
 
 
 --
--- TOC entry 3408 (class 0 OID 0)
--- Dependencies: 253
+-- TOC entry 3268 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: COLUMN tb_jornadas.dia; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1292,7 +1386,7 @@ COMMENT ON COLUMN generales.tb_jornadas.dia IS 'Descripción o dia de la semana'
 
 
 --
--- TOC entry 252 (class 1259 OID 16724)
+-- TOC entry 228 (class 1259 OID 17232)
 -- Name: tb_jornadas_id_jornada_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1308,8 +1402,8 @@ CREATE SEQUENCE generales.tb_jornadas_id_jornada_seq
 ALTER TABLE generales.tb_jornadas_id_jornada_seq OWNER TO postgres;
 
 --
--- TOC entry 3409 (class 0 OID 0)
--- Dependencies: 252
+-- TOC entry 3269 (class 0 OID 0)
+-- Dependencies: 228
 -- Name: tb_jornadas_id_jornada_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1317,7 +1411,7 @@ ALTER SEQUENCE generales.tb_jornadas_id_jornada_seq OWNED BY generales.tb_jornad
 
 
 --
--- TOC entry 215 (class 1259 OID 16497)
+-- TOC entry 229 (class 1259 OID 17234)
 -- Name: tb_paises; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1331,8 +1425,8 @@ CREATE TABLE generales.tb_paises (
 ALTER TABLE generales.tb_paises OWNER TO postgres;
 
 --
--- TOC entry 3410 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 3270 (class 0 OID 0)
+-- Dependencies: 229
 -- Name: COLUMN tb_paises.id_pais; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1340,8 +1434,8 @@ COMMENT ON COLUMN generales.tb_paises.id_pais IS 'Id llave primaria de la tabla 
 
 
 --
--- TOC entry 3411 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 3271 (class 0 OID 0)
+-- Dependencies: 229
 -- Name: COLUMN tb_paises.codigo_pais; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1349,8 +1443,8 @@ COMMENT ON COLUMN generales.tb_paises.codigo_pais IS 'Código del país';
 
 
 --
--- TOC entry 3412 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 3272 (class 0 OID 0)
+-- Dependencies: 229
 -- Name: COLUMN tb_paises.nombre_pais; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1358,7 +1452,7 @@ COMMENT ON COLUMN generales.tb_paises.nombre_pais IS 'Nombre del país';
 
 
 --
--- TOC entry 214 (class 1259 OID 16495)
+-- TOC entry 230 (class 1259 OID 17237)
 -- Name: tb_paises_id_pais_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1374,8 +1468,8 @@ CREATE SEQUENCE generales.tb_paises_id_pais_seq
 ALTER TABLE generales.tb_paises_id_pais_seq OWNER TO postgres;
 
 --
--- TOC entry 3413 (class 0 OID 0)
--- Dependencies: 214
+-- TOC entry 3273 (class 0 OID 0)
+-- Dependencies: 230
 -- Name: tb_paises_id_pais_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1383,7 +1477,82 @@ ALTER SEQUENCE generales.tb_paises_id_pais_seq OWNED BY generales.tb_paises.id_p
 
 
 --
--- TOC entry 236 (class 1259 OID 16650)
+-- TOC entry 282 (class 1259 OID 17417)
+-- Name: tb_redes_sociales; Type: TABLE; Schema: generales; Owner: postgres
+--
+
+CREATE TABLE generales.tb_redes_sociales (
+    id_red_social integer NOT NULL,
+    nombre character varying(20),
+    imagen text
+);
+
+
+ALTER TABLE generales.tb_redes_sociales OWNER TO postgres;
+
+--
+-- TOC entry 3274 (class 0 OID 0)
+-- Dependencies: 282
+-- Name: TABLE tb_redes_sociales; Type: COMMENT; Schema: generales; Owner: postgres
+--
+
+COMMENT ON TABLE generales.tb_redes_sociales IS 'Tabla que contiene la información de las redes sociales existentes';
+
+
+--
+-- TOC entry 3275 (class 0 OID 0)
+-- Dependencies: 282
+-- Name: COLUMN tb_redes_sociales.id_red_social; Type: COMMENT; Schema: generales; Owner: postgres
+--
+
+COMMENT ON COLUMN generales.tb_redes_sociales.id_red_social IS 'ID llave primaria de la tabla que tiene la información de redes sociales';
+
+
+--
+-- TOC entry 3276 (class 0 OID 0)
+-- Dependencies: 282
+-- Name: COLUMN tb_redes_sociales.nombre; Type: COMMENT; Schema: generales; Owner: postgres
+--
+
+COMMENT ON COLUMN generales.tb_redes_sociales.nombre IS 'Nombre de la red social';
+
+
+--
+-- TOC entry 3277 (class 0 OID 0)
+-- Dependencies: 282
+-- Name: COLUMN tb_redes_sociales.imagen; Type: COMMENT; Schema: generales; Owner: postgres
+--
+
+COMMENT ON COLUMN generales.tb_redes_sociales.imagen IS 'Nombre / Ruta del logo o imagen de la red social';
+
+
+--
+-- TOC entry 281 (class 1259 OID 17415)
+-- Name: tb_redes_sociales_id_red_social_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
+--
+
+CREATE SEQUENCE generales.tb_redes_sociales_id_red_social_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE generales.tb_redes_sociales_id_red_social_seq OWNER TO postgres;
+
+--
+-- TOC entry 3278 (class 0 OID 0)
+-- Dependencies: 281
+-- Name: tb_redes_sociales_id_red_social_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
+--
+
+ALTER SEQUENCE generales.tb_redes_sociales_id_red_social_seq OWNED BY generales.tb_redes_sociales.id_red_social;
+
+
+--
+-- TOC entry 231 (class 1259 OID 17239)
 -- Name: tb_solicitudes_estados; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1396,8 +1565,8 @@ CREATE TABLE generales.tb_solicitudes_estados (
 ALTER TABLE generales.tb_solicitudes_estados OWNER TO postgres;
 
 --
--- TOC entry 3414 (class 0 OID 0)
--- Dependencies: 236
+-- TOC entry 3279 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: TABLE tb_solicitudes_estados; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1405,8 +1574,8 @@ COMMENT ON TABLE generales.tb_solicitudes_estados IS 'Tabla que contiene los est
 
 
 --
--- TOC entry 3415 (class 0 OID 0)
--- Dependencies: 236
+-- TOC entry 3280 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: COLUMN tb_solicitudes_estados.id_solicitud_estado; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1414,8 +1583,8 @@ COMMENT ON COLUMN generales.tb_solicitudes_estados.id_solicitud_estado IS 'Llave
 
 
 --
--- TOC entry 3416 (class 0 OID 0)
--- Dependencies: 236
+-- TOC entry 3281 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: COLUMN tb_solicitudes_estados.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1423,7 +1592,7 @@ COMMENT ON COLUMN generales.tb_solicitudes_estados.descripcion IS 'Descripción 
 
 
 --
--- TOC entry 235 (class 1259 OID 16648)
+-- TOC entry 232 (class 1259 OID 17242)
 -- Name: tb_solicitudes_estados_id_solicitud_estado_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1439,8 +1608,8 @@ CREATE SEQUENCE generales.tb_solicitudes_estados_id_solicitud_estado_seq
 ALTER TABLE generales.tb_solicitudes_estados_id_solicitud_estado_seq OWNER TO postgres;
 
 --
--- TOC entry 3417 (class 0 OID 0)
--- Dependencies: 235
+-- TOC entry 3282 (class 0 OID 0)
+-- Dependencies: 232
 -- Name: tb_solicitudes_estados_id_solicitud_estado_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1448,7 +1617,7 @@ ALTER SEQUENCE generales.tb_solicitudes_estados_id_solicitud_estado_seq OWNED BY
 
 
 --
--- TOC entry 264 (class 1259 OID 16961)
+-- TOC entry 233 (class 1259 OID 17244)
 -- Name: tb_urgencias; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1461,8 +1630,8 @@ CREATE TABLE generales.tb_urgencias (
 ALTER TABLE generales.tb_urgencias OWNER TO postgres;
 
 --
--- TOC entry 3418 (class 0 OID 0)
--- Dependencies: 264
+-- TOC entry 3283 (class 0 OID 0)
+-- Dependencies: 233
 -- Name: TABLE tb_urgencias; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1470,8 +1639,8 @@ COMMENT ON TABLE generales.tb_urgencias IS 'Tabla que contiene los valores posib
 
 
 --
--- TOC entry 3419 (class 0 OID 0)
--- Dependencies: 264
+-- TOC entry 3284 (class 0 OID 0)
+-- Dependencies: 233
 -- Name: COLUMN tb_urgencias.id_urgencia; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1479,8 +1648,8 @@ COMMENT ON COLUMN generales.tb_urgencias.id_urgencia IS 'ID llave primaria de la
 
 
 --
--- TOC entry 3420 (class 0 OID 0)
--- Dependencies: 264
+-- TOC entry 3285 (class 0 OID 0)
+-- Dependencies: 233
 -- Name: COLUMN tb_urgencias.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1488,7 +1657,7 @@ COMMENT ON COLUMN generales.tb_urgencias.descripcion IS 'Descripción o denomina
 
 
 --
--- TOC entry 263 (class 1259 OID 16959)
+-- TOC entry 234 (class 1259 OID 17247)
 -- Name: tb_urgencias_id_urgencia_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1504,8 +1673,8 @@ CREATE SEQUENCE generales.tb_urgencias_id_urgencia_seq
 ALTER TABLE generales.tb_urgencias_id_urgencia_seq OWNER TO postgres;
 
 --
--- TOC entry 3421 (class 0 OID 0)
--- Dependencies: 263
+-- TOC entry 3286 (class 0 OID 0)
+-- Dependencies: 234
 -- Name: tb_urgencias_id_urgencia_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1513,7 +1682,7 @@ ALTER SEQUENCE generales.tb_urgencias_id_urgencia_seq OWNED BY generales.tb_urge
 
 
 --
--- TOC entry 255 (class 1259 OID 16804)
+-- TOC entry 235 (class 1259 OID 17249)
 -- Name: tb_zonas; Type: TABLE; Schema: generales; Owner: postgres
 --
 
@@ -1526,8 +1695,8 @@ CREATE TABLE generales.tb_zonas (
 ALTER TABLE generales.tb_zonas OWNER TO postgres;
 
 --
--- TOC entry 3422 (class 0 OID 0)
--- Dependencies: 255
+-- TOC entry 3287 (class 0 OID 0)
+-- Dependencies: 235
 -- Name: TABLE tb_zonas; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1535,8 +1704,8 @@ COMMENT ON TABLE generales.tb_zonas IS 'Zonas de la ciudad en las que se ubican 
 
 
 --
--- TOC entry 3423 (class 0 OID 0)
--- Dependencies: 255
+-- TOC entry 3288 (class 0 OID 0)
+-- Dependencies: 235
 -- Name: COLUMN tb_zonas.id_zona; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1544,8 +1713,8 @@ COMMENT ON COLUMN generales.tb_zonas.id_zona IS 'ID llave primaria de la tabla d
 
 
 --
--- TOC entry 3424 (class 0 OID 0)
--- Dependencies: 255
+-- TOC entry 3289 (class 0 OID 0)
+-- Dependencies: 235
 -- Name: COLUMN tb_zonas.descripcion; Type: COMMENT; Schema: generales; Owner: postgres
 --
 
@@ -1553,7 +1722,7 @@ COMMENT ON COLUMN generales.tb_zonas.descripcion IS 'Descripción o denominació
 
 
 --
--- TOC entry 254 (class 1259 OID 16802)
+-- TOC entry 236 (class 1259 OID 17252)
 -- Name: tb_zonas_id_zona_seq; Type: SEQUENCE; Schema: generales; Owner: postgres
 --
 
@@ -1569,8 +1738,8 @@ CREATE SEQUENCE generales.tb_zonas_id_zona_seq
 ALTER TABLE generales.tb_zonas_id_zona_seq OWNER TO postgres;
 
 --
--- TOC entry 3425 (class 0 OID 0)
--- Dependencies: 254
+-- TOC entry 3290 (class 0 OID 0)
+-- Dependencies: 236
 -- Name: tb_zonas_id_zona_seq; Type: SEQUENCE OWNED BY; Schema: generales; Owner: postgres
 --
 
@@ -1578,7 +1747,7 @@ ALTER SEQUENCE generales.tb_zonas_id_zona_seq OWNED BY generales.tb_zonas.id_zon
 
 
 --
--- TOC entry 222 (class 1259 OID 16580)
+-- TOC entry 237 (class 1259 OID 17254)
 -- Name: tb_caracteristicas_inmuebles; Type: TABLE; Schema: inmuebles; Owner: postgres
 --
 
@@ -1593,8 +1762,8 @@ CREATE TABLE inmuebles.tb_caracteristicas_inmuebles (
 ALTER TABLE inmuebles.tb_caracteristicas_inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3426 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3291 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: TABLE tb_caracteristicas_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1602,8 +1771,8 @@ COMMENT ON TABLE inmuebles.tb_caracteristicas_inmuebles IS 'Tabla que contiene l
 
 
 --
--- TOC entry 3427 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3292 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: COLUMN tb_caracteristicas_inmuebles.id_caracterisitica_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1611,8 +1780,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_inmuebles.id_caracterisitica_inmu
 
 
 --
--- TOC entry 3428 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3293 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: COLUMN tb_caracteristicas_inmuebles."nombre_característica"; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1620,8 +1789,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_inmuebles."nombre_característica
 
 
 --
--- TOC entry 3429 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3294 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: COLUMN tb_caracteristicas_inmuebles.id_tipo_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1629,8 +1798,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_inmuebles.id_tipo_inmueble IS 'Id
 
 
 --
--- TOC entry 3430 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3295 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: COLUMN tb_caracteristicas_inmuebles.tipo_caracteristica; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1638,7 +1807,7 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_inmuebles.tipo_caracteristica IS 
 
 
 --
--- TOC entry 221 (class 1259 OID 16578)
+-- TOC entry 238 (class 1259 OID 17257)
 -- Name: tb_caracteristicas_inmuebles_id_tb_caracterisitica_inmueble_seq; Type: SEQUENCE; Schema: inmuebles; Owner: postgres
 --
 
@@ -1654,8 +1823,8 @@ CREATE SEQUENCE inmuebles.tb_caracteristicas_inmuebles_id_tb_caracterisitica_inm
 ALTER TABLE inmuebles.tb_caracteristicas_inmuebles_id_tb_caracterisitica_inmueble_seq OWNER TO postgres;
 
 --
--- TOC entry 3431 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 3296 (class 0 OID 0)
+-- Dependencies: 238
 -- Name: tb_caracteristicas_inmuebles_id_tb_caracterisitica_inmueble_seq; Type: SEQUENCE OWNED BY; Schema: inmuebles; Owner: postgres
 --
 
@@ -1663,7 +1832,7 @@ ALTER SEQUENCE inmuebles.tb_caracteristicas_inmuebles_id_tb_caracterisitica_inmu
 
 
 --
--- TOC entry 278 (class 1259 OID 17140)
+-- TOC entry 239 (class 1259 OID 17259)
 -- Name: tb_caracteristicas_tipo_inmueble; Type: TABLE; Schema: inmuebles; Owner: postgres
 --
 
@@ -1685,8 +1854,8 @@ CREATE TABLE inmuebles.tb_caracteristicas_tipo_inmueble (
 ALTER TABLE inmuebles.tb_caracteristicas_tipo_inmueble OWNER TO postgres;
 
 --
--- TOC entry 3432 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3297 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: TABLE tb_caracteristicas_tipo_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1694,8 +1863,8 @@ COMMENT ON TABLE inmuebles.tb_caracteristicas_tipo_inmueble IS 'Tabla que contie
 
 
 --
--- TOC entry 3433 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3298 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.id_caracteristicas_tipo_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1703,8 +1872,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.id_caracteristicas_
 
 
 --
--- TOC entry 3434 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3299 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.id_tipo_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1712,8 +1881,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.id_tipo_inmueble IS
 
 
 --
--- TOC entry 3435 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3300 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.id_caracteristica; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1721,8 +1890,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.id_caracteristica I
 
 
 --
--- TOC entry 3436 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3301 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.id_criterio_diligenciamiento; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1730,8 +1899,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.id_criterio_diligen
 
 
 --
--- TOC entry 3437 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3302 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.id_tipos_caracteristicas_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1739,8 +1908,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.id_tipos_caracteris
 
 
 --
--- TOC entry 3438 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3303 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.id_user_creacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1748,8 +1917,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.id_user_creacion IS
 
 
 --
--- TOC entry 3439 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3304 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.id_user_modificacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1757,8 +1926,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.id_user_modificacio
 
 
 --
--- TOC entry 3440 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3305 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.estado; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1766,8 +1935,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.estado IS 'Estado d
 
 
 --
--- TOC entry 3441 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3306 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.fecha_creacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1775,8 +1944,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.fecha_creacion IS '
 
 
 --
--- TOC entry 3442 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3307 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.fecha_modificacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1784,8 +1953,8 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.fecha_modificacion 
 
 
 --
--- TOC entry 3443 (class 0 OID 0)
--- Dependencies: 278
+-- TOC entry 3308 (class 0 OID 0)
+-- Dependencies: 239
 -- Name: COLUMN tb_caracteristicas_tipo_inmueble.descripcion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1793,7 +1962,7 @@ COMMENT ON COLUMN inmuebles.tb_caracteristicas_tipo_inmueble.descripcion IS 'Des
 
 
 --
--- TOC entry 277 (class 1259 OID 17138)
+-- TOC entry 240 (class 1259 OID 17263)
 -- Name: tb_caracteristicas_tipo_inmue_id_caracteristicas_tipo_inmue_seq; Type: SEQUENCE; Schema: inmuebles; Owner: postgres
 --
 
@@ -1809,8 +1978,8 @@ CREATE SEQUENCE inmuebles.tb_caracteristicas_tipo_inmue_id_caracteristicas_tipo_
 ALTER TABLE inmuebles.tb_caracteristicas_tipo_inmue_id_caracteristicas_tipo_inmue_seq OWNER TO postgres;
 
 --
--- TOC entry 3444 (class 0 OID 0)
--- Dependencies: 277
+-- TOC entry 3309 (class 0 OID 0)
+-- Dependencies: 240
 -- Name: tb_caracteristicas_tipo_inmue_id_caracteristicas_tipo_inmue_seq; Type: SEQUENCE OWNED BY; Schema: inmuebles; Owner: postgres
 --
 
@@ -1818,7 +1987,7 @@ ALTER SEQUENCE inmuebles.tb_caracteristicas_tipo_inmue_id_caracteristicas_tipo_i
 
 
 --
--- TOC entry 247 (class 1259 OID 16702)
+-- TOC entry 241 (class 1259 OID 17265)
 -- Name: tb_estados_inmuebles; Type: TABLE; Schema: inmuebles; Owner: postgres
 --
 
@@ -1833,8 +2002,8 @@ CREATE TABLE inmuebles.tb_estados_inmuebles (
 ALTER TABLE inmuebles.tb_estados_inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3445 (class 0 OID 0)
--- Dependencies: 247
+-- TOC entry 3310 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: TABLE tb_estados_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1842,8 +2011,8 @@ COMMENT ON TABLE inmuebles.tb_estados_inmuebles IS 'Tabla que contiene la inform
 
 
 --
--- TOC entry 3446 (class 0 OID 0)
--- Dependencies: 247
+-- TOC entry 3311 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: COLUMN tb_estados_inmuebles.id_estado_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1851,8 +2020,8 @@ COMMENT ON COLUMN inmuebles.tb_estados_inmuebles.id_estado_inmueble IS 'Llave pr
 
 
 --
--- TOC entry 3447 (class 0 OID 0)
--- Dependencies: 247
+-- TOC entry 3312 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: COLUMN tb_estados_inmuebles.id_inmueble_estado; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1860,8 +2029,8 @@ COMMENT ON COLUMN inmuebles.tb_estados_inmuebles.id_inmueble_estado IS 'Llave fo
 
 
 --
--- TOC entry 3448 (class 0 OID 0)
--- Dependencies: 247
+-- TOC entry 3313 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: COLUMN tb_estados_inmuebles.id_persona; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1869,8 +2038,8 @@ COMMENT ON COLUMN inmuebles.tb_estados_inmuebles.id_persona IS 'Llave foránea q
 
 
 --
--- TOC entry 3449 (class 0 OID 0)
--- Dependencies: 247
+-- TOC entry 3314 (class 0 OID 0)
+-- Dependencies: 241
 -- Name: COLUMN tb_estados_inmuebles.fecha_creacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1878,7 +2047,7 @@ COMMENT ON COLUMN inmuebles.tb_estados_inmuebles.fecha_creacion IS 'Fecha en que
 
 
 --
--- TOC entry 246 (class 1259 OID 16700)
+-- TOC entry 242 (class 1259 OID 17268)
 -- Name: tb_estados_inmuebles_id_estado_inmueble_seq; Type: SEQUENCE; Schema: inmuebles; Owner: postgres
 --
 
@@ -1894,8 +2063,8 @@ CREATE SEQUENCE inmuebles.tb_estados_inmuebles_id_estado_inmueble_seq
 ALTER TABLE inmuebles.tb_estados_inmuebles_id_estado_inmueble_seq OWNER TO postgres;
 
 --
--- TOC entry 3450 (class 0 OID 0)
--- Dependencies: 246
+-- TOC entry 3315 (class 0 OID 0)
+-- Dependencies: 242
 -- Name: tb_estados_inmuebles_id_estado_inmueble_seq; Type: SEQUENCE OWNED BY; Schema: inmuebles; Owner: postgres
 --
 
@@ -1903,7 +2072,7 @@ ALTER SEQUENCE inmuebles.tb_estados_inmuebles_id_estado_inmueble_seq OWNED BY in
 
 
 --
--- TOC entry 251 (class 1259 OID 16718)
+-- TOC entry 243 (class 1259 OID 17270)
 -- Name: tb_horarios_inmuebles; Type: TABLE; Schema: inmuebles; Owner: postgres
 --
 
@@ -1923,8 +2092,8 @@ CREATE TABLE inmuebles.tb_horarios_inmuebles (
 ALTER TABLE inmuebles.tb_horarios_inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3451 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3316 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: TABLE tb_horarios_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1932,8 +2101,8 @@ COMMENT ON TABLE inmuebles.tb_horarios_inmuebles IS 'Tabla que contiene la infor
 
 
 --
--- TOC entry 3452 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3317 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.id_horario_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1941,8 +2110,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.id_horario_inmueble IS 'Id lla
 
 
 --
--- TOC entry 3453 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3318 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.hora_inicial; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1950,8 +2119,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.hora_inicial IS 'Hora inicial 
 
 
 --
--- TOC entry 3454 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3319 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.minuto_inicial; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1959,8 +2128,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.minuto_inicial IS 'Minuto en e
 
 
 --
--- TOC entry 3455 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3320 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.hora_final; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1968,8 +2137,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.hora_final IS 'Hora en la que 
 
 
 --
--- TOC entry 3456 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3321 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.minuto_final; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1977,8 +2146,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.minuto_final IS 'Minuto dentro
 
 
 --
--- TOC entry 3457 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3322 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.id_jornada; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1986,8 +2155,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.id_jornada IS 'Llave foránea 
 
 
 --
--- TOC entry 3458 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3323 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.id_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -1995,8 +2164,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.id_inmueble IS 'Llave foránea
 
 
 --
--- TOC entry 3459 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3324 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.id_persona_crea; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2004,8 +2173,8 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.id_persona_crea IS 'Llave for�
 
 
 --
--- TOC entry 3460 (class 0 OID 0)
--- Dependencies: 251
+-- TOC entry 3325 (class 0 OID 0)
+-- Dependencies: 243
 -- Name: COLUMN tb_horarios_inmuebles.fecha_creacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2013,7 +2182,7 @@ COMMENT ON COLUMN inmuebles.tb_horarios_inmuebles.fecha_creacion IS 'Fecha en la
 
 
 --
--- TOC entry 250 (class 1259 OID 16716)
+-- TOC entry 244 (class 1259 OID 17273)
 -- Name: tb_horarios_inmuebles_id_horario_inmueble_seq; Type: SEQUENCE; Schema: inmuebles; Owner: postgres
 --
 
@@ -2029,8 +2198,8 @@ CREATE SEQUENCE inmuebles.tb_horarios_inmuebles_id_horario_inmueble_seq
 ALTER TABLE inmuebles.tb_horarios_inmuebles_id_horario_inmueble_seq OWNER TO postgres;
 
 --
--- TOC entry 3461 (class 0 OID 0)
--- Dependencies: 250
+-- TOC entry 3326 (class 0 OID 0)
+-- Dependencies: 244
 -- Name: tb_horarios_inmuebles_id_horario_inmueble_seq; Type: SEQUENCE OWNED BY; Schema: inmuebles; Owner: postgres
 --
 
@@ -2038,7 +2207,7 @@ ALTER SEQUENCE inmuebles.tb_horarios_inmuebles_id_horario_inmueble_seq OWNED BY 
 
 
 --
--- TOC entry 245 (class 1259 OID 16694)
+-- TOC entry 245 (class 1259 OID 17275)
 -- Name: tb_inmuebles_registrados; Type: TABLE; Schema: inmuebles; Owner: postgres
 --
 
@@ -2060,7 +2229,7 @@ CREATE TABLE inmuebles.tb_inmuebles_registrados (
 ALTER TABLE inmuebles.tb_inmuebles_registrados OWNER TO postgres;
 
 --
--- TOC entry 3462 (class 0 OID 0)
+-- TOC entry 3327 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: TABLE tb_inmuebles_registrados; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2069,7 +2238,7 @@ COMMENT ON TABLE inmuebles.tb_inmuebles_registrados IS 'Tabla que almacena la in
 
 
 --
--- TOC entry 3463 (class 0 OID 0)
+-- TOC entry 3328 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.id_inmueble_registrado; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2078,7 +2247,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.id_inmueble_registrado IS '
 
 
 --
--- TOC entry 3464 (class 0 OID 0)
+-- TOC entry 3329 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.id_tipo_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2087,7 +2256,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.id_tipo_inmueble IS 'Llave 
 
 
 --
--- TOC entry 3465 (class 0 OID 0)
+-- TOC entry 3330 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.id_cliente; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2096,7 +2265,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.id_cliente IS 'Llave forán
 
 
 --
--- TOC entry 3466 (class 0 OID 0)
+-- TOC entry 3331 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.id_personal; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2105,7 +2274,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.id_personal IS 'Llave forá
 
 
 --
--- TOC entry 3467 (class 0 OID 0)
+-- TOC entry 3332 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.valor_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2114,7 +2283,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.valor_inmueble IS 'Valor en
 
 
 --
--- TOC entry 3468 (class 0 OID 0)
+-- TOC entry 3333 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.fecha_creacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2123,7 +2292,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.fecha_creacion IS 'Fecha en
 
 
 --
--- TOC entry 3469 (class 0 OID 0)
+-- TOC entry 3334 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.direccion_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2132,7 +2301,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.direccion_inmueble IS 'Dire
 
 
 --
--- TOC entry 3470 (class 0 OID 0)
+-- TOC entry 3335 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.id_ciudad; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2141,7 +2310,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.id_ciudad IS 'Llave foráne
 
 
 --
--- TOC entry 3471 (class 0 OID 0)
+-- TOC entry 3336 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.id_zona; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2150,7 +2319,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.id_zona IS 'Llave foránea 
 
 
 --
--- TOC entry 3472 (class 0 OID 0)
+-- TOC entry 3337 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.observacion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2159,7 +2328,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.observacion IS 'Observació
 
 
 --
--- TOC entry 3473 (class 0 OID 0)
+-- TOC entry 3338 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: COLUMN tb_inmuebles_registrados.id_estado_inmueble; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
@@ -2168,7 +2337,7 @@ COMMENT ON COLUMN inmuebles.tb_inmuebles_registrados.id_estado_inmueble IS 'Llav
 
 
 --
--- TOC entry 244 (class 1259 OID 16692)
+-- TOC entry 246 (class 1259 OID 17278)
 -- Name: tb_inmuebles_registrados_id_inmueble_registrado_seq; Type: SEQUENCE; Schema: inmuebles; Owner: postgres
 --
 
@@ -2184,8 +2353,8 @@ CREATE SEQUENCE inmuebles.tb_inmuebles_registrados_id_inmueble_registrado_seq
 ALTER TABLE inmuebles.tb_inmuebles_registrados_id_inmueble_registrado_seq OWNER TO postgres;
 
 --
--- TOC entry 3474 (class 0 OID 0)
--- Dependencies: 244
+-- TOC entry 3339 (class 0 OID 0)
+-- Dependencies: 246
 -- Name: tb_inmuebles_registrados_id_inmueble_registrado_seq; Type: SEQUENCE OWNED BY; Schema: inmuebles; Owner: postgres
 --
 
@@ -2193,7 +2362,7 @@ ALTER SEQUENCE inmuebles.tb_inmuebles_registrados_id_inmueble_registrado_seq OWN
 
 
 --
--- TOC entry 274 (class 1259 OID 17124)
+-- TOC entry 247 (class 1259 OID 17280)
 -- Name: tb_tipos_caracteristicas_inmuebles; Type: TABLE; Schema: inmuebles; Owner: postgres
 --
 
@@ -2206,8 +2375,8 @@ CREATE TABLE inmuebles.tb_tipos_caracteristicas_inmuebles (
 ALTER TABLE inmuebles.tb_tipos_caracteristicas_inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3475 (class 0 OID 0)
--- Dependencies: 274
+-- TOC entry 3340 (class 0 OID 0)
+-- Dependencies: 247
 -- Name: TABLE tb_tipos_caracteristicas_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2215,8 +2384,8 @@ COMMENT ON TABLE inmuebles.tb_tipos_caracteristicas_inmuebles IS 'Tabla que cont
 
 
 --
--- TOC entry 3476 (class 0 OID 0)
--- Dependencies: 274
+-- TOC entry 3341 (class 0 OID 0)
+-- Dependencies: 247
 -- Name: COLUMN tb_tipos_caracteristicas_inmuebles.id_tipos_caracteristicas_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2224,8 +2393,8 @@ COMMENT ON COLUMN inmuebles.tb_tipos_caracteristicas_inmuebles.id_tipos_caracter
 
 
 --
--- TOC entry 3477 (class 0 OID 0)
--- Dependencies: 274
+-- TOC entry 3342 (class 0 OID 0)
+-- Dependencies: 247
 -- Name: COLUMN tb_tipos_caracteristicas_inmuebles.descripcion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2233,7 +2402,7 @@ COMMENT ON COLUMN inmuebles.tb_tipos_caracteristicas_inmuebles.descripcion IS 'D
 
 
 --
--- TOC entry 273 (class 1259 OID 17122)
+-- TOC entry 248 (class 1259 OID 17283)
 -- Name: tb_tipos_caracteristicas_inmu_id_tipos_caracteristicas_inmu_seq; Type: SEQUENCE; Schema: inmuebles; Owner: postgres
 --
 
@@ -2249,8 +2418,8 @@ CREATE SEQUENCE inmuebles.tb_tipos_caracteristicas_inmu_id_tipos_caracteristicas
 ALTER TABLE inmuebles.tb_tipos_caracteristicas_inmu_id_tipos_caracteristicas_inmu_seq OWNER TO postgres;
 
 --
--- TOC entry 3478 (class 0 OID 0)
--- Dependencies: 273
+-- TOC entry 3343 (class 0 OID 0)
+-- Dependencies: 248
 -- Name: tb_tipos_caracteristicas_inmu_id_tipos_caracteristicas_inmu_seq; Type: SEQUENCE OWNED BY; Schema: inmuebles; Owner: postgres
 --
 
@@ -2258,7 +2427,7 @@ ALTER SEQUENCE inmuebles.tb_tipos_caracteristicas_inmu_id_tipos_caracteristicas_
 
 
 --
--- TOC entry 230 (class 1259 OID 16626)
+-- TOC entry 249 (class 1259 OID 17285)
 -- Name: tb_tipos_inmuebles; Type: TABLE; Schema: inmuebles; Owner: postgres
 --
 
@@ -2271,8 +2440,8 @@ CREATE TABLE inmuebles.tb_tipos_inmuebles (
 ALTER TABLE inmuebles.tb_tipos_inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3479 (class 0 OID 0)
--- Dependencies: 230
+-- TOC entry 3344 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: TABLE tb_tipos_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2280,8 +2449,8 @@ COMMENT ON TABLE inmuebles.tb_tipos_inmuebles IS 'Tabla que contiene la informac
 
 
 --
--- TOC entry 3480 (class 0 OID 0)
--- Dependencies: 230
+-- TOC entry 3345 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: COLUMN tb_tipos_inmuebles.id_tipos_inmuebles; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2289,8 +2458,8 @@ COMMENT ON COLUMN inmuebles.tb_tipos_inmuebles.id_tipos_inmuebles IS 'Id llave p
 
 
 --
--- TOC entry 3481 (class 0 OID 0)
--- Dependencies: 230
+-- TOC entry 3346 (class 0 OID 0)
+-- Dependencies: 249
 -- Name: COLUMN tb_tipos_inmuebles.descripcion; Type: COMMENT; Schema: inmuebles; Owner: postgres
 --
 
@@ -2298,7 +2467,7 @@ COMMENT ON COLUMN inmuebles.tb_tipos_inmuebles.descripcion IS 'Descripción del 
 
 
 --
--- TOC entry 229 (class 1259 OID 16624)
+-- TOC entry 250 (class 1259 OID 17288)
 -- Name: tb_tipos_inmuebles_id_tipos_inmuebles_seq; Type: SEQUENCE; Schema: inmuebles; Owner: postgres
 --
 
@@ -2314,8 +2483,8 @@ CREATE SEQUENCE inmuebles.tb_tipos_inmuebles_id_tipos_inmuebles_seq
 ALTER TABLE inmuebles.tb_tipos_inmuebles_id_tipos_inmuebles_seq OWNER TO postgres;
 
 --
--- TOC entry 3482 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 3347 (class 0 OID 0)
+-- Dependencies: 250
 -- Name: tb_tipos_inmuebles_id_tipos_inmuebles_seq; Type: SEQUENCE OWNED BY; Schema: inmuebles; Owner: postgres
 --
 
@@ -2323,7 +2492,7 @@ ALTER SEQUENCE inmuebles.tb_tipos_inmuebles_id_tipos_inmuebles_seq OWNED BY inmu
 
 
 --
--- TOC entry 219 (class 1259 OID 16541)
+-- TOC entry 251 (class 1259 OID 17290)
 -- Name: tb_personal; Type: TABLE; Schema: rrhh; Owner: postgres
 --
 
@@ -2344,8 +2513,8 @@ CREATE TABLE rrhh.tb_personal (
 ALTER TABLE rrhh.tb_personal OWNER TO postgres;
 
 --
--- TOC entry 3483 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3348 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: TABLE tb_personal; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2353,8 +2522,8 @@ COMMENT ON TABLE rrhh.tb_personal IS 'Tabla que contiene la información del per
 
 
 --
--- TOC entry 3484 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3349 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.id_personal; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2362,8 +2531,8 @@ COMMENT ON COLUMN rrhh.tb_personal.id_personal IS 'Id llave primaria de la tabla
 
 
 --
--- TOC entry 3485 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3350 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.id_tipo_identificacion; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2371,8 +2540,8 @@ COMMENT ON COLUMN rrhh.tb_personal.id_tipo_identificacion IS 'Llave foránea que
 
 
 --
--- TOC entry 3486 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3351 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.nombres; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2380,8 +2549,8 @@ COMMENT ON COLUMN rrhh.tb_personal.nombres IS 'Nombres de la persona';
 
 
 --
--- TOC entry 3487 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3352 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.apellidos; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2389,8 +2558,8 @@ COMMENT ON COLUMN rrhh.tb_personal.apellidos IS 'Apellidos de la persona';
 
 
 --
--- TOC entry 3488 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3353 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.numero_identificacion; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2398,8 +2567,8 @@ COMMENT ON COLUMN rrhh.tb_personal.numero_identificacion IS 'Número de identifi
 
 
 --
--- TOC entry 3489 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3354 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.numero_telefono; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2407,8 +2576,8 @@ COMMENT ON COLUMN rrhh.tb_personal.numero_telefono IS 'Número de teléfono de l
 
 
 --
--- TOC entry 3490 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3355 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.correo_electronico; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2416,8 +2585,8 @@ COMMENT ON COLUMN rrhh.tb_personal.correo_electronico IS 'Correo electrónico de
 
 
 --
--- TOC entry 3491 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3356 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.id_ciudad; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2425,8 +2594,8 @@ COMMENT ON COLUMN rrhh.tb_personal.id_ciudad IS 'Llave foránea que relaciona la
 
 
 --
--- TOC entry 3492 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3357 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.id_cargo_persona; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2434,8 +2603,8 @@ COMMENT ON COLUMN rrhh.tb_personal.id_cargo_persona IS 'Llave foránea a la tabl
 
 
 --
--- TOC entry 3493 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 3358 (class 0 OID 0)
+-- Dependencies: 251
 -- Name: COLUMN tb_personal.porcentaje_ganancia; Type: COMMENT; Schema: rrhh; Owner: postgres
 --
 
@@ -2443,7 +2612,7 @@ COMMENT ON COLUMN rrhh.tb_personal.porcentaje_ganancia IS 'Porcentaje de gananci
 
 
 --
--- TOC entry 218 (class 1259 OID 16539)
+-- TOC entry 252 (class 1259 OID 17293)
 -- Name: tb_personal_id_personal_seq; Type: SEQUENCE; Schema: rrhh; Owner: postgres
 --
 
@@ -2459,8 +2628,8 @@ CREATE SEQUENCE rrhh.tb_personal_id_personal_seq
 ALTER TABLE rrhh.tb_personal_id_personal_seq OWNER TO postgres;
 
 --
--- TOC entry 3494 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 3359 (class 0 OID 0)
+-- Dependencies: 252
 -- Name: tb_personal_id_personal_seq; Type: SEQUENCE OWNED BY; Schema: rrhh; Owner: postgres
 --
 
@@ -2468,7 +2637,7 @@ ALTER SEQUENCE rrhh.tb_personal_id_personal_seq OWNED BY rrhh.tb_personal.id_per
 
 
 --
--- TOC entry 208 (class 1259 OID 16449)
+-- TOC entry 253 (class 1259 OID 17295)
 -- Name: tb_users_access; Type: TABLE; Schema: session; Owner: postgres
 --
 
@@ -2486,8 +2655,8 @@ CREATE TABLE session.tb_users_access (
 ALTER TABLE session.tb_users_access OWNER TO postgres;
 
 --
--- TOC entry 3495 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3360 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: TABLE tb_users_access; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2495,8 +2664,8 @@ COMMENT ON TABLE session.tb_users_access IS 'Tabla que guarda la información de
 
 
 --
--- TOC entry 3496 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3361 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: COLUMN tb_users_access.id_user_access; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2504,8 +2673,8 @@ COMMENT ON COLUMN session.tb_users_access.id_user_access IS 'Llave primaria de l
 
 
 --
--- TOC entry 3497 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3362 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: COLUMN tb_users_access.id_user_app; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2513,8 +2682,8 @@ COMMENT ON COLUMN session.tb_users_access.id_user_app IS 'Llave foránea a la ta
 
 
 --
--- TOC entry 3498 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3363 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: COLUMN tb_users_access.fecha_acceso; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2522,8 +2691,8 @@ COMMENT ON COLUMN session.tb_users_access.fecha_acceso IS 'Fecha y hora en las q
 
 
 --
--- TOC entry 3499 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3364 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: COLUMN tb_users_access.datos_sesion; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2531,8 +2700,8 @@ COMMENT ON COLUMN session.tb_users_access.datos_sesion IS 'Cadena JSON que conti
 
 
 --
--- TOC entry 3500 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3365 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: COLUMN tb_users_access.id_acceso; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2540,8 +2709,8 @@ COMMENT ON COLUMN session.tb_users_access.id_acceso IS 'Id de acceso a la aplica
 
 
 --
--- TOC entry 3501 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3366 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: COLUMN tb_users_access.datos_host_remoto; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2549,8 +2718,8 @@ COMMENT ON COLUMN session.tb_users_access.datos_host_remoto IS 'Datos obtenidos 
 
 
 --
--- TOC entry 3502 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3367 (class 0 OID 0)
+-- Dependencies: 253
 -- Name: COLUMN tb_users_access.fecha_salida; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2558,7 +2727,7 @@ COMMENT ON COLUMN session.tb_users_access.fecha_salida IS 'Fecha y hora en la qu
 
 
 --
--- TOC entry 207 (class 1259 OID 16447)
+-- TOC entry 254 (class 1259 OID 17302)
 -- Name: tb_users_access_id_user_access_seq; Type: SEQUENCE; Schema: session; Owner: postgres
 --
 
@@ -2574,8 +2743,8 @@ CREATE SEQUENCE session.tb_users_access_id_user_access_seq
 ALTER TABLE session.tb_users_access_id_user_access_seq OWNER TO postgres;
 
 --
--- TOC entry 3503 (class 0 OID 0)
--- Dependencies: 207
+-- TOC entry 3368 (class 0 OID 0)
+-- Dependencies: 254
 -- Name: tb_users_access_id_user_access_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
 
@@ -2583,7 +2752,7 @@ ALTER SEQUENCE session.tb_users_access_id_user_access_seq OWNED BY session.tb_us
 
 
 --
--- TOC entry 209 (class 1259 OID 16463)
+-- TOC entry 255 (class 1259 OID 17304)
 -- Name: tb_users_access_id_user_seq; Type: SEQUENCE; Schema: session; Owner: postgres
 --
 
@@ -2599,8 +2768,8 @@ CREATE SEQUENCE session.tb_users_access_id_user_seq
 ALTER TABLE session.tb_users_access_id_user_seq OWNER TO postgres;
 
 --
--- TOC entry 3504 (class 0 OID 0)
--- Dependencies: 209
+-- TOC entry 3369 (class 0 OID 0)
+-- Dependencies: 255
 -- Name: tb_users_access_id_user_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
 
@@ -2608,7 +2777,7 @@ ALTER SEQUENCE session.tb_users_access_id_user_seq OWNED BY session.tb_users_acc
 
 
 --
--- TOC entry 206 (class 1259 OID 16438)
+-- TOC entry 256 (class 1259 OID 17306)
 -- Name: tb_users_app; Type: TABLE; Schema: session; Owner: postgres
 --
 
@@ -2626,8 +2795,8 @@ CREATE TABLE session.tb_users_app (
 ALTER TABLE session.tb_users_app OWNER TO postgres;
 
 --
--- TOC entry 3505 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3370 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_user; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2635,8 +2804,8 @@ COMMENT ON COLUMN session.tb_users_app.id_user IS 'Llave primaria de la tabla de
 
 
 --
--- TOC entry 3506 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3371 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: COLUMN tb_users_app.userlogin; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2644,8 +2813,8 @@ COMMENT ON COLUMN session.tb_users_app.userlogin IS 'Identificador o nombre úni
 
 
 --
--- TOC entry 3507 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3372 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: COLUMN tb_users_app.password; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2653,8 +2822,8 @@ COMMENT ON COLUMN session.tb_users_app.password IS 'Password o contraseña asign
 
 
 --
--- TOC entry 3508 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3373 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: COLUMN tb_users_app.estado; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2662,8 +2831,8 @@ COMMENT ON COLUMN session.tb_users_app.estado IS 'Indica el estado del usuario, 
 
 
 --
--- TOC entry 3509 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3374 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: COLUMN tb_users_app.fecha_creacion; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2671,8 +2840,8 @@ COMMENT ON COLUMN session.tb_users_app.fecha_creacion IS 'Fecha en la que se cre
 
 
 --
--- TOC entry 3510 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3375 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_persona; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2680,8 +2849,8 @@ COMMENT ON COLUMN session.tb_users_app.id_persona IS 'Llave foránea hacia la ta
 
 
 --
--- TOC entry 3511 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3376 (class 0 OID 0)
+-- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_user_app_externo; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2689,7 +2858,7 @@ COMMENT ON COLUMN session.tb_users_app.id_user_app_externo IS 'Llave foránea a 
 
 
 --
--- TOC entry 211 (class 1259 OID 16480)
+-- TOC entry 257 (class 1259 OID 17313)
 -- Name: tb_users_app_externo; Type: TABLE; Schema: session; Owner: postgres
 --
 
@@ -2708,8 +2877,8 @@ CREATE TABLE session.tb_users_app_externo (
 ALTER TABLE session.tb_users_app_externo OWNER TO postgres;
 
 --
--- TOC entry 3512 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3377 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: TABLE tb_users_app_externo; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2717,8 +2886,8 @@ COMMENT ON TABLE session.tb_users_app_externo IS 'Tabla que contiene la informac
 
 
 --
--- TOC entry 3513 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3378 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.id_user_app_externo; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2726,8 +2895,8 @@ COMMENT ON COLUMN session.tb_users_app_externo.id_user_app_externo IS 'Id llave 
 
 
 --
--- TOC entry 3514 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3379 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.nombres_siglas; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2735,8 +2904,8 @@ COMMENT ON COLUMN session.tb_users_app_externo.nombres_siglas IS 'Nombres de la 
 
 
 --
--- TOC entry 3515 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3380 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.apellidos_razon_social; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2744,8 +2913,8 @@ COMMENT ON COLUMN session.tb_users_app_externo.apellidos_razon_social IS 'Apelli
 
 
 --
--- TOC entry 3516 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3381 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.numero_identificacion; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2753,8 +2922,8 @@ COMMENT ON COLUMN session.tb_users_app_externo.numero_identificacion IS 'Número
 
 
 --
--- TOC entry 3517 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3382 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.id_tipo_identificacion; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2762,8 +2931,8 @@ COMMENT ON COLUMN session.tb_users_app_externo.id_tipo_identificacion IS 'Id for
 
 
 --
--- TOC entry 3518 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3383 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.numero_telefono; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2771,8 +2940,8 @@ COMMENT ON COLUMN session.tb_users_app_externo.numero_telefono IS 'Número de te
 
 
 --
--- TOC entry 3519 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3384 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.correo_electronico; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2780,8 +2949,8 @@ COMMENT ON COLUMN session.tb_users_app_externo.correo_electronico IS 'Email del 
 
 
 --
--- TOC entry 3520 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3385 (class 0 OID 0)
+-- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.id_ciudad; Type: COMMENT; Schema: session; Owner: postgres
 --
 
@@ -2789,7 +2958,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.id_ciudad IS 'LLave foránea que 
 
 
 --
--- TOC entry 210 (class 1259 OID 16478)
+-- TOC entry 258 (class 1259 OID 17316)
 -- Name: tb_users_app_externo_id_user_app_externo_seq; Type: SEQUENCE; Schema: session; Owner: postgres
 --
 
@@ -2805,8 +2974,8 @@ CREATE SEQUENCE session.tb_users_app_externo_id_user_app_externo_seq
 ALTER TABLE session.tb_users_app_externo_id_user_app_externo_seq OWNER TO postgres;
 
 --
--- TOC entry 3521 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 3386 (class 0 OID 0)
+-- Dependencies: 258
 -- Name: tb_users_app_externo_id_user_app_externo_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
 
@@ -2814,7 +2983,7 @@ ALTER SEQUENCE session.tb_users_app_externo_id_user_app_externo_seq OWNED BY ses
 
 
 --
--- TOC entry 205 (class 1259 OID 16436)
+-- TOC entry 259 (class 1259 OID 17318)
 -- Name: tb_users_id_usuario_seq; Type: SEQUENCE; Schema: session; Owner: postgres
 --
 
@@ -2830,8 +2999,8 @@ CREATE SEQUENCE session.tb_users_id_usuario_seq
 ALTER TABLE session.tb_users_id_usuario_seq OWNER TO postgres;
 
 --
--- TOC entry 3522 (class 0 OID 0)
--- Dependencies: 205
+-- TOC entry 3387 (class 0 OID 0)
+-- Dependencies: 259
 -- Name: tb_users_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
 
@@ -2839,7 +3008,7 @@ ALTER SEQUENCE session.tb_users_id_usuario_seq OWNED BY session.tb_users_app.id_
 
 
 --
--- TOC entry 243 (class 1259 OID 16685)
+-- TOC entry 260 (class 1259 OID 17320)
 -- Name: tb_agendas_solicitudes; Type: TABLE; Schema: solicitudes; Owner: postgres
 --
 
@@ -2861,8 +3030,8 @@ CREATE TABLE solicitudes.tb_agendas_solicitudes (
 ALTER TABLE solicitudes.tb_agendas_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3523 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3388 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: TABLE tb_agendas_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2870,8 +3039,8 @@ COMMENT ON TABLE solicitudes.tb_agendas_solicitudes IS 'Tabla que contiene la in
 
 
 --
--- TOC entry 3524 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3389 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_agenda_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2879,8 +3048,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_agenda_solicitud IS 'Id 
 
 
 --
--- TOC entry 3525 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3390 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2888,8 +3057,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_solicitud IS 'Llave for�
 
 
 --
--- TOC entry 3526 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3391 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.fecha_programada; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2897,8 +3066,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.fecha_programada IS 'Fecha 
 
 
 --
--- TOC entry 3527 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3392 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_persona; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2906,8 +3075,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_persona IS 'Llave forán
 
 
 --
--- TOC entry 3528 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3393 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_vendedor; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2915,8 +3084,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_vendedor IS 'Llave forá
 
 
 --
--- TOC entry 3529 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3394 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.fecha_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2924,8 +3093,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.fecha_creacion IS 'Fecha y 
 
 
 --
--- TOC entry 3530 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3395 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_persona_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2933,8 +3102,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_persona_creacion IS 'Lla
 
 
 --
--- TOC entry 3531 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3396 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_estado_agenda; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2942,8 +3111,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_estado_agenda IS 'Llave 
 
 
 --
--- TOC entry 3532 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3397 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.fecha_modificacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2951,8 +3120,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.fecha_modificacion IS 'Fech
 
 
 --
--- TOC entry 3533 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3398 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.observacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2960,8 +3129,8 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.observacion IS 'Observació
 
 
 --
--- TOC entry 3534 (class 0 OID 0)
--- Dependencies: 243
+-- TOC entry 3399 (class 0 OID 0)
+-- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_cliente; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -2969,7 +3138,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_cliente IS 'Llave forán
 
 
 --
--- TOC entry 242 (class 1259 OID 16683)
+-- TOC entry 261 (class 1259 OID 17323)
 -- Name: tb_agendas_solicitudes_id_agenda_solicitud_seq; Type: SEQUENCE; Schema: solicitudes; Owner: postgres
 --
 
@@ -2985,8 +3154,8 @@ CREATE SEQUENCE solicitudes.tb_agendas_solicitudes_id_agenda_solicitud_seq
 ALTER TABLE solicitudes.tb_agendas_solicitudes_id_agenda_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3535 (class 0 OID 0)
--- Dependencies: 242
+-- TOC entry 3400 (class 0 OID 0)
+-- Dependencies: 261
 -- Name: tb_agendas_solicitudes_id_agenda_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
 
@@ -2994,7 +3163,7 @@ ALTER SEQUENCE solicitudes.tb_agendas_solicitudes_id_agenda_solicitud_seq OWNED 
 
 
 --
--- TOC entry 234 (class 1259 OID 16642)
+-- TOC entry 262 (class 1259 OID 17325)
 -- Name: tb_caracteristicas_solicitudes; Type: TABLE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3009,8 +3178,8 @@ CREATE TABLE solicitudes.tb_caracteristicas_solicitudes (
 ALTER TABLE solicitudes.tb_caracteristicas_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3536 (class 0 OID 0)
--- Dependencies: 234
+-- TOC entry 3401 (class 0 OID 0)
+-- Dependencies: 262
 -- Name: TABLE tb_caracteristicas_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3018,8 +3187,8 @@ COMMENT ON TABLE solicitudes.tb_caracteristicas_solicitudes IS 'Tabla que contie
 
 
 --
--- TOC entry 3537 (class 0 OID 0)
--- Dependencies: 234
+-- TOC entry 3402 (class 0 OID 0)
+-- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.id_caracteristicas_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3027,8 +3196,8 @@ COMMENT ON COLUMN solicitudes.tb_caracteristicas_solicitudes.id_caracteristicas_
 
 
 --
--- TOC entry 3538 (class 0 OID 0)
--- Dependencies: 234
+-- TOC entry 3403 (class 0 OID 0)
+-- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.id_caracteristica_inmueble; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3036,8 +3205,8 @@ COMMENT ON COLUMN solicitudes.tb_caracteristicas_solicitudes.id_caracteristica_i
 
 
 --
--- TOC entry 3539 (class 0 OID 0)
--- Dependencies: 234
+-- TOC entry 3404 (class 0 OID 0)
+-- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3045,8 +3214,8 @@ COMMENT ON COLUMN solicitudes.tb_caracteristicas_solicitudes.id_solicitud IS 'Ll
 
 
 --
--- TOC entry 3540 (class 0 OID 0)
--- Dependencies: 234
+-- TOC entry 3405 (class 0 OID 0)
+-- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.valor_caracteristica; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3054,7 +3223,7 @@ COMMENT ON COLUMN solicitudes.tb_caracteristicas_solicitudes.valor_caracteristic
 
 
 --
--- TOC entry 233 (class 1259 OID 16640)
+-- TOC entry 263 (class 1259 OID 17328)
 -- Name: tb_caracteristicas_solicitudes_id_caracteristicas_solicitud_seq; Type: SEQUENCE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3070,8 +3239,8 @@ CREATE SEQUENCE solicitudes.tb_caracteristicas_solicitudes_id_caracteristicas_so
 ALTER TABLE solicitudes.tb_caracteristicas_solicitudes_id_caracteristicas_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3541 (class 0 OID 0)
--- Dependencies: 233
+-- TOC entry 3406 (class 0 OID 0)
+-- Dependencies: 263
 -- Name: tb_caracteristicas_solicitudes_id_caracteristicas_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
 
@@ -3079,7 +3248,7 @@ ALTER SEQUENCE solicitudes.tb_caracteristicas_solicitudes_id_caracteristicas_sol
 
 
 --
--- TOC entry 232 (class 1259 OID 16634)
+-- TOC entry 264 (class 1259 OID 17330)
 -- Name: tb_estados_solicitudes; Type: TABLE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3101,8 +3270,8 @@ CREATE TABLE solicitudes.tb_estados_solicitudes (
 ALTER TABLE solicitudes.tb_estados_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3542 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3407 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: TABLE tb_estados_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3110,8 +3279,8 @@ COMMENT ON TABLE solicitudes.tb_estados_solicitudes IS 'Tabla de estados de las 
 
 
 --
--- TOC entry 3543 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3408 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_estado_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3119,8 +3288,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_estado_solicitud IS 'ID 
 
 
 --
--- TOC entry 3544 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3409 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_solicitud_estado; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3128,8 +3297,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_solicitud_estado IS 'Lla
 
 
 --
--- TOC entry 3545 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3410 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_persona; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3137,8 +3306,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_persona IS 'Llave forán
 
 
 --
--- TOC entry 3546 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3411 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.observacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3146,8 +3315,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.observacion IS 'Observació
 
 
 --
--- TOC entry 3547 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3412 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.fecha_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3155,8 +3324,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.fecha_creacion IS 'Fecha en
 
 
 --
--- TOC entry 3548 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3413 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_tipo_actividad; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3164,8 +3333,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_tipo_actividad IS 'Llave
 
 
 --
--- TOC entry 3549 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3414 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.actividad_programada; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3173,8 +3342,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.actividad_programada IS 'Va
 
 
 --
--- TOC entry 3550 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3415 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.fecha_programada; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3182,8 +3351,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.fecha_programada IS 'Fecha 
 
 
 --
--- TOC entry 3551 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3416 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.valor_negocio; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3191,8 +3360,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.valor_negocio IS 'Valor rea
 
 
 --
--- TOC entry 3552 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3417 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.porcentaje_comision; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3200,8 +3369,8 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.porcentaje_comision IS 'Por
 
 
 --
--- TOC entry 3553 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3418 (class 0 OID 0)
+-- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3209,7 +3378,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_solicitud IS 'Llave for�
 
 
 --
--- TOC entry 231 (class 1259 OID 16632)
+-- TOC entry 265 (class 1259 OID 17333)
 -- Name: tb_estados_solicitudes_id_estado_solicitud_seq; Type: SEQUENCE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3225,8 +3394,8 @@ CREATE SEQUENCE solicitudes.tb_estados_solicitudes_id_estado_solicitud_seq
 ALTER TABLE solicitudes.tb_estados_solicitudes_id_estado_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3554 (class 0 OID 0)
--- Dependencies: 231
+-- TOC entry 3419 (class 0 OID 0)
+-- Dependencies: 265
 -- Name: tb_estados_solicitudes_id_estado_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
 
@@ -3234,7 +3403,7 @@ ALTER SEQUENCE solicitudes.tb_estados_solicitudes_id_estado_solicitud_seq OWNED 
 
 
 --
--- TOC entry 240 (class 1259 OID 16666)
+-- TOC entry 266 (class 1259 OID 17335)
 -- Name: tb_intereses_solicitudes; Type: TABLE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3249,8 +3418,8 @@ CREATE TABLE solicitudes.tb_intereses_solicitudes (
 ALTER TABLE solicitudes.tb_intereses_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3555 (class 0 OID 0)
--- Dependencies: 240
+-- TOC entry 3420 (class 0 OID 0)
+-- Dependencies: 266
 -- Name: TABLE tb_intereses_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3258,8 +3427,8 @@ COMMENT ON TABLE solicitudes.tb_intereses_solicitudes IS 'Tabla que asocia los i
 
 
 --
--- TOC entry 3556 (class 0 OID 0)
--- Dependencies: 240
+-- TOC entry 3421 (class 0 OID 0)
+-- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.id_interes_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3267,8 +3436,8 @@ COMMENT ON COLUMN solicitudes.tb_intereses_solicitudes.id_interes_solicitud IS '
 
 
 --
--- TOC entry 3557 (class 0 OID 0)
--- Dependencies: 240
+-- TOC entry 3422 (class 0 OID 0)
+-- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.id_interes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3276,8 +3445,8 @@ COMMENT ON COLUMN solicitudes.tb_intereses_solicitudes.id_interes IS 'Llave for�
 
 
 --
--- TOC entry 3558 (class 0 OID 0)
--- Dependencies: 240
+-- TOC entry 3423 (class 0 OID 0)
+-- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3285,8 +3454,8 @@ COMMENT ON COLUMN solicitudes.tb_intereses_solicitudes.id_solicitud IS 'Llave fo
 
 
 --
--- TOC entry 3559 (class 0 OID 0)
--- Dependencies: 240
+-- TOC entry 3424 (class 0 OID 0)
+-- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.observacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3294,7 +3463,7 @@ COMMENT ON COLUMN solicitudes.tb_intereses_solicitudes.observacion IS 'Observaci
 
 
 --
--- TOC entry 239 (class 1259 OID 16664)
+-- TOC entry 267 (class 1259 OID 17338)
 -- Name: tb_intereses_solicitudes_id_interes_solicitud_seq; Type: SEQUENCE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3310,8 +3479,8 @@ CREATE SEQUENCE solicitudes.tb_intereses_solicitudes_id_interes_solicitud_seq
 ALTER TABLE solicitudes.tb_intereses_solicitudes_id_interes_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3560 (class 0 OID 0)
--- Dependencies: 239
+-- TOC entry 3425 (class 0 OID 0)
+-- Dependencies: 267
 -- Name: tb_intereses_solicitudes_id_interes_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
 
@@ -3319,7 +3488,7 @@ ALTER SEQUENCE solicitudes.tb_intereses_solicitudes_id_interes_solicitud_seq OWN
 
 
 --
--- TOC entry 224 (class 1259 OID 16589)
+-- TOC entry 268 (class 1259 OID 17340)
 -- Name: tb_solicitudes_compra; Type: TABLE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3348,8 +3517,8 @@ CREATE TABLE solicitudes.tb_solicitudes_compra (
 ALTER TABLE solicitudes.tb_solicitudes_compra OWNER TO postgres;
 
 --
--- TOC entry 3561 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3426 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: TABLE tb_solicitudes_compra; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3357,8 +3526,8 @@ COMMENT ON TABLE solicitudes.tb_solicitudes_compra IS 'Tabla que contiene la inf
 
 
 --
--- TOC entry 3562 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3427 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3366,8 +3535,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_solicitudes IS 'Id de la 
 
 
 --
--- TOC entry 3563 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3428 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_cliente; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3375,8 +3544,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_cliente IS 'Llave foráne
 
 
 --
--- TOC entry 3564 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3429 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_tipo_inmueble; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3384,8 +3553,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_tipo_inmueble IS 'Llave f
 
 
 --
--- TOC entry 3565 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3430 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.observaciones; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3393,8 +3562,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.observaciones IS 'Observacio
 
 
 --
--- TOC entry 3566 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3431 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.valor_inmueble; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3402,8 +3571,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.valor_inmueble IS 'Valor del
 
 
 --
--- TOC entry 3567 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3432 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_forma_pago; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3411,8 +3580,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_forma_pago IS 'Llave for�
 
 
 --
--- TOC entry 3568 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3433 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_urgencia; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3420,8 +3589,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_urgencia IS 'Llave forán
 
 
 --
--- TOC entry 3569 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3434 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_zona; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3429,8 +3598,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_zona IS 'Zona de la ciuda
 
 
 --
--- TOC entry 3570 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3435 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.fecha_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3438,8 +3607,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.fecha_creacion IS 'Fecha en 
 
 
 --
--- TOC entry 3571 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3436 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_usuario_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3447,8 +3616,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_usuario_creacion IS 'Id d
 
 
 --
--- TOC entry 3572 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3437 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_usuario_modifica; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3456,8 +3625,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_usuario_modifica IS 'Id d
 
 
 --
--- TOC entry 3573 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3438 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.fecha_modificacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3465,8 +3634,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.fecha_modificacion IS 'Fecha
 
 
 --
--- TOC entry 3574 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3439 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_estado_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3474,8 +3643,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_estado_solicitud IS 'Llav
 
 
 --
--- TOC entry 3575 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3440 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.numero_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3483,8 +3652,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.numero_solicitud IS 'Número
 
 
 --
--- TOC entry 3576 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3441 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.cantidad_ninos; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3492,8 +3661,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.cantidad_ninos IS 'Cantidad 
 
 
 --
--- TOC entry 3577 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3442 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.cantidad_adultos; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3501,8 +3670,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.cantidad_adultos IS 'Cantida
 
 
 --
--- TOC entry 3578 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3443 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.cantidad_adultos_mayores; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3510,8 +3679,8 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.cantidad_adultos_mayores IS 
 
 
 --
--- TOC entry 3579 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3444 (class 0 OID 0)
+-- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.fecha_requerida; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
 
@@ -3519,7 +3688,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.fecha_requerida IS 'Fecha en
 
 
 --
--- TOC entry 223 (class 1259 OID 16587)
+-- TOC entry 269 (class 1259 OID 17343)
 -- Name: tb_solicitudes_id_solicitudes_seq; Type: SEQUENCE; Schema: solicitudes; Owner: postgres
 --
 
@@ -3535,8 +3704,8 @@ CREATE SEQUENCE solicitudes.tb_solicitudes_id_solicitudes_seq
 ALTER TABLE solicitudes.tb_solicitudes_id_solicitudes_seq OWNER TO postgres;
 
 --
--- TOC entry 3580 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 3445 (class 0 OID 0)
+-- Dependencies: 269
 -- Name: tb_solicitudes_id_solicitudes_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
 
@@ -3544,7 +3713,7 @@ ALTER SEQUENCE solicitudes.tb_solicitudes_id_solicitudes_seq OWNED BY solicitude
 
 
 --
--- TOC entry 241 (class 1259 OID 16680)
+-- TOC entry 270 (class 1259 OID 17345)
 -- Name: tb_tipos_actividades; Type: TABLE; Schema: tipos; Owner: postgres
 --
 
@@ -3557,8 +3726,8 @@ CREATE TABLE tipos.tb_tipos_actividades (
 ALTER TABLE tipos.tb_tipos_actividades OWNER TO postgres;
 
 --
--- TOC entry 3581 (class 0 OID 0)
--- Dependencies: 241
+-- TOC entry 3446 (class 0 OID 0)
+-- Dependencies: 270
 -- Name: TABLE tb_tipos_actividades; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3566,8 +3735,8 @@ COMMENT ON TABLE tipos.tb_tipos_actividades IS 'Tabla que contiene los tipos de 
 
 
 --
--- TOC entry 3582 (class 0 OID 0)
--- Dependencies: 241
+-- TOC entry 3447 (class 0 OID 0)
+-- Dependencies: 270
 -- Name: COLUMN tb_tipos_actividades.id_tipo_actividad; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3575,8 +3744,8 @@ COMMENT ON COLUMN tipos.tb_tipos_actividades.id_tipo_actividad IS 'Id llave prim
 
 
 --
--- TOC entry 3583 (class 0 OID 0)
--- Dependencies: 241
+-- TOC entry 3448 (class 0 OID 0)
+-- Dependencies: 270
 -- Name: COLUMN tb_tipos_actividades.descripcion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3584,7 +3753,7 @@ COMMENT ON COLUMN tipos.tb_tipos_actividades.descripcion IS 'Descripción o deno
 
 
 --
--- TOC entry 260 (class 1259 OID 16909)
+-- TOC entry 271 (class 1259 OID 17348)
 -- Name: tb_tipos_actividades_id_tipo_actividad_seq; Type: SEQUENCE; Schema: tipos; Owner: postgres
 --
 
@@ -3600,8 +3769,8 @@ CREATE SEQUENCE tipos.tb_tipos_actividades_id_tipo_actividad_seq
 ALTER TABLE tipos.tb_tipos_actividades_id_tipo_actividad_seq OWNER TO postgres;
 
 --
--- TOC entry 3584 (class 0 OID 0)
--- Dependencies: 260
+-- TOC entry 3449 (class 0 OID 0)
+-- Dependencies: 271
 -- Name: tb_tipos_actividades_id_tipo_actividad_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
 
@@ -3609,7 +3778,7 @@ ALTER SEQUENCE tipos.tb_tipos_actividades_id_tipo_actividad_seq OWNED BY tipos.t
 
 
 --
--- TOC entry 272 (class 1259 OID 17042)
+-- TOC entry 272 (class 1259 OID 17350)
 -- Name: tb_tipos_clientes; Type: TABLE; Schema: tipos; Owner: postgres
 --
 
@@ -3622,7 +3791,7 @@ CREATE TABLE tipos.tb_tipos_clientes (
 ALTER TABLE tipos.tb_tipos_clientes OWNER TO postgres;
 
 --
--- TOC entry 3585 (class 0 OID 0)
+-- TOC entry 3450 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: TABLE tb_tipos_clientes; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -3631,7 +3800,7 @@ COMMENT ON TABLE tipos.tb_tipos_clientes IS 'Tabla que contiene la información 
 
 
 --
--- TOC entry 3586 (class 0 OID 0)
+-- TOC entry 3451 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: COLUMN tb_tipos_clientes.id_tipo_cliente; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -3640,7 +3809,7 @@ COMMENT ON COLUMN tipos.tb_tipos_clientes.id_tipo_cliente IS 'ID llave primaria 
 
 
 --
--- TOC entry 3587 (class 0 OID 0)
+-- TOC entry 3452 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: COLUMN tb_tipos_clientes.descripcion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -3649,7 +3818,7 @@ COMMENT ON COLUMN tipos.tb_tipos_clientes.descripcion IS 'Descripción o denomin
 
 
 --
--- TOC entry 271 (class 1259 OID 17040)
+-- TOC entry 273 (class 1259 OID 17353)
 -- Name: tb_tipos_clientes_id_tipo_cliente_seq; Type: SEQUENCE; Schema: tipos; Owner: postgres
 --
 
@@ -3665,8 +3834,8 @@ CREATE SEQUENCE tipos.tb_tipos_clientes_id_tipo_cliente_seq
 ALTER TABLE tipos.tb_tipos_clientes_id_tipo_cliente_seq OWNER TO postgres;
 
 --
--- TOC entry 3588 (class 0 OID 0)
--- Dependencies: 271
+-- TOC entry 3453 (class 0 OID 0)
+-- Dependencies: 273
 -- Name: tb_tipos_clientes_id_tipo_cliente_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
 
@@ -3674,7 +3843,7 @@ ALTER SEQUENCE tipos.tb_tipos_clientes_id_tipo_cliente_seq OWNED BY tipos.tb_tip
 
 
 --
--- TOC entry 220 (class 1259 OID 16571)
+-- TOC entry 274 (class 1259 OID 17355)
 -- Name: tb_tipos_inmuebles; Type: TABLE; Schema: tipos; Owner: postgres
 --
 
@@ -3687,8 +3856,8 @@ CREATE TABLE tipos.tb_tipos_inmuebles (
 ALTER TABLE tipos.tb_tipos_inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3589 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 3454 (class 0 OID 0)
+-- Dependencies: 274
 -- Name: TABLE tb_tipos_inmuebles; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3696,8 +3865,8 @@ COMMENT ON TABLE tipos.tb_tipos_inmuebles IS 'Tabla que contiene los tipos de in
 
 
 --
--- TOC entry 3590 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 3455 (class 0 OID 0)
+-- Dependencies: 274
 -- Name: COLUMN tb_tipos_inmuebles.id_tipo_inmueble; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3705,8 +3874,8 @@ COMMENT ON COLUMN tipos.tb_tipos_inmuebles.id_tipo_inmueble IS 'Id de la tabla q
 
 
 --
--- TOC entry 3591 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 3456 (class 0 OID 0)
+-- Dependencies: 274
 -- Name: COLUMN tb_tipos_inmuebles.nombre; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3714,7 +3883,7 @@ COMMENT ON COLUMN tipos.tb_tipos_inmuebles.nombre IS 'Nombre del tipo de inmuebl
 
 
 --
--- TOC entry 266 (class 1259 OID 16999)
+-- TOC entry 275 (class 1259 OID 17358)
 -- Name: tb_tipos_notificacion; Type: TABLE; Schema: tipos; Owner: postgres
 --
 
@@ -3727,8 +3896,8 @@ CREATE TABLE tipos.tb_tipos_notificacion (
 ALTER TABLE tipos.tb_tipos_notificacion OWNER TO postgres;
 
 --
--- TOC entry 3592 (class 0 OID 0)
--- Dependencies: 266
+-- TOC entry 3457 (class 0 OID 0)
+-- Dependencies: 275
 -- Name: TABLE tb_tipos_notificacion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3736,8 +3905,8 @@ COMMENT ON TABLE tipos.tb_tipos_notificacion IS 'Tabla que contiene la informaci
 
 
 --
--- TOC entry 3593 (class 0 OID 0)
--- Dependencies: 266
+-- TOC entry 3458 (class 0 OID 0)
+-- Dependencies: 275
 -- Name: COLUMN tb_tipos_notificacion.descripcion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3745,7 +3914,7 @@ COMMENT ON COLUMN tipos.tb_tipos_notificacion.descripcion IS 'descripcion o deno
 
 
 --
--- TOC entry 265 (class 1259 OID 16997)
+-- TOC entry 276 (class 1259 OID 17361)
 -- Name: tb_tipos_notificacion_id_tipo_notificacion_seq; Type: SEQUENCE; Schema: tipos; Owner: postgres
 --
 
@@ -3761,8 +3930,8 @@ CREATE SEQUENCE tipos.tb_tipos_notificacion_id_tipo_notificacion_seq
 ALTER TABLE tipos.tb_tipos_notificacion_id_tipo_notificacion_seq OWNER TO postgres;
 
 --
--- TOC entry 3594 (class 0 OID 0)
--- Dependencies: 265
+-- TOC entry 3459 (class 0 OID 0)
+-- Dependencies: 276
 -- Name: tb_tipos_notificacion_id_tipo_notificacion_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
 
@@ -3770,7 +3939,7 @@ ALTER SEQUENCE tipos.tb_tipos_notificacion_id_tipo_notificacion_seq OWNED BY tip
 
 
 --
--- TOC entry 204 (class 1259 OID 16429)
+-- TOC entry 277 (class 1259 OID 17363)
 -- Name: tb_tiposidentificacion; Type: TABLE; Schema: tipos; Owner: postgres
 --
 
@@ -3784,8 +3953,8 @@ CREATE TABLE tipos.tb_tiposidentificacion (
 ALTER TABLE tipos.tb_tiposidentificacion OWNER TO postgres;
 
 --
--- TOC entry 3595 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3460 (class 0 OID 0)
+-- Dependencies: 277
 -- Name: TABLE tb_tiposidentificacion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3793,8 +3962,8 @@ COMMENT ON TABLE tipos.tb_tiposidentificacion IS 'Tabla que contiene los tipos d
 
 
 --
--- TOC entry 3596 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3461 (class 0 OID 0)
+-- Dependencies: 277
 -- Name: COLUMN tb_tiposidentificacion.id_tipo_ident; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3802,8 +3971,8 @@ COMMENT ON COLUMN tipos.tb_tiposidentificacion.id_tipo_ident IS 'Id primary key 
 
 
 --
--- TOC entry 3597 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3462 (class 0 OID 0)
+-- Dependencies: 277
 -- Name: COLUMN tb_tiposidentificacion.desc_tipo_id; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3811,8 +3980,8 @@ COMMENT ON COLUMN tipos.tb_tiposidentificacion.desc_tipo_id IS 'Descripción o n
 
 
 --
--- TOC entry 3598 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3463 (class 0 OID 0)
+-- Dependencies: 277
 -- Name: COLUMN tb_tiposidentificacion.abreviatura; Type: COMMENT; Schema: tipos; Owner: postgres
 --
 
@@ -3820,7 +3989,7 @@ COMMENT ON COLUMN tipos.tb_tiposidentificacion.abreviatura IS 'Abreviatura del t
 
 
 --
--- TOC entry 203 (class 1259 OID 16427)
+-- TOC entry 278 (class 1259 OID 17366)
 -- Name: tb_tiposdocumento_id_tipo_ident_seq; Type: SEQUENCE; Schema: tipos; Owner: postgres
 --
 
@@ -3836,8 +4005,8 @@ CREATE SEQUENCE tipos.tb_tiposdocumento_id_tipo_ident_seq
 ALTER TABLE tipos.tb_tiposdocumento_id_tipo_ident_seq OWNER TO postgres;
 
 --
--- TOC entry 3599 (class 0 OID 0)
--- Dependencies: 203
+-- TOC entry 3464 (class 0 OID 0)
+-- Dependencies: 278
 -- Name: tb_tiposdocumento_id_tipo_ident_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
 
@@ -3845,7 +4014,7 @@ ALTER SEQUENCE tipos.tb_tiposdocumento_id_tipo_ident_seq OWNED BY tipos.tb_tipos
 
 
 --
--- TOC entry 2917 (class 2604 OID 16601)
+-- TOC entry 2918 (class 2604 OID 17368)
 -- Name: tb_clientes id_cliente; Type: DEFAULT; Schema: clientes; Owner: postgres
 --
 
@@ -3853,7 +4022,15 @@ ALTER TABLE ONLY clientes.tb_clientes ALTER COLUMN id_cliente SET DEFAULT nextva
 
 
 --
--- TOC entry 2939 (class 2604 OID 17016)
+-- TOC entry 2959 (class 2604 OID 17412)
+-- Name: tb_redes_sociales_cliente id_redes_sociales_cliente; Type: DEFAULT; Schema: clientes; Owner: postgres
+--
+
+ALTER TABLE ONLY clientes.tb_redes_sociales_cliente ALTER COLUMN id_redes_sociales_cliente SET DEFAULT nextval('clientes.tb_redes_sociales_cliente_id_redes_sociales_cliente_seq'::regclass);
+
+
+--
+-- TOC entry 2919 (class 2604 OID 17369)
 -- Name: tb_aut_externas id_aut_externas; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3861,7 +4038,7 @@ ALTER TABLE ONLY generales.tb_aut_externas ALTER COLUMN id_aut_externas SET DEFA
 
 
 --
--- TOC entry 2940 (class 2604 OID 17027)
+-- TOC entry 2920 (class 2604 OID 17370)
 -- Name: tb_aut_externas_services id_aut_externas_services; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3869,7 +4046,7 @@ ALTER TABLE ONLY generales.tb_aut_externas_services ALTER COLUMN id_aut_externas
 
 
 --
--- TOC entry 2934 (class 2604 OID 16821)
+-- TOC entry 2921 (class 2604 OID 17371)
 -- Name: tb_cargos id_cargo; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3877,7 +4054,7 @@ ALTER TABLE ONLY generales.tb_cargos ALTER COLUMN id_cargo SET DEFAULT nextval('
 
 
 --
--- TOC entry 2913 (class 2604 OID 16508)
+-- TOC entry 2922 (class 2604 OID 17372)
 -- Name: tb_ciudades id_ciudad; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3885,7 +4062,7 @@ ALTER TABLE ONLY generales.tb_ciudades ALTER COLUMN id_ciudad SET DEFAULT nextva
 
 
 --
--- TOC entry 2943 (class 2604 OID 17135)
+-- TOC entry 2923 (class 2604 OID 17373)
 -- Name: tb_criterios_diligenciamiento id_criterio_diligenciamiento; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3893,7 +4070,7 @@ ALTER TABLE ONLY generales.tb_criterios_diligenciamiento ALTER COLUMN id_criteri
 
 
 --
--- TOC entry 2911 (class 2604 OID 16492)
+-- TOC entry 2924 (class 2604 OID 17374)
 -- Name: tb_departamentos id_departamento; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3901,7 +4078,7 @@ ALTER TABLE ONLY generales.tb_departamentos ALTER COLUMN id_departamento SET DEF
 
 
 --
--- TOC entry 2935 (class 2604 OID 16864)
+-- TOC entry 2925 (class 2604 OID 17375)
 -- Name: tb_estado_agenda id_estado_agenda; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3909,7 +4086,7 @@ ALTER TABLE ONLY generales.tb_estado_agenda ALTER COLUMN id_estado_agenda SET DE
 
 
 --
--- TOC entry 2919 (class 2604 OID 16613)
+-- TOC entry 2926 (class 2604 OID 17376)
 -- Name: tb_estados_civiles id_estado_civil; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3917,7 +4094,7 @@ ALTER TABLE ONLY generales.tb_estados_civiles ALTER COLUMN id_estado_civil SET D
 
 
 --
--- TOC entry 2936 (class 2604 OID 16950)
+-- TOC entry 2927 (class 2604 OID 17377)
 -- Name: tb_formas_pago id_forma_pago; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3925,7 +4102,7 @@ ALTER TABLE ONLY generales.tb_formas_pago ALTER COLUMN id_forma_pago SET DEFAULT
 
 
 --
--- TOC entry 2930 (class 2604 OID 16713)
+-- TOC entry 2928 (class 2604 OID 17378)
 -- Name: tb_inmuebles_estados id_inmueble_estado; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3933,7 +4110,7 @@ ALTER TABLE ONLY generales.tb_inmuebles_estados ALTER COLUMN id_inmueble_estado 
 
 
 --
--- TOC entry 2924 (class 2604 OID 16661)
+-- TOC entry 2929 (class 2604 OID 17379)
 -- Name: tb_intereses id_interes; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3941,7 +4118,7 @@ ALTER TABLE ONLY generales.tb_intereses ALTER COLUMN id_interes SET DEFAULT next
 
 
 --
--- TOC entry 2932 (class 2604 OID 16729)
+-- TOC entry 2930 (class 2604 OID 17380)
 -- Name: tb_jornadas id_jornada; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3949,7 +4126,7 @@ ALTER TABLE ONLY generales.tb_jornadas ALTER COLUMN id_jornada SET DEFAULT nextv
 
 
 --
--- TOC entry 2912 (class 2604 OID 16500)
+-- TOC entry 2931 (class 2604 OID 17381)
 -- Name: tb_paises id_pais; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3957,7 +4134,15 @@ ALTER TABLE ONLY generales.tb_paises ALTER COLUMN id_pais SET DEFAULT nextval('g
 
 
 --
--- TOC entry 2923 (class 2604 OID 16653)
+-- TOC entry 2960 (class 2604 OID 17420)
+-- Name: tb_redes_sociales id_red_social; Type: DEFAULT; Schema: generales; Owner: postgres
+--
+
+ALTER TABLE ONLY generales.tb_redes_sociales ALTER COLUMN id_red_social SET DEFAULT nextval('generales.tb_redes_sociales_id_red_social_seq'::regclass);
+
+
+--
+-- TOC entry 2932 (class 2604 OID 17382)
 -- Name: tb_solicitudes_estados id_solicitud_estado; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3965,7 +4150,7 @@ ALTER TABLE ONLY generales.tb_solicitudes_estados ALTER COLUMN id_solicitud_esta
 
 
 --
--- TOC entry 2937 (class 2604 OID 16964)
+-- TOC entry 2933 (class 2604 OID 17383)
 -- Name: tb_urgencias id_urgencia; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3973,7 +4158,7 @@ ALTER TABLE ONLY generales.tb_urgencias ALTER COLUMN id_urgencia SET DEFAULT nex
 
 
 --
--- TOC entry 2933 (class 2604 OID 16807)
+-- TOC entry 2934 (class 2604 OID 17384)
 -- Name: tb_zonas id_zona; Type: DEFAULT; Schema: generales; Owner: postgres
 --
 
@@ -3981,7 +4166,7 @@ ALTER TABLE ONLY generales.tb_zonas ALTER COLUMN id_zona SET DEFAULT nextval('ge
 
 
 --
--- TOC entry 2915 (class 2604 OID 16583)
+-- TOC entry 2935 (class 2604 OID 17385)
 -- Name: tb_caracteristicas_inmuebles id_caracterisitica_inmueble; Type: DEFAULT; Schema: inmuebles; Owner: postgres
 --
 
@@ -3989,7 +4174,7 @@ ALTER TABLE ONLY inmuebles.tb_caracteristicas_inmuebles ALTER COLUMN id_caracter
 
 
 --
--- TOC entry 2944 (class 2604 OID 17143)
+-- TOC entry 2937 (class 2604 OID 17386)
 -- Name: tb_caracteristicas_tipo_inmueble id_caracteristicas_tipo_inmueble; Type: DEFAULT; Schema: inmuebles; Owner: postgres
 --
 
@@ -3997,7 +4182,7 @@ ALTER TABLE ONLY inmuebles.tb_caracteristicas_tipo_inmueble ALTER COLUMN id_cara
 
 
 --
--- TOC entry 2929 (class 2604 OID 16705)
+-- TOC entry 2938 (class 2604 OID 17387)
 -- Name: tb_estados_inmuebles id_estado_inmueble; Type: DEFAULT; Schema: inmuebles; Owner: postgres
 --
 
@@ -4005,7 +4190,7 @@ ALTER TABLE ONLY inmuebles.tb_estados_inmuebles ALTER COLUMN id_estado_inmueble 
 
 
 --
--- TOC entry 2931 (class 2604 OID 16721)
+-- TOC entry 2939 (class 2604 OID 17388)
 -- Name: tb_horarios_inmuebles id_horario_inmueble; Type: DEFAULT; Schema: inmuebles; Owner: postgres
 --
 
@@ -4013,7 +4198,7 @@ ALTER TABLE ONLY inmuebles.tb_horarios_inmuebles ALTER COLUMN id_horario_inmuebl
 
 
 --
--- TOC entry 2928 (class 2604 OID 16697)
+-- TOC entry 2940 (class 2604 OID 17389)
 -- Name: tb_inmuebles_registrados id_inmueble_registrado; Type: DEFAULT; Schema: inmuebles; Owner: postgres
 --
 
@@ -4021,7 +4206,7 @@ ALTER TABLE ONLY inmuebles.tb_inmuebles_registrados ALTER COLUMN id_inmueble_reg
 
 
 --
--- TOC entry 2942 (class 2604 OID 17127)
+-- TOC entry 2941 (class 2604 OID 17390)
 -- Name: tb_tipos_caracteristicas_inmuebles id_tipos_caracteristicas_inmuebles; Type: DEFAULT; Schema: inmuebles; Owner: postgres
 --
 
@@ -4029,7 +4214,7 @@ ALTER TABLE ONLY inmuebles.tb_tipos_caracteristicas_inmuebles ALTER COLUMN id_ti
 
 
 --
--- TOC entry 2920 (class 2604 OID 16629)
+-- TOC entry 2942 (class 2604 OID 17391)
 -- Name: tb_tipos_inmuebles id_tipos_inmuebles; Type: DEFAULT; Schema: inmuebles; Owner: postgres
 --
 
@@ -4037,7 +4222,7 @@ ALTER TABLE ONLY inmuebles.tb_tipos_inmuebles ALTER COLUMN id_tipos_inmuebles SE
 
 
 --
--- TOC entry 2914 (class 2604 OID 16544)
+-- TOC entry 2943 (class 2604 OID 17392)
 -- Name: tb_personal id_personal; Type: DEFAULT; Schema: rrhh; Owner: postgres
 --
 
@@ -4045,7 +4230,7 @@ ALTER TABLE ONLY rrhh.tb_personal ALTER COLUMN id_personal SET DEFAULT nextval('
 
 
 --
--- TOC entry 2907 (class 2604 OID 16452)
+-- TOC entry 2945 (class 2604 OID 17393)
 -- Name: tb_users_access id_user_access; Type: DEFAULT; Schema: session; Owner: postgres
 --
 
@@ -4053,7 +4238,7 @@ ALTER TABLE ONLY session.tb_users_access ALTER COLUMN id_user_access SET DEFAULT
 
 
 --
--- TOC entry 2908 (class 2604 OID 16465)
+-- TOC entry 2946 (class 2604 OID 17394)
 -- Name: tb_users_access id_user_app; Type: DEFAULT; Schema: session; Owner: postgres
 --
 
@@ -4061,7 +4246,7 @@ ALTER TABLE ONLY session.tb_users_access ALTER COLUMN id_user_app SET DEFAULT ne
 
 
 --
--- TOC entry 2905 (class 2604 OID 16441)
+-- TOC entry 2948 (class 2604 OID 17395)
 -- Name: tb_users_app id_user; Type: DEFAULT; Schema: session; Owner: postgres
 --
 
@@ -4069,7 +4254,7 @@ ALTER TABLE ONLY session.tb_users_app ALTER COLUMN id_user SET DEFAULT nextval('
 
 
 --
--- TOC entry 2910 (class 2604 OID 16483)
+-- TOC entry 2949 (class 2604 OID 17396)
 -- Name: tb_users_app_externo id_user_app_externo; Type: DEFAULT; Schema: session; Owner: postgres
 --
 
@@ -4077,7 +4262,7 @@ ALTER TABLE ONLY session.tb_users_app_externo ALTER COLUMN id_user_app_externo S
 
 
 --
--- TOC entry 2927 (class 2604 OID 16688)
+-- TOC entry 2950 (class 2604 OID 17397)
 -- Name: tb_agendas_solicitudes id_agenda_solicitud; Type: DEFAULT; Schema: solicitudes; Owner: postgres
 --
 
@@ -4085,7 +4270,7 @@ ALTER TABLE ONLY solicitudes.tb_agendas_solicitudes ALTER COLUMN id_agenda_solic
 
 
 --
--- TOC entry 2922 (class 2604 OID 16645)
+-- TOC entry 2951 (class 2604 OID 17398)
 -- Name: tb_caracteristicas_solicitudes id_caracteristicas_solicitud; Type: DEFAULT; Schema: solicitudes; Owner: postgres
 --
 
@@ -4093,7 +4278,7 @@ ALTER TABLE ONLY solicitudes.tb_caracteristicas_solicitudes ALTER COLUMN id_cara
 
 
 --
--- TOC entry 2921 (class 2604 OID 16637)
+-- TOC entry 2952 (class 2604 OID 17399)
 -- Name: tb_estados_solicitudes id_estado_solicitud; Type: DEFAULT; Schema: solicitudes; Owner: postgres
 --
 
@@ -4101,7 +4286,7 @@ ALTER TABLE ONLY solicitudes.tb_estados_solicitudes ALTER COLUMN id_estado_solic
 
 
 --
--- TOC entry 2925 (class 2604 OID 16669)
+-- TOC entry 2953 (class 2604 OID 17400)
 -- Name: tb_intereses_solicitudes id_interes_solicitud; Type: DEFAULT; Schema: solicitudes; Owner: postgres
 --
 
@@ -4109,7 +4294,7 @@ ALTER TABLE ONLY solicitudes.tb_intereses_solicitudes ALTER COLUMN id_interes_so
 
 
 --
--- TOC entry 2916 (class 2604 OID 16592)
+-- TOC entry 2954 (class 2604 OID 17401)
 -- Name: tb_solicitudes_compra id_solicitudes; Type: DEFAULT; Schema: solicitudes; Owner: postgres
 --
 
@@ -4117,7 +4302,7 @@ ALTER TABLE ONLY solicitudes.tb_solicitudes_compra ALTER COLUMN id_solicitudes S
 
 
 --
--- TOC entry 2926 (class 2604 OID 16911)
+-- TOC entry 2955 (class 2604 OID 17402)
 -- Name: tb_tipos_actividades id_tipo_actividad; Type: DEFAULT; Schema: tipos; Owner: postgres
 --
 
@@ -4125,7 +4310,7 @@ ALTER TABLE ONLY tipos.tb_tipos_actividades ALTER COLUMN id_tipo_actividad SET D
 
 
 --
--- TOC entry 2941 (class 2604 OID 17045)
+-- TOC entry 2956 (class 2604 OID 17403)
 -- Name: tb_tipos_clientes id_tipo_cliente; Type: DEFAULT; Schema: tipos; Owner: postgres
 --
 
@@ -4133,7 +4318,7 @@ ALTER TABLE ONLY tipos.tb_tipos_clientes ALTER COLUMN id_tipo_cliente SET DEFAUL
 
 
 --
--- TOC entry 2938 (class 2604 OID 17002)
+-- TOC entry 2957 (class 2604 OID 17404)
 -- Name: tb_tipos_notificacion id_tipo_notificacion; Type: DEFAULT; Schema: tipos; Owner: postgres
 --
 
@@ -4141,7 +4326,7 @@ ALTER TABLE ONLY tipos.tb_tipos_notificacion ALTER COLUMN id_tipo_notificacion S
 
 
 --
--- TOC entry 2904 (class 2604 OID 16432)
+-- TOC entry 2958 (class 2604 OID 17405)
 -- Name: tb_tiposidentificacion id_tipo_ident; Type: DEFAULT; Schema: tipos; Owner: postgres
 --
 
@@ -4149,8 +4334,8 @@ ALTER TABLE ONLY tipos.tb_tiposidentificacion ALTER COLUMN id_tipo_ident SET DEF
 
 
 --
--- TOC entry 3259 (class 0 OID 16596)
--- Dependencies: 225
+-- TOC entry 3086 (class 0 OID 17159)
+-- Dependencies: 203
 -- Data for Name: tb_clientes; Type: TABLE DATA; Schema: clientes; Owner: postgres
 --
 
@@ -4160,19 +4345,28 @@ INSERT INTO clientes.tb_clientes (id_cliente, nombres, apellidos, id_tipo_identi
 
 
 --
--- TOC entry 3302 (class 0 OID 17013)
--- Dependencies: 268
+-- TOC entry 3163 (class 0 OID 17409)
+-- Dependencies: 280
+-- Data for Name: tb_redes_sociales_cliente; Type: TABLE DATA; Schema: clientes; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 3088 (class 0 OID 17168)
+-- Dependencies: 205
 -- Data for Name: tb_aut_externas; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 INSERT INTO generales.tb_aut_externas (id_aut_externas, id_api, token_api, provider, uri) VALUES (1, 'id_company=1942092', 'wasi_token=0Stz_CkOK_PWxU_wlr6', 'wasi', 'https://api.wasi.co/v1/');
 INSERT INTO generales.tb_aut_externas (id_aut_externas, id_api, token_api, provider, uri) VALUES (2, NULL, NULL, 'dolartoday', 'https://s3.amazonaws.com/dolartoday/data.json');
 INSERT INTO generales.tb_aut_externas (id_aut_externas, id_api, token_api, provider, uri) VALUES (3, NULL, NULL, 'GetTRM', 'http://app.docm.co/prod/Dmservices/Utilities.svc/');
+INSERT INTO generales.tb_aut_externas (id_aut_externas, id_api, token_api, provider, uri) VALUES (4, NULL, NULL, 'DatosAbiertos', 'https://www.datos.gov.co/resource/');
 
 
 --
--- TOC entry 3304 (class 0 OID 17024)
--- Dependencies: 270
+-- TOC entry 3090 (class 0 OID 17176)
+-- Dependencies: 207
 -- Data for Name: tb_aut_externas_services; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
@@ -4187,27 +4381,29 @@ INSERT INTO generales.tb_aut_externas_services (id_aut_externas_services, name_s
 INSERT INTO generales.tb_aut_externas_services (id_aut_externas_services, name_service, uri_compl, id_aut_externas) VALUES (9, 'lista_monedas', 'property/currency-all', 1);
 INSERT INTO generales.tb_aut_externas_services (id_aut_externas_services, name_service, uri_compl, id_aut_externas) VALUES (10, 'conversion_monedas', '', 2);
 INSERT INTO generales.tb_aut_externas_services (id_aut_externas_services, name_service, uri_compl, id_aut_externas) VALUES (11, 'trm', 'GetTRM', 3);
+INSERT INTO generales.tb_aut_externas_services (id_aut_externas_services, name_service, uri_compl, id_aut_externas) VALUES (12, 'comunas_barrios_cali', 'hxey-nky4.json', 4);
+INSERT INTO generales.tb_aut_externas_services (id_aut_externas_services, name_service, uri_compl, id_aut_externas) VALUES (13, 'estratos_barrios_cali', 'i2dd-kbda.json', 4);
 
 
 --
--- TOC entry 3291 (class 0 OID 16818)
--- Dependencies: 257
+-- TOC entry 3092 (class 0 OID 17184)
+-- Dependencies: 209
 -- Data for Name: tb_cargos; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3251 (class 0 OID 16505)
--- Dependencies: 217
+-- TOC entry 3094 (class 0 OID 17189)
+-- Dependencies: 211
 -- Data for Name: tb_ciudades; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3310 (class 0 OID 17132)
--- Dependencies: 276
+-- TOC entry 3096 (class 0 OID 17194)
+-- Dependencies: 213
 -- Data for Name: tb_criterios_diligenciamiento; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
@@ -4216,8 +4412,8 @@ INSERT INTO generales.tb_criterios_diligenciamiento (id_criterio_diligenciamient
 
 
 --
--- TOC entry 3247 (class 0 OID 16489)
--- Dependencies: 213
+-- TOC entry 3098 (class 0 OID 17199)
+-- Dependencies: 215
 -- Data for Name: tb_departamentos; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
@@ -4257,56 +4453,56 @@ INSERT INTO generales.tb_departamentos (id_departamento, codigo_departamento, no
 
 
 --
--- TOC entry 3292 (class 0 OID 16859)
--- Dependencies: 258
+-- TOC entry 3100 (class 0 OID 17204)
+-- Dependencies: 217
 -- Data for Name: tb_estado_agenda; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3262 (class 0 OID 16610)
--- Dependencies: 228
+-- TOC entry 3102 (class 0 OID 17209)
+-- Dependencies: 219
 -- Data for Name: tb_estados_civiles; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3296 (class 0 OID 16947)
--- Dependencies: 262
+-- TOC entry 3104 (class 0 OID 17214)
+-- Dependencies: 221
 -- Data for Name: tb_formas_pago; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3283 (class 0 OID 16710)
--- Dependencies: 249
+-- TOC entry 3106 (class 0 OID 17219)
+-- Dependencies: 223
 -- Data for Name: tb_inmuebles_estados; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3272 (class 0 OID 16658)
--- Dependencies: 238
+-- TOC entry 3108 (class 0 OID 17224)
+-- Dependencies: 225
 -- Data for Name: tb_intereses; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3287 (class 0 OID 16726)
--- Dependencies: 253
+-- TOC entry 3110 (class 0 OID 17229)
+-- Dependencies: 227
 -- Data for Name: tb_jornadas; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3249 (class 0 OID 16497)
--- Dependencies: 215
+-- TOC entry 3112 (class 0 OID 17234)
+-- Dependencies: 229
 -- Data for Name: tb_paises; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
@@ -4314,40 +4510,56 @@ INSERT INTO generales.tb_paises (id_pais, codigo_pais, nombre_pais) VALUES (1, '
 
 
 --
--- TOC entry 3270 (class 0 OID 16650)
--- Dependencies: 236
+-- TOC entry 3165 (class 0 OID 17417)
+-- Dependencies: 282
+-- Data for Name: tb_redes_sociales; Type: TABLE DATA; Schema: generales; Owner: postgres
+--
+
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (1, 'Facebook', 'facebook.png');
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (2, 'Twitter', 'twitter.png');
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (3, 'Instagram', 'instagram.png');
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (4, 'LinkedIn', 'linkedin.png');
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (5, 'Google +', 'google+.png');
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (6, 'Pinterest', 'pinterest.png');
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (7, 'YouTube', 'youtube.png');
+INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (8, 'WhatsApp', 'whatsapp.png');
+
+
+--
+-- TOC entry 3114 (class 0 OID 17239)
+-- Dependencies: 231
 -- Data for Name: tb_solicitudes_estados; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3298 (class 0 OID 16961)
--- Dependencies: 264
+-- TOC entry 3116 (class 0 OID 17244)
+-- Dependencies: 233
 -- Data for Name: tb_urgencias; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3289 (class 0 OID 16804)
--- Dependencies: 255
+-- TOC entry 3118 (class 0 OID 17249)
+-- Dependencies: 235
 -- Data for Name: tb_zonas; Type: TABLE DATA; Schema: generales; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3256 (class 0 OID 16580)
--- Dependencies: 222
+-- TOC entry 3120 (class 0 OID 17254)
+-- Dependencies: 237
 -- Data for Name: tb_caracteristicas_inmuebles; Type: TABLE DATA; Schema: inmuebles; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3312 (class 0 OID 17140)
--- Dependencies: 278
+-- TOC entry 3122 (class 0 OID 17259)
+-- Dependencies: 239
 -- Data for Name: tb_caracteristicas_tipo_inmueble; Type: TABLE DATA; Schema: inmuebles; Owner: postgres
 --
 
@@ -4377,23 +4589,23 @@ INSERT INTO inmuebles.tb_caracteristicas_tipo_inmueble (id_caracteristicas_tipo_
 
 
 --
--- TOC entry 3281 (class 0 OID 16702)
--- Dependencies: 247
+-- TOC entry 3124 (class 0 OID 17265)
+-- Dependencies: 241
 -- Data for Name: tb_estados_inmuebles; Type: TABLE DATA; Schema: inmuebles; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3285 (class 0 OID 16718)
--- Dependencies: 251
+-- TOC entry 3126 (class 0 OID 17270)
+-- Dependencies: 243
 -- Data for Name: tb_horarios_inmuebles; Type: TABLE DATA; Schema: inmuebles; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3279 (class 0 OID 16694)
+-- TOC entry 3128 (class 0 OID 17275)
 -- Dependencies: 245
 -- Data for Name: tb_inmuebles_registrados; Type: TABLE DATA; Schema: inmuebles; Owner: postgres
 --
@@ -4401,8 +4613,8 @@ INSERT INTO inmuebles.tb_caracteristicas_tipo_inmueble (id_caracteristicas_tipo_
 
 
 --
--- TOC entry 3308 (class 0 OID 17124)
--- Dependencies: 274
+-- TOC entry 3130 (class 0 OID 17280)
+-- Dependencies: 247
 -- Data for Name: tb_tipos_caracteristicas_inmuebles; Type: TABLE DATA; Schema: inmuebles; Owner: postgres
 --
 
@@ -4412,32 +4624,32 @@ INSERT INTO inmuebles.tb_tipos_caracteristicas_inmuebles (id_tipos_caracteristic
 
 
 --
--- TOC entry 3264 (class 0 OID 16626)
--- Dependencies: 230
+-- TOC entry 3132 (class 0 OID 17285)
+-- Dependencies: 249
 -- Data for Name: tb_tipos_inmuebles; Type: TABLE DATA; Schema: inmuebles; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3253 (class 0 OID 16541)
--- Dependencies: 219
+-- TOC entry 3134 (class 0 OID 17290)
+-- Dependencies: 251
 -- Data for Name: tb_personal; Type: TABLE DATA; Schema: rrhh; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3242 (class 0 OID 16449)
--- Dependencies: 208
+-- TOC entry 3136 (class 0 OID 17295)
+-- Dependencies: 253
 -- Data for Name: tb_users_access; Type: TABLE DATA; Schema: session; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3240 (class 0 OID 16438)
--- Dependencies: 206
+-- TOC entry 3139 (class 0 OID 17306)
+-- Dependencies: 256
 -- Data for Name: tb_users_app; Type: TABLE DATA; Schema: session; Owner: postgres
 --
 
@@ -4445,63 +4657,63 @@ INSERT INTO session.tb_users_app (id_user, userlogin, password, estado, fecha_cr
 
 
 --
--- TOC entry 3245 (class 0 OID 16480)
--- Dependencies: 211
+-- TOC entry 3140 (class 0 OID 17313)
+-- Dependencies: 257
 -- Data for Name: tb_users_app_externo; Type: TABLE DATA; Schema: session; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3277 (class 0 OID 16685)
--- Dependencies: 243
+-- TOC entry 3143 (class 0 OID 17320)
+-- Dependencies: 260
 -- Data for Name: tb_agendas_solicitudes; Type: TABLE DATA; Schema: solicitudes; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3268 (class 0 OID 16642)
--- Dependencies: 234
+-- TOC entry 3145 (class 0 OID 17325)
+-- Dependencies: 262
 -- Data for Name: tb_caracteristicas_solicitudes; Type: TABLE DATA; Schema: solicitudes; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3266 (class 0 OID 16634)
--- Dependencies: 232
+-- TOC entry 3147 (class 0 OID 17330)
+-- Dependencies: 264
 -- Data for Name: tb_estados_solicitudes; Type: TABLE DATA; Schema: solicitudes; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3274 (class 0 OID 16666)
--- Dependencies: 240
+-- TOC entry 3149 (class 0 OID 17335)
+-- Dependencies: 266
 -- Data for Name: tb_intereses_solicitudes; Type: TABLE DATA; Schema: solicitudes; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3258 (class 0 OID 16589)
--- Dependencies: 224
+-- TOC entry 3151 (class 0 OID 17340)
+-- Dependencies: 268
 -- Data for Name: tb_solicitudes_compra; Type: TABLE DATA; Schema: solicitudes; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3275 (class 0 OID 16680)
--- Dependencies: 241
+-- TOC entry 3153 (class 0 OID 17345)
+-- Dependencies: 270
 -- Data for Name: tb_tipos_actividades; Type: TABLE DATA; Schema: tipos; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3306 (class 0 OID 17042)
+-- TOC entry 3155 (class 0 OID 17350)
 -- Dependencies: 272
 -- Data for Name: tb_tipos_clientes; Type: TABLE DATA; Schema: tipos; Owner: postgres
 --
@@ -4511,16 +4723,16 @@ INSERT INTO tipos.tb_tipos_clientes (id_tipo_cliente, descripcion) VALUES (2, 'V
 
 
 --
--- TOC entry 3254 (class 0 OID 16571)
--- Dependencies: 220
+-- TOC entry 3157 (class 0 OID 17355)
+-- Dependencies: 274
 -- Data for Name: tb_tipos_inmuebles; Type: TABLE DATA; Schema: tipos; Owner: postgres
 --
 
 
 
 --
--- TOC entry 3300 (class 0 OID 16999)
--- Dependencies: 266
+-- TOC entry 3158 (class 0 OID 17358)
+-- Dependencies: 275
 -- Data for Name: tb_tipos_notificacion; Type: TABLE DATA; Schema: tipos; Owner: postgres
 --
 
@@ -4530,8 +4742,8 @@ INSERT INTO tipos.tb_tipos_notificacion (id_tipo_notificacion, descripcion) VALU
 
 
 --
--- TOC entry 3238 (class 0 OID 16429)
--- Dependencies: 204
+-- TOC entry 3160 (class 0 OID 17363)
+-- Dependencies: 277
 -- Data for Name: tb_tiposidentificacion; Type: TABLE DATA; Schema: tipos; Owner: postgres
 --
 
@@ -4545,8 +4757,8 @@ INSERT INTO tipos.tb_tiposidentificacion (id_tipo_ident, desc_tipo_id, abreviatu
 
 
 --
--- TOC entry 3600 (class 0 OID 0)
--- Dependencies: 226
+-- TOC entry 3465 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: tb_clientes_id_cliente_seq; Type: SEQUENCE SET; Schema: clientes; Owner: postgres
 --
 
@@ -4554,26 +4766,35 @@ SELECT pg_catalog.setval('clientes.tb_clientes_id_cliente_seq', 18, true);
 
 
 --
--- TOC entry 3601 (class 0 OID 0)
--- Dependencies: 267
+-- TOC entry 3466 (class 0 OID 0)
+-- Dependencies: 279
+-- Name: tb_redes_sociales_cliente_id_redes_sociales_cliente_seq; Type: SEQUENCE SET; Schema: clientes; Owner: postgres
+--
+
+SELECT pg_catalog.setval('clientes.tb_redes_sociales_cliente_id_redes_sociales_cliente_seq', 1, false);
+
+
+--
+-- TOC entry 3467 (class 0 OID 0)
+-- Dependencies: 206
 -- Name: tb_aut_externas_id_aut_externas_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
-SELECT pg_catalog.setval('generales.tb_aut_externas_id_aut_externas_seq', 3, true);
+SELECT pg_catalog.setval('generales.tb_aut_externas_id_aut_externas_seq', 4, true);
 
 
 --
--- TOC entry 3602 (class 0 OID 0)
--- Dependencies: 269
+-- TOC entry 3468 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: tb_aut_externas_services_id_aut_externas_services_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
-SELECT pg_catalog.setval('generales.tb_aut_externas_services_id_aut_externas_services_seq', 11, true);
+SELECT pg_catalog.setval('generales.tb_aut_externas_services_id_aut_externas_services_seq', 13, true);
 
 
 --
--- TOC entry 3603 (class 0 OID 0)
--- Dependencies: 256
+-- TOC entry 3469 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: tb_cargos_id_cargo_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4581,8 +4802,8 @@ SELECT pg_catalog.setval('generales.tb_cargos_id_cargo_seq', 1, false);
 
 
 --
--- TOC entry 3604 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 3470 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: tb_ciudades_id_ciudad_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4590,8 +4811,8 @@ SELECT pg_catalog.setval('generales.tb_ciudades_id_ciudad_seq', 1, false);
 
 
 --
--- TOC entry 3605 (class 0 OID 0)
--- Dependencies: 275
+-- TOC entry 3471 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: tb_criterios_diligenciamiento_id_criterio_diligenciamiento_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4599,8 +4820,8 @@ SELECT pg_catalog.setval('generales.tb_criterios_diligenciamiento_id_criterio_di
 
 
 --
--- TOC entry 3606 (class 0 OID 0)
--- Dependencies: 212
+-- TOC entry 3472 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: tb_departamentos_id_departamento_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4608,8 +4829,8 @@ SELECT pg_catalog.setval('generales.tb_departamentos_id_departamento_seq', 53, t
 
 
 --
--- TOC entry 3607 (class 0 OID 0)
--- Dependencies: 259
+-- TOC entry 3473 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: tb_estado_agenda_id_estado_agenda_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4617,8 +4838,8 @@ SELECT pg_catalog.setval('generales.tb_estado_agenda_id_estado_agenda_seq', 1, f
 
 
 --
--- TOC entry 3608 (class 0 OID 0)
--- Dependencies: 227
+-- TOC entry 3474 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: tb_estados_civiles_id_estado_civil_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4626,8 +4847,8 @@ SELECT pg_catalog.setval('generales.tb_estados_civiles_id_estado_civil_seq', 1, 
 
 
 --
--- TOC entry 3609 (class 0 OID 0)
--- Dependencies: 261
+-- TOC entry 3475 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: tb_formas_pago_id_forma_pago_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4635,8 +4856,8 @@ SELECT pg_catalog.setval('generales.tb_formas_pago_id_forma_pago_seq', 1, false)
 
 
 --
--- TOC entry 3610 (class 0 OID 0)
--- Dependencies: 248
+-- TOC entry 3476 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: tb_inmuebles_estados_id_inmueble_estado_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4644,8 +4865,8 @@ SELECT pg_catalog.setval('generales.tb_inmuebles_estados_id_inmueble_estado_seq'
 
 
 --
--- TOC entry 3611 (class 0 OID 0)
--- Dependencies: 237
+-- TOC entry 3477 (class 0 OID 0)
+-- Dependencies: 226
 -- Name: tb_intereses_id_interes_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4653,8 +4874,8 @@ SELECT pg_catalog.setval('generales.tb_intereses_id_interes_seq', 1, false);
 
 
 --
--- TOC entry 3612 (class 0 OID 0)
--- Dependencies: 252
+-- TOC entry 3478 (class 0 OID 0)
+-- Dependencies: 228
 -- Name: tb_jornadas_id_jornada_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4662,8 +4883,8 @@ SELECT pg_catalog.setval('generales.tb_jornadas_id_jornada_seq', 1, false);
 
 
 --
--- TOC entry 3613 (class 0 OID 0)
--- Dependencies: 214
+-- TOC entry 3479 (class 0 OID 0)
+-- Dependencies: 230
 -- Name: tb_paises_id_pais_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4671,8 +4892,17 @@ SELECT pg_catalog.setval('generales.tb_paises_id_pais_seq', 1, true);
 
 
 --
--- TOC entry 3614 (class 0 OID 0)
--- Dependencies: 235
+-- TOC entry 3480 (class 0 OID 0)
+-- Dependencies: 281
+-- Name: tb_redes_sociales_id_red_social_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
+--
+
+SELECT pg_catalog.setval('generales.tb_redes_sociales_id_red_social_seq', 8, true);
+
+
+--
+-- TOC entry 3481 (class 0 OID 0)
+-- Dependencies: 232
 -- Name: tb_solicitudes_estados_id_solicitud_estado_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4680,8 +4910,8 @@ SELECT pg_catalog.setval('generales.tb_solicitudes_estados_id_solicitud_estado_s
 
 
 --
--- TOC entry 3615 (class 0 OID 0)
--- Dependencies: 263
+-- TOC entry 3482 (class 0 OID 0)
+-- Dependencies: 234
 -- Name: tb_urgencias_id_urgencia_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4689,8 +4919,8 @@ SELECT pg_catalog.setval('generales.tb_urgencias_id_urgencia_seq', 1, false);
 
 
 --
--- TOC entry 3616 (class 0 OID 0)
--- Dependencies: 254
+-- TOC entry 3483 (class 0 OID 0)
+-- Dependencies: 236
 -- Name: tb_zonas_id_zona_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
 
@@ -4698,8 +4928,8 @@ SELECT pg_catalog.setval('generales.tb_zonas_id_zona_seq', 1, false);
 
 
 --
--- TOC entry 3617 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 3484 (class 0 OID 0)
+-- Dependencies: 238
 -- Name: tb_caracteristicas_inmuebles_id_tb_caracterisitica_inmueble_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
 
@@ -4707,8 +4937,8 @@ SELECT pg_catalog.setval('inmuebles.tb_caracteristicas_inmuebles_id_tb_caracteri
 
 
 --
--- TOC entry 3618 (class 0 OID 0)
--- Dependencies: 277
+-- TOC entry 3485 (class 0 OID 0)
+-- Dependencies: 240
 -- Name: tb_caracteristicas_tipo_inmue_id_caracteristicas_tipo_inmue_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
 
@@ -4716,8 +4946,8 @@ SELECT pg_catalog.setval('inmuebles.tb_caracteristicas_tipo_inmue_id_caracterist
 
 
 --
--- TOC entry 3619 (class 0 OID 0)
--- Dependencies: 246
+-- TOC entry 3486 (class 0 OID 0)
+-- Dependencies: 242
 -- Name: tb_estados_inmuebles_id_estado_inmueble_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
 
@@ -4725,8 +4955,8 @@ SELECT pg_catalog.setval('inmuebles.tb_estados_inmuebles_id_estado_inmueble_seq'
 
 
 --
--- TOC entry 3620 (class 0 OID 0)
--- Dependencies: 250
+-- TOC entry 3487 (class 0 OID 0)
+-- Dependencies: 244
 -- Name: tb_horarios_inmuebles_id_horario_inmueble_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
 
@@ -4734,8 +4964,8 @@ SELECT pg_catalog.setval('inmuebles.tb_horarios_inmuebles_id_horario_inmueble_se
 
 
 --
--- TOC entry 3621 (class 0 OID 0)
--- Dependencies: 244
+-- TOC entry 3488 (class 0 OID 0)
+-- Dependencies: 246
 -- Name: tb_inmuebles_registrados_id_inmueble_registrado_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
 
@@ -4743,8 +4973,8 @@ SELECT pg_catalog.setval('inmuebles.tb_inmuebles_registrados_id_inmueble_registr
 
 
 --
--- TOC entry 3622 (class 0 OID 0)
--- Dependencies: 273
+-- TOC entry 3489 (class 0 OID 0)
+-- Dependencies: 248
 -- Name: tb_tipos_caracteristicas_inmu_id_tipos_caracteristicas_inmu_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
 
@@ -4752,8 +4982,8 @@ SELECT pg_catalog.setval('inmuebles.tb_tipos_caracteristicas_inmu_id_tipos_carac
 
 
 --
--- TOC entry 3623 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 3490 (class 0 OID 0)
+-- Dependencies: 250
 -- Name: tb_tipos_inmuebles_id_tipos_inmuebles_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
 
@@ -4761,8 +4991,8 @@ SELECT pg_catalog.setval('inmuebles.tb_tipos_inmuebles_id_tipos_inmuebles_seq', 
 
 
 --
--- TOC entry 3624 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 3491 (class 0 OID 0)
+-- Dependencies: 252
 -- Name: tb_personal_id_personal_seq; Type: SEQUENCE SET; Schema: rrhh; Owner: postgres
 --
 
@@ -4770,8 +5000,8 @@ SELECT pg_catalog.setval('rrhh.tb_personal_id_personal_seq', 1, false);
 
 
 --
--- TOC entry 3625 (class 0 OID 0)
--- Dependencies: 207
+-- TOC entry 3492 (class 0 OID 0)
+-- Dependencies: 254
 -- Name: tb_users_access_id_user_access_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
 
@@ -4779,8 +5009,8 @@ SELECT pg_catalog.setval('session.tb_users_access_id_user_access_seq', 1, false)
 
 
 --
--- TOC entry 3626 (class 0 OID 0)
--- Dependencies: 209
+-- TOC entry 3493 (class 0 OID 0)
+-- Dependencies: 255
 -- Name: tb_users_access_id_user_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
 
@@ -4788,8 +5018,8 @@ SELECT pg_catalog.setval('session.tb_users_access_id_user_seq', 1, false);
 
 
 --
--- TOC entry 3627 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 3494 (class 0 OID 0)
+-- Dependencies: 258
 -- Name: tb_users_app_externo_id_user_app_externo_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
 
@@ -4797,8 +5027,8 @@ SELECT pg_catalog.setval('session.tb_users_app_externo_id_user_app_externo_seq',
 
 
 --
--- TOC entry 3628 (class 0 OID 0)
--- Dependencies: 205
+-- TOC entry 3495 (class 0 OID 0)
+-- Dependencies: 259
 -- Name: tb_users_id_usuario_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
 
@@ -4806,8 +5036,8 @@ SELECT pg_catalog.setval('session.tb_users_id_usuario_seq', 1, true);
 
 
 --
--- TOC entry 3629 (class 0 OID 0)
--- Dependencies: 242
+-- TOC entry 3496 (class 0 OID 0)
+-- Dependencies: 261
 -- Name: tb_agendas_solicitudes_id_agenda_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
 
@@ -4815,8 +5045,8 @@ SELECT pg_catalog.setval('solicitudes.tb_agendas_solicitudes_id_agenda_solicitud
 
 
 --
--- TOC entry 3630 (class 0 OID 0)
--- Dependencies: 233
+-- TOC entry 3497 (class 0 OID 0)
+-- Dependencies: 263
 -- Name: tb_caracteristicas_solicitudes_id_caracteristicas_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
 
@@ -4824,8 +5054,8 @@ SELECT pg_catalog.setval('solicitudes.tb_caracteristicas_solicitudes_id_caracter
 
 
 --
--- TOC entry 3631 (class 0 OID 0)
--- Dependencies: 231
+-- TOC entry 3498 (class 0 OID 0)
+-- Dependencies: 265
 -- Name: tb_estados_solicitudes_id_estado_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
 
@@ -4833,8 +5063,8 @@ SELECT pg_catalog.setval('solicitudes.tb_estados_solicitudes_id_estado_solicitud
 
 
 --
--- TOC entry 3632 (class 0 OID 0)
--- Dependencies: 239
+-- TOC entry 3499 (class 0 OID 0)
+-- Dependencies: 267
 -- Name: tb_intereses_solicitudes_id_interes_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
 
@@ -4842,8 +5072,8 @@ SELECT pg_catalog.setval('solicitudes.tb_intereses_solicitudes_id_interes_solici
 
 
 --
--- TOC entry 3633 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 3500 (class 0 OID 0)
+-- Dependencies: 269
 -- Name: tb_solicitudes_id_solicitudes_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
 
@@ -4851,8 +5081,8 @@ SELECT pg_catalog.setval('solicitudes.tb_solicitudes_id_solicitudes_seq', 1, fal
 
 
 --
--- TOC entry 3634 (class 0 OID 0)
--- Dependencies: 260
+-- TOC entry 3501 (class 0 OID 0)
+-- Dependencies: 271
 -- Name: tb_tipos_actividades_id_tipo_actividad_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
 
@@ -4860,8 +5090,8 @@ SELECT pg_catalog.setval('tipos.tb_tipos_actividades_id_tipo_actividad_seq', 1, 
 
 
 --
--- TOC entry 3635 (class 0 OID 0)
--- Dependencies: 271
+-- TOC entry 3502 (class 0 OID 0)
+-- Dependencies: 273
 -- Name: tb_tipos_clientes_id_tipo_cliente_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
 
@@ -4869,8 +5099,8 @@ SELECT pg_catalog.setval('tipos.tb_tipos_clientes_id_tipo_cliente_seq', 2, true)
 
 
 --
--- TOC entry 3636 (class 0 OID 0)
--- Dependencies: 265
+-- TOC entry 3503 (class 0 OID 0)
+-- Dependencies: 276
 -- Name: tb_tipos_notificacion_id_tipo_notificacion_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
 
@@ -4878,15 +5108,15 @@ SELECT pg_catalog.setval('tipos.tb_tipos_notificacion_id_tipo_notificacion_seq',
 
 
 --
--- TOC entry 3637 (class 0 OID 0)
--- Dependencies: 203
+-- TOC entry 3504 (class 0 OID 0)
+-- Dependencies: 278
 -- Name: tb_tiposdocumento_id_tipo_ident_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
 
 SELECT pg_catalog.setval('tipos.tb_tiposdocumento_id_tipo_ident_seq', 8, true);
 
 
--- Completed on 2019-01-18 22:57:25
+-- Completed on 2019-01-22 23:30:42
 
 --
 -- PostgreSQL database dump complete

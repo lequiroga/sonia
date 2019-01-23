@@ -1,0 +1,34 @@
+
+  <div class="toggle">
+    <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
+  </div>
+  <div class="form">
+    <center><h2 style="font-family:Verdana;">REDES&nbsp;SOCIALES&nbsp;CLIENTE</h2></center>
+    <br />
+    <form name="formularioRedesCliente" ng-model="redesCliente" id="formularioRedesCliente" method="post" NOVALIDATE>         
+      <label>N&uacute;mero identificaci&oacute;n</label><input name="redesCliente_numero_identificacion" type="number" string-to-number ng-model="redesCliente.numeroIdentificacion" ng-disabled="1"/>
+      <label>Nombre</label><input name="redesCliente_nombre" type="text" ng-model="redesCliente.nombre" ng-disabled="1"/>
+      <label>Red social (*)</label>
+      <select name="redesCliente_red_social" ng-options="id_red_social as id_red_social.nombre for id_red_social in ids_redes_sociales track by id_red_social.id_red_social" ng-model="redesCliente.red_social" ng-change="getImgRedSocial(redesCliente.red_social.imagen)"/>       
+      </select> 
+      <label ng-if="redesCliente.red_social"><img src="{{redesCliente.red_seleccionada}}" width="30" heigth="30"/>&nbsp;&nbsp;Cuenta (*)</label><input name="redesCliente_nombre_cuenta" type="text" ng-if="redesCliente.red_social" ng-model="redesCliente.nombre_cuenta"/>      
+      <input type="hidden" name="redesCliente_id_cliente" ng-model="redesCliente.id_cliente">
+      <input type="hidden" name="redesCliente_id_redes_cliente" ng-model="redesCliente.id_redes_cliente">    
+      <br />
+      <label>(*) Informaci&oacute;n requerida</label>
+      <br />
+      <center>      
+      <button style="width:15em;" class="consultar" ng-click="saveRedesClientes('1')" >Guardar</button>
+      <br />
+      <br />      
+      <button style="width:15em;" class="limpiar" ng-click="limpiarRedesClientes()">Limpiar</button>      
+      <br />
+      <br />
+      <button style="width:15em;" class="volver" ng-click="showClientsCreate()">Volver</button></center>
+    </form>
+  </div>
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>
+
+ 
