@@ -246,6 +246,278 @@
 
     }
 
+    //Consulta que la red social que se intenta asociar no esté relacionada a otro cliente
+    function consultarCantRedesSocialesCliente($nombre_cuenta,$id_red_social,$id_cliente){        
+
+        $query = "SELECT
+                    count(id_redes_sociales_cliente) AS cant_redes_cliente
+                  FROM 
+                    clientes.tb_redes_sociales_cliente
+                  WHERE 
+                    cuenta = '$nombre_cuenta' 
+                    AND id_red_social = $id_red_social
+                    AND id_cliente <> $id_cliente 
+                    ";
+
+        //$query.=$id_red_social_cliente;          
+
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+        $row = pg_fetch_array($result, null);
+
+        return $row['cant_redes_cliente'];                  
+
+    }
+
+    //Consultar la red social que tiene asociado el cliente por medio del ID
+    function consultarRedSocialCliente($id_red_social_cliente,$id_cliente){        
+
+        $query = "SELECT
+                    id_red_social AS id_red_social
+                  FROM 
+                    clientes.tb_redes_sociales_cliente
+                  WHERE 
+                    id_redes_sociales_cliente = $id_red_social_cliente                     
+                    AND id_cliente = $id_cliente 
+                    ";                 
+
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+        $row = pg_fetch_array($result, null);
+
+        return $row['id_red_social'];                  
+
+    }
+
+
+    //Consulta si el cliente tiene una determinada cuenta de red social asociada
+    function consultarCantRedesSocialesCliente1($nombre_cuenta,$id_red_social,$id_cliente){
+        
+        $query = "SELECT
+                    count(id_redes_sociales_cliente) AS cant_redes_cliente
+                  FROM 
+                    clientes.tb_redes_sociales_cliente
+                  WHERE 
+                    cuenta = '$nombre_cuenta' 
+                    AND id_red_social = $id_red_social
+                    AND id_cliente = $id_cliente 
+                    ";           
+
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+        $row = pg_fetch_array($result, null);
+
+        return $row['cant_redes_cliente'];                  
+
+    }
+
+    function listarRedesSocialesCliente($id_cliente){
+
+        $query = "SELECT
+                    a.id_redes_sociales_cliente AS id_redes_sociales_cliente,
+                    b.id_red_social AS id_red_social,
+                    b.nombre AS red_social,
+                    b.imagen AS imagen,
+                    a.cuenta AS cuenta
+                  FROM
+                    clientes.tb_redes_sociales_cliente a
+                    INNER JOIN generales.tb_redes_sociales b ON a.id_red_social = b.id_red_social
+                  WHERE
+                    a.id_cliente = $id_cliente
+                    AND a.estado='1'
+                  ";
+
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());     
+
+        if(pg_num_rows($result)>0){
+
+          $i = 0; 
+          while($row = pg_fetch_array($result, null)){      
+            $output[$i]['id_red_social_cliente'] = $row['id_redes_sociales_cliente'];
+            $output[$i]['red_social']  = $row['red_social'];
+            $output[$i]['id_red_social']  = $row['id_red_social'];
+            $output[$i]['imagen']  = $row['imagen'];
+            $output[$i]['cuenta']  = $row['cuenta'];
+            $i++;     
+          } 
+                // Liberando el conjunto de resultados
+          pg_free_result($result);  
+
+          $respuesta['redes_sociales_cliente'] = $output;
+          $respuesta['respuesta'] = $i;        
+
+        }
+        else
+          $respuesta['cantidad_redes_sociales_cliente'] = '0';  
+
+        return $respuesta;        
+
+    }
+
+    function guardarRedesSocialesCliente($datosRedesCliente){
+
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $row = array();
+
+        if(isset($datosRedesCliente->id_redes_cliente)){
+          
+          if(($this->consultarCantRedesSocialesCliente($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 0)&&($this->consultarCantRedesSocialesCliente1($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 1)){            
+
+            $query = "UPDATE
+                        clientes.tb_redes_sociales_cliente
+                      SET
+                        cuenta = '".$datosRedesCliente->nombre_cuenta."', 
+                        id_red_social = ".$datosRedesCliente->id_red_social.",
+                        id_user_mod = ".$_SESSION['id_user'].",
+                        fecha_modificacion = CURRENT_TIMESTAMP,
+                        estado='1'
+                      WHERE
+                        id_redes_sociales_cliente = ".$datosRedesCliente->id_redes_cliente;
+
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+            $row['respuesta'] = '1';      
+            $row['id_redes_sociales_cliente'] =  $datosRedesCliente->id_redes_cliente;                     
+
+          }
+
+          else if(($this->consultarCantRedesSocialesCliente1($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 0)){
+
+            if($this->consultarRedSocialCliente($datosRedesCliente->id_redes_cliente,$datosRedesCliente->id_cliente)!=$datosRedesCliente->id_red_social){
+
+              $query = "INSERT INTO
+                          clientes.tb_redes_sociales_cliente
+                          (
+                            cuenta,
+                            id_red_social,
+                            id_cliente,
+                            id_user,
+                            estado
+                          )
+                        VALUES
+                          (
+                            '".$datosRedesCliente->nombre_cuenta."',
+                            ".$datosRedesCliente->id_red_social.",
+                            ".$datosRedesCliente->id_cliente.",
+                            ".$_SESSION['id_user'].",
+                            '1'
+                          )  
+                        RETURNING 
+                          id_redes_sociales_cliente
+                        ";
+
+              $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+              $row = pg_fetch_array($result, null);
+  
+              $row['respuesta'] = '3'; 
+
+            } 
+            else{
+              $query = "UPDATE
+                          clientes.tb_redes_sociales_cliente
+                        SET
+                          cuenta = '".$datosRedesCliente->nombre_cuenta."', 
+                          id_red_social = ".$datosRedesCliente->id_red_social.",
+                          id_user_mod = ".$_SESSION['id_user'].",
+                          fecha_modificacion = CURRENT_TIMESTAMP,
+                          estado='1'
+                        WHERE
+                          id_redes_sociales_cliente = ".$datosRedesCliente->id_redes_cliente;
+
+              $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+  
+              $row['respuesta'] = '1';      
+              $row['id_redes_sociales_cliente'] =  $datosRedesCliente->id_redes_cliente;        
+            }           
+
+          }
+          else if($this->consultarCantRedesSocialesCliente($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 1){
+            $row['respuesta'] = '2';      
+            $row['id_redes_sociales_cliente'] =  $datosRedesCliente->id_redes_cliente; 
+          }
+
+        }
+
+        else{
+
+          if($this->consultarCantRedesSocialesCliente1($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 0){
+
+            $query = "INSERT INTO
+                        clientes.tb_redes_sociales_cliente
+                        (
+                          cuenta,
+                          id_red_social,
+                          id_cliente,
+                          id_user,
+                          estado
+                        )
+                      VALUES
+                        (
+                          '".$datosRedesCliente->nombre_cuenta."',
+                          ".$datosRedesCliente->id_red_social.",
+                          ".$datosRedesCliente->id_cliente.",
+                          ".$_SESSION['id_user'].",
+                          '1'
+                        )  
+                      RETURNING 
+                        id_redes_sociales_cliente
+                      ";
+
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $row = pg_fetch_array($result, null);
+
+            $row['respuesta'] = '3';            
+
+          }
+
+          else{
+
+            //$row['respuesta'] = '4'; 
+            $query = "UPDATE
+                        clientes.tb_redes_sociales_cliente
+                      SET                        
+                        id_user_mod = ".$_SESSION['id_user'].",
+                        fecha_modificacion = CURRENT_TIMESTAMP,
+                        estado='1'
+                      WHERE
+                        id_red_social = ".$datosRedesCliente->id_red_social."
+                        AND cuenta = '".$datosRedesCliente->nombre_cuenta."'
+                      RETURNING  
+                        id_redes_sociales_cliente";
+
+            $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+            $row = pg_fetch_array($result, null);
+
+            $row['respuesta'] = '1';      
+            //$row['id_redes_sociales_cliente'] =  $datosRedesCliente->id_redes_cliente;            
+
+          }         
+          
+        }
+
+        return $row;
+
+    }
+
+    function borrarRedSocialCliente($id_red_social_cliente){
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $query = "UPDATE
+                    clientes.tb_redes_sociales_cliente
+                  SET
+                    estado='0',
+                    id_user_mod = ".$_SESSION['id_user'].",
+                    fecha_modificacion = CURRENT_TIMESTAMP
+                  WHERE
+                    id_redes_sociales_cliente = ".$id_red_social_cliente;
+
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());        
+        $row['respuesta'] = '1';            
+
+    }
+
     function consultarClientes($datosCliente){
 
       $query="SELECT

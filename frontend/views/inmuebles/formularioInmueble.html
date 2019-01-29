@@ -26,7 +26,7 @@
       <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>       
       </select>   
       <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Barrio</label>
-      <select name="inmueble_barrio" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-model="inmueble.codigoBarrio"/>        
+      <select name="inmueble_barrio" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-change="getEstratoComunaCali(inmueble.codigoBarrio)" ng-model="inmueble.codigoBarrio"/>        
       </select>   
       <label>Tipo inmueble (*)</label>
       <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>  

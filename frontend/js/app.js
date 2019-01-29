@@ -29,6 +29,12 @@ app.controller("siniController",
     $scope.lista_estratos_barrios_cali = []; 
     $scope.barrios_comunas_cali_ini = [];
     $scope.barrios_comunas_cali = [];
+    $scope.redesCliente.red_seleccionada = '';
+    $scope.redesCliente.id_cliente = '';
+    $scope.cant_redes_sociales_cliente = '';
+    $scope.lista_redes_sociales_cliente = [];
+
+    //$scope.seleccionarCliente = [];
 
     $http.post($scope.endpoint,{'accion':'validateLogin'})
      .then(function(response){      	
@@ -39,6 +45,16 @@ app.controller("siniController",
        	 $scope.showContent = '../login/formularioLogin.html';
        }
     });
+
+    $scope.seleccionarCliente = function(id_cliente){      
+      
+      $http.post($scope.endpoint,{'accion':'datosClientePorID','id_cliente':id_cliente})
+      .then(function(response){         
+        $scope.cliente=response.data.datosCliente;        
+        $scope.showClientsCreateUpd($scope.cliente);
+      });      
+      
+    } 
 
     $scope.setContentDiv = function(){
       $scope.showContent = '../login/formularioLogin.html';           	
@@ -73,12 +89,45 @@ app.controller("siniController",
       $scope.redesCliente.nombre_cuenta = undefined;
     }
 
-    $scope.showRedesSocialesClientes = function(){      
-      $scope.redesCliente.numeroIdentificacion = $scope.cliente.numeroIdentificacion;
-      $scope.redesCliente.nombre = $scope.cliente.nombres+' '+$scope.cliente.apellidos;
-      $scope.redesCliente.id_cliente = $scope.cliente.id_cliente;      
-      $scope.getListaRedesSociales();
-      $scope.showContent = '../clientes/formularioRedesCliente.html' 
+    $scope.showRedesSocialesClientes = function(){  
+    
+      if(!angular.isUndefined($scope.cliente.id_cliente)&&$scope.cliente.id_cliente!=''){
+        $scope.redesCliente.numeroIdentificacion = $scope.cliente.numeroIdentificacion;      
+        $scope.redesCliente.nombre = $scope.cliente.nombres+' '+$scope.cliente.apellidos;
+        $scope.redesCliente.id_cliente = $scope.cliente.id_cliente;      
+        $scope.getListaRedesSociales();
+        $scope.limpiarRedesClientes();
+        //$scope.lista_estratos_barrios_cali = [];
+        $scope.showContent = '../clientes/formularioRedesCliente.html';  
+      }
+      else{
+        alert('Debe guardar previamente los datos del cliente');
+      }
+       
+    }
+
+    $scope.seleccionarRedSocialCliente = function(id_redes_sociales_cliente){    
+    //alert(id_redes_sociales_cliente);  
+    console.log($scope.lista_redes_sociales_cliente);
+      angular.forEach($scope.lista_redes_sociales_cliente, function(value, key) {
+        if(value.id_red_social_cliente==id_redes_sociales_cliente){
+          $scope.redesCliente.red_social={'id_red_social':value.id_red_social,'nombre':value.red_social};          
+          $scope.redesCliente.nombre_cuenta=value.cuenta;
+          $scope.redesCliente.red_seleccionada='../../form-images/social/'+value.imagen;
+          $scope.redesCliente.id_redes_cliente=value.id_red_social_cliente;          
+        }  
+      });      
+    }
+
+    $scope.borrarRedSocialCliente = function(id_red_social_cliente,red_social,cuenta){      
+      if(confirm("Realmente desea borrar la cuenta "+cuenta+" de "+red_social+" de este cliente?")){
+        $http.post($scope.endpoint,{'accion':'borrarCuentaRedSocialCliente','id_red_social_cliente':id_red_social_cliente})
+        .then(function(response){               
+          alert("Se ha borrado la cuenta con éxito");
+          $scope.listarRedesSocialesCliente();
+          $scope.limpiarRedesClientes();
+        });
+      }
     }
 
     $scope.showClientsCreate = function(){
@@ -116,6 +165,45 @@ app.controller("siniController",
     $scope.getImgRedSocial = function(imagen){      
       $scope.redesCliente.nombre_cuenta = undefined;
       $scope.redesCliente.red_seleccionada = '../../form-images/social/'+imagen;      
+    }
+
+    $scope.saveRedesClientes = function(){
+      if(angular.isUndefined($scope.redesCliente.red_social)){
+        alert('Debe seleccionar una red social');
+      }
+      else if(angular.isUndefined($scope.redesCliente.nombre_cuenta)){
+        alert('Debe ingresar el nombre de la cuenta');
+      } 
+      else{
+        var datosRedesCliente = {};
+        datosRedesCliente.id_cliente = $scope.redesCliente.id_cliente;
+        datosRedesCliente.id_red_social = $scope.redesCliente.red_social.id_red_social;
+        datosRedesCliente.nombre_cuenta = $scope.redesCliente.nombre_cuenta;
+        if(!angular.isUndefined($scope.redesCliente.id_redes_cliente)){
+          datosRedesCliente.id_redes_cliente = $scope.redesCliente.id_redes_cliente;
+        }
+        $http.post($scope.endpoint,{'accion':'guardarRedesSocialesCliente','datosRedesCliente':datosRedesCliente})
+        .then(function(response){ 
+          if(response.data.respuesta == '1'){
+            alert('Red social del cliente actualizada existosamente');
+            $scope.redesCliente.id_redes_cliente = response.data.id_redes_sociales_cliente;
+            $scope.listarRedesSocialesCliente();            
+          }
+          else if(response.data.respuesta == '2'){
+            alert('La red social que intenta asociar ya se encuentra relacionada');
+            //datosRedesCliente.id_redes_cliente = response.data.id_redes_sociales_cliente;
+          }
+          else if(response.data.respuesta == '3'){
+            alert('Red social ingresada existosamente para este cliente');
+            $scope.redesCliente.id_redes_cliente = response.data.id_redes_sociales_cliente;
+            $scope.listarRedesSocialesCliente();
+          }        
+          else{
+            alert('La red social que intenta asociar ya se encuentra relacionada');
+            //datosRedesCliente.id_redes_cliente = response.data.id_redes_sociales_cliente;
+          }
+        });
+      }   
     }
 
     $scope.getCiudadesCliente = function(id_departamento){      
@@ -217,7 +305,14 @@ app.controller("siniController",
 
     }  	
 
-     
+    $scope.listarRedesSocialesCliente = function(){
+      var id_cliente = $scope.redesCliente.id_cliente;
+      $http.post($scope.endpoint,{'accion':'listarRedesSocialesCliente','id_cliente':id_cliente})
+      .then(function(response){         
+        $scope.cant_redes_sociales_cliente=response.data.cantidad_redes_sociales_cliente;        
+        $scope.lista_redes_sociales_cliente=response.data.redes_sociales_cliente;
+      });
+    } 
 
     $scope.getTiposIdentificacion = function(){            
       $http.post($scope.endpoint,{'accion':'tiposIdentificacion'})
@@ -463,6 +558,23 @@ app.controller("siniController",
       });
 
     } 
+
+    $scope.getEstratoComunaCali = function(codigoBarrio){      
+      var comuna = '';
+      angular.forEach($scope.lista_comunas_cali,function(value,key){
+        if(value.codigo == codigoBarrio.comuna){
+          comuna = value.nombre;
+        }
+      });
+      var estrato = '';
+      angular.forEach($scope.lista_estratos_cali,function(value,key){
+        if(value.codigo == codigoBarrio.estrato){
+          estrato = value.nombre;
+        }
+      });
+      $scope.inmueble.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
+      $scope.inmueble.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato} ;
+    }
 
     $scope.getLocEstCali = function(codigoEstrato){
       $scope.lista_comunas_cali = $scope.lista_comunas_cali_ini;
@@ -724,17 +836,7 @@ app.controller("siniController1",
   	$scope.currentPage = 0;
     $scope.pageSize = 10;
     $scope.lista_clientes_busq = [];       
-    $scope.cant_clie_busq = '1';    
-
-    $scope.seleccionarCliente = function(id_cliente){      
-      
-      $http.post($scope.endpoint,{'accion':'datosClientePorID','id_cliente':id_cliente})
-      .then(function(response){         
-        $scope.cliente=response.data.datosCliente;        
-        $scope.showClientsCreateUpd($scope.cliente);
-      });      
-      
-    }
+    $scope.cant_clie_busq = '1';      
 
     $scope.consultarClientes = function(){ 
 

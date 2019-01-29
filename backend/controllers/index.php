@@ -50,6 +50,24 @@
       $obj->getListaRedesSociales();
     }
 
+    if($request->accion=='guardarRedesSocialesCliente'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->guardarRedesSocialesCliente($request->datosRedesCliente);
+    }
+
+    if($request->accion=='listarRedesSocialesCliente'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->listarRedesSocialesCliente($request->id_cliente);
+    }
+
+    if($request->accion=='borrarCuentaRedSocialCliente'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->borrarRedSocialCliente($request->id_red_social_cliente);
+    }
+
     if($request->accion=='caracteristicasTiposInmuebles'){
       require_once('services/Inmuebles.php');        
       $obj = new Inmuebles();       

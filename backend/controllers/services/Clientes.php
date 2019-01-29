@@ -21,6 +21,11 @@
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);	
 		}
 
+		function borrarRedSocialCliente($id_red_social_cliente){
+			$output = $this->objClientes->borrarRedSocialCliente($id_red_social_cliente);
+	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+		}
+
 		function getTiposClientes(){        
 
             $autAPI   = new AutenticaAPI();
@@ -60,6 +65,16 @@
 
 		function guardarClientes($datosCliente){			
 			$output = $this->objClientes->guardarClientes($datosCliente);
+	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+		}
+
+		function guardarRedesSocialesCliente($datosRedesCliente){			
+			$output = $this->objClientes->guardarRedesSocialesCliente($datosRedesCliente);
+	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+		}
+
+		function listarRedesSocialesCliente($id_cliente){
+			$output = $this->objClientes->listarRedesSocialesCliente($id_cliente);
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 		}
 
