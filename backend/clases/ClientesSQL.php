@@ -381,6 +381,11 @@
 
           }
 
+          else if($this->consultarCantRedesSocialesCliente($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 1){
+            $row['respuesta'] = '2';      
+            $row['id_redes_sociales_cliente'] =  $datosRedesCliente->id_redes_cliente; 
+          }
+
           else if(($this->consultarCantRedesSocialesCliente1($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 0)){
 
             if($this->consultarRedSocialCliente($datosRedesCliente->id_redes_cliente,$datosRedesCliente->id_cliente)!=$datosRedesCliente->id_red_social){
@@ -431,16 +436,13 @@
             }           
 
           }
-          else if($this->consultarCantRedesSocialesCliente($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 1){
-            $row['respuesta'] = '2';      
-            $row['id_redes_sociales_cliente'] =  $datosRedesCliente->id_redes_cliente; 
-          }
+          
 
         }
 
         else{
 
-          if($this->consultarCantRedesSocialesCliente1($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 0){
+          if($this->consultarCantRedesSocialesCliente($datosRedesCliente->nombre_cuenta,$datosRedesCliente->id_red_social,$datosRedesCliente->id_cliente) == 0){
 
             $query = "INSERT INTO
                         clientes.tb_redes_sociales_cliente
@@ -473,7 +475,7 @@
           else{
 
             //$row['respuesta'] = '4'; 
-            $query = "UPDATE
+            /*$query = "UPDATE
                         clientes.tb_redes_sociales_cliente
                       SET                        
                         id_user_mod = ".$_SESSION['id_user'].",
@@ -486,9 +488,9 @@
                         id_redes_sociales_cliente";
 
             $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-            $row = pg_fetch_array($result, null);
+            $row = pg_fetch_array($result, null);*/
 
-            $row['respuesta'] = '1';      
+            $row['respuesta'] = '2';      
             //$row['id_redes_sociales_cliente'] =  $datosRedesCliente->id_redes_cliente;            
 
           }         

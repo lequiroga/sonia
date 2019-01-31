@@ -14,13 +14,13 @@
       <label>Ciudad (*)</label>
       <select name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/>        
       </select>      
-      <label ng-if="1==2">Sector</label>
-      <select ng-if="1==2" name="inmueble_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-model="inmueble.codigoSector"/>        
+      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Sector&nbsp;/&nbsp;Zona</label>
+      <select ng-if="inmueble.codigoCiudad.id_ciudad=='132'" name="inmueble_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-model="inmueble.codigoSector"/>        
       </select>
       <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Estrato</label>
       <select name="inmueble_codigoEstratoCali" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(inmueble.codigoEstrato)" ng-model="inmueble.codigoEstrato"/>    
       </select>
-      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'||inmueble.codigoCiudad.id_ciudad=='794'">Zona / Localidad / Comuna</label>
+      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'||inmueble.codigoCiudad.id_ciudad=='794'">Localidad / Comuna</label>
       <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmueble.codigoZona"/>        
       </select> 
       <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>       

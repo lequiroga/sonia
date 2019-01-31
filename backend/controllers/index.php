@@ -56,10 +56,23 @@
       $obj->guardarRedesSocialesCliente($request->datosRedesCliente);
     }
 
+    if($request->accion=='guardarClasificacionBarrio'){
+      require_once('services/Zonas.php');        
+      $obj = new Zonas();       
+      $obj->guardarClasificacionBarrio($request->clasificacion);
+    }
+
     if($request->accion=='listarRedesSocialesCliente'){
       require_once('services/Clientes.php');        
       $obj = new Clientes(); 
       $obj->listarRedesSocialesCliente($request->id_cliente);
+    }
+
+    //Servicio que entrega la lista de barrios asociados a una zona
+    if($request->accion=='listarBarriosZona'){
+      require_once('services/Zona.php');        
+      $obj = new Zona(); 
+      $obj->listarBarriosZona($request->id_sector,$request->id_ciudad);
     }
 
     if($request->accion=='borrarCuentaRedSocialCliente'){
@@ -142,12 +155,13 @@
   	  require_once('services/Ciudades.php');	  	  
       $obj = new Ciudades(); 
       $obj->listaCiudades($request->id_departamento);
-  	}
+  	}    
   	if($request->accion=='listaZonas'){
   	  require_once('services/Zonas.php');	  	  
       $obj = new Zonas(); 
       $obj->listaZonas($request->id_ciudad);
   	}
+    //WS que lista las zonas o sectores definidos para cada ciudad
   	if($request->accion=='listaSectores'){
   	  require_once('services/Sectores.php');	  	  
       $obj = new Sectores(); 

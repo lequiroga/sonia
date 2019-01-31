@@ -18,6 +18,7 @@ app.controller("siniController",
     $scope.cant_caract_inm_opc = '0';
     $scope.cant_caract_inm_obl = '0';
     $scope.cant_caract_inm_obl_show = '0';
+    $scope.cant_barrios_zona = '0';
     $scope.lista_caracteristicas_inmueble = [];
     $scope.lista_caracteristicas_obligatorias_inmueble = [];
     $scope.lista_caracteristicas_opcionales_inmueble = [];
@@ -27,12 +28,14 @@ app.controller("siniController",
     $scope.lista_comunas_cali = []; 
     $scope.lista_estratos_cali = []; 
     $scope.lista_estratos_barrios_cali = []; 
+    $scope.lista_barrios_zonas = [];
     $scope.barrios_comunas_cali_ini = [];
     $scope.barrios_comunas_cali = [];
     $scope.redesCliente.red_seleccionada = '';
     $scope.redesCliente.id_cliente = '';
     $scope.cant_redes_sociales_cliente = '';
     $scope.lista_redes_sociales_cliente = [];
+    $scope.clasificacionBarrios = [];
 
     //$scope.seleccionarCliente = [];
 
@@ -76,6 +79,10 @@ app.controller("siniController",
       $scope.showContent = '../administracion/caracteristicasInmuebles/formularioCaracteristicasInmuebles.html';  
     }
 
+    $scope.showClasificacionBarriosIndex = function(){
+      $scope.showContent = '../administracion/clasificacionBarrios/formularioClasificacionBarrios.html';  
+    }
+
     $scope.showAdministracionIndex = function(){
       $scope.showContent = '../administracion/formularioAdministracion.html';  
     }
@@ -97,7 +104,7 @@ app.controller("siniController",
         $scope.redesCliente.id_cliente = $scope.cliente.id_cliente;      
         $scope.getListaRedesSociales();
         $scope.limpiarRedesClientes();
-        //$scope.lista_estratos_barrios_cali = [];
+        $scope.lista_redes_sociales_cliente = [];
         $scope.showContent = '../clientes/formularioRedesCliente.html';  
       }
       else{
@@ -128,6 +135,32 @@ app.controller("siniController",
           $scope.limpiarRedesClientes();
         });
       }
+    }
+
+    //Función para des-asociar un barrio de una zona
+    $scope.borrarBarrioZona = function(id_zona_barrio,id_zona,id_ciudad){      
+      if(confirm("Realmente desea borrar el barrio de dicha zona?")){
+        $http.post($scope.endpoint,{'accion':'borrarBarrioZona','id_zona_barrio':id_zona_barrio})
+        .then(function(response){               
+          alert("Se ha borrado el barrio de la zona con éxito");
+          $scope.listarBarriosZona(id_zona,id_ciudad);          
+        });
+      }
+    }
+
+    //Función que lista todos los barrios asociados a una zona
+    $scope.listarBarriosZona = function(id_sector,id_ciudad){
+      $http.post($scope.endpoint,{'accion':'listarBarriosZona','id_sector':id_sector,'id_ciudad':id_ciudad})
+      .then(function(response){     
+        if(response.data.cant_barrios_zona == '0'){
+          $scope.lista_barrios_zonas = [];
+          $scope.cant_barrios_zona = '0';
+        } 
+        else{
+          $scope.lista_barrios_zonas = response.data.barrios_zona;  
+          $scope.cant_barrios_zona = response.data.cant_barrios_zona;
+        }             
+      });
     }
 
     $scope.showClientsCreate = function(){
@@ -185,12 +218,12 @@ app.controller("siniController",
         $http.post($scope.endpoint,{'accion':'guardarRedesSocialesCliente','datosRedesCliente':datosRedesCliente})
         .then(function(response){ 
           if(response.data.respuesta == '1'){
-            alert('Red social del cliente actualizada existosamente');
+            alert('Red social del cliente actualizada exitosamente');
             $scope.redesCliente.id_redes_cliente = response.data.id_redes_sociales_cliente;
             $scope.listarRedesSocialesCliente();            
           }
           else if(response.data.respuesta == '2'){
-            alert('La red social que intenta asociar ya se encuentra relacionada');
+            alert('La red social que intenta asociar ya se encuentra relacionada a otro cliente');
             //datosRedesCliente.id_redes_cliente = response.data.id_redes_sociales_cliente;
           }
           else if(response.data.respuesta == '3'){
@@ -199,7 +232,7 @@ app.controller("siniController",
             $scope.listarRedesSocialesCliente();
           }        
           else{
-            alert('La red social que intenta asociar ya se encuentra relacionada');
+            alert('Ha ocurrido un error inesperado, contacte al administrador');
             //datosRedesCliente.id_redes_cliente = response.data.id_redes_sociales_cliente;
           }
         });
@@ -377,11 +410,15 @@ app.controller("siniController",
     $scope.getZonasSectores = function(codigoCiudad){  
       $scope.ids_zonas=null; 
       $scope.ids_sectores=null;	
+      $scope.clasificacionBarrios.codigoBarrio = [];
+      $scope.clasificacionBarrios.codigoZona = [];   
+      $scope.clasificacionBarrios.codigoEstrato = [];    
       if(codigoCiudad!=null){
         var id_ciudad = codigoCiudad.id_ciudad;   
         $http.post($scope.endpoint,{'accion':'listaSectores','id_ciudad':id_ciudad})
         .then(function(response){       	
           $scope.ids_sectores=response.data;
+          //console.log(response.data);
         });     
         $http.post($scope.endpoint,{'accion':'listaZonas','id_ciudad':id_ciudad})
         .then(function(response){       	
@@ -559,21 +596,47 @@ app.controller("siniController",
 
     } 
 
-    $scope.getEstratoComunaCali = function(codigoBarrio){      
-      var comuna = '';
-      angular.forEach($scope.lista_comunas_cali,function(value,key){
-        if(value.codigo == codigoBarrio.comuna){
-          comuna = value.nombre;
-        }
-      });
-      var estrato = '';
-      angular.forEach($scope.lista_estratos_cali,function(value,key){
-        if(value.codigo == codigoBarrio.estrato){
-          estrato = value.nombre;
-        }
-      });
-      $scope.inmueble.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
-      $scope.inmueble.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato} ;
+    $scope.getEstratoComunaCali = function(codigoBarrio){ 
+      if(!angular.isUndefined(codigoBarrio)&&(codigoBarrio!=null)){
+        var comuna = '';
+        angular.forEach($scope.lista_comunas_cali,function(value,key){
+          if(value.codigo == codigoBarrio.comuna){
+            comuna = value.nombre;
+          }
+        });
+        var estrato = '';
+        angular.forEach($scope.lista_estratos_cali,function(value,key){
+          if(value.codigo == codigoBarrio.estrato){
+            estrato = value.nombre;
+          }
+        });
+        $scope.inmueble.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
+        $scope.inmueble.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato};
+        //console.log($scope.inmueble);
+      }     
+      
+    }
+
+    //clasificacionBarrios
+    $scope.getEstratoComunaCaliClasif = function(codigoBarrio){ 
+      if(!angular.isUndefined(codigoBarrio)&&(codigoBarrio!=null)){
+        var comuna = '';
+        angular.forEach($scope.lista_comunas_cali,function(value,key){
+          if(value.codigo == codigoBarrio.comuna){
+            comuna = value.nombre;
+          }
+        });
+        var estrato = '';
+        angular.forEach($scope.lista_estratos_cali,function(value,key){
+          if(value.codigo == codigoBarrio.estrato){
+            estrato = value.nombre;
+          }
+        });
+        $scope.clasificacionBarrios.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
+        $scope.clasificacionBarrios.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato};
+        //console.log($scope.inmueble);
+      }     
+      
     }
 
     $scope.getLocEstCali = function(codigoEstrato){
@@ -776,6 +839,55 @@ app.controller("siniController",
       $scope.getTiposCaracteristicasInm();
       //$scope.getTiposCaracteristicasInm1();
     }    
+
+    //Limpiar el formulario de clasificación del barrio. Deja por defecto valores de Colombia
+    $scope.limpiarClasificacionBarrios = function(){
+
+      $scope.clasificacionBarrios=[];      
+      $scope.clasificacionBarrios.codigoPais = {id_pais:'1',name:'Colombia'};      
+      $scope.getDepartamentosCliente('1');
+      $scope.clasificacionBarrios.codigoDepartamento = {id_departamento:'32',name:'Valle del Cauca'}; 
+      $scope.getCiudadesCliente('32');
+      
+    } 
+
+    /*Valida el formulario de clasificación del barrio indicando si hay algún valor vacío, de lo contrario 
+      se realiza el guardado de la misma.
+    */
+    $scope.guardarClasificacionBarrio = function(){
+      if(angular.isUndefined($scope.clasificacionBarrios.codigoPais)){
+        alert("Debe seleccionar el país");
+      }
+      else if(angular.isUndefined($scope.clasificacionBarrios.codigoDepartamento)){
+        alert("Debe seleccionar el departamento");
+      }
+      else if(angular.isUndefined($scope.clasificacionBarrios.codigoCiudad)){
+        alert("Debe seleccionar la ciudad");
+      }
+      else if(angular.isUndefined($scope.clasificacionBarrios.codigoSector)){
+        alert("Debe seleccionar la zona o sector");
+      }
+      else if((angular.isUndefined($scope.clasificacionBarrios.codigoBarrio))||$scope.clasificacionBarrios.codigoBarrio==''){
+        alert("Debe seleccionar el barrio");
+      }      
+      else{        
+        $http.post($scope.endpoint,{'accion':'guardarClasificacionBarrio', 'clasificacion':
+                                    {
+                                      'id_barrio':$scope.clasificacionBarrios.codigoBarrio.codigo,
+                                      'id_ciudad':$scope.clasificacionBarrios.codigoCiudad.id_ciudad,
+                                      'id_sector':$scope.clasificacionBarrios.codigoSector.id_sector
+                                    }                                      
+                                  })
+        .then(function(response){ 
+          if(response.data.respuesta=='1'){
+            alert("Se ha relacionado el barrio a la zona correctamente.");
+          }
+          else{
+            alert("No se ha podido relacionar la zona, por favor verifique.");
+          }                
+        });  
+      }
+    }
 
     $scope.seleccionarCaracteristicaInmueble = function(id_caracteristicas_tipo_inmueble){      
       $http.post($scope.endpoint,{'accion':'seleccionarCaracteristicaInmueble','id_caracteristicas_tipo_inmueble':id_caracteristicas_tipo_inmueble})

@@ -1,0 +1,80 @@
+<div class="toggle">
+    <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
+</div>
+<div class="form" ng-init="limpiarClasificacionBarrios()">
+    <center><h2 style="font-family:Verdana;">CLASIFICACI&Oacute;N&nbsp;ZONAS&nbsp;BARRIOS</h2></center>
+    <br />
+    <form name="formularioClasificacionBarrios" id="formularioClasificacionBarrios" ng-model="formularioClasificacionBarrios" method="post" NOVALIDATE>
+      <label>Pa&iacute;s (*)</label>
+      <select name="clasificacionBarrios_codigoPais" id="codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="clasificacionBarrios.codigoPais" ng-change="getDepartamentos(clasificacionBarrios.codigoPais)" ng-init="getPaises()"/>        
+      </select>
+      <label>Departamento (*)</label>
+      <select name="clasificacionBarrios_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(clasificacionBarrios.codigoDepartamento)" ng-model="clasificacionBarrios.codigoDepartamento"/>
+      </select>
+      <label>Ciudad (*)</label>
+      <select name="clasificacionBarrios_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="clasificacionBarrios.codigoCiudad" ng-change="getZonasSectores(clasificacionBarrios.codigoCiudad)"/>        
+      </select> 
+      <label ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'">Sector&nbsp;/&nbsp;Zona (*)</label>
+      <select ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" name="clasificacionBarrios_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-change="listarBarriosZona(clasificacionBarrios.codigoSector.id_sector,clasificacionBarrios.codigoCiudad.id_ciudad)" ng-model="clasificacionBarrios.codigoSector"/>  
+      </select> 
+      <label ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'">Barrio (*)</label>
+      <select name="clasificacionBarrios_barrio" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-change="getEstratoComunaCaliClasif(clasificacionBarrios.codigoBarrio)" ng-model="clasificacionBarrios.codigoBarrio"/>        
+      </select>      
+      <label ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'||clasificacionBarrios.codigoCiudad.id_ciudad=='794'">Localidad / Comuna</label>
+      <select name="clasificacionBarrios_zona" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="clasificacionBarrios.codigoZona"/>        
+      </select> 
+      <select name="clasificacionBarrios_zona" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-disabled="clasificacionBarrios.codigoCiudad.id_ciudad" ng-change="getBarriosLocCali(clasificacionBarrios.codigoZona)" ng-model="clasificacionBarrios.codigoZona"/>       
+      </select>      
+      <label ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'">Estrato</label>
+      <select name="clasificacionBarrios_codigoEstratoCali" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(clasificacionBarrios.codigoEstrato)" ng-model="clasificacionBarrios.codigoEstrato" ng-disabled="clasificacionBarrios.codigoCiudad.id_ciudad"/>    
+      </select>         
+      <br />
+      <label>(*) Informaci&oacute;n requerida</label>      
+      <br />   
+      <center>    
+      <button style="width:15em;" class="consultar" ng-click="guardarClasificacionBarrio()">Guardar</button>
+      <br />
+      <br />       
+      <button style="width:15em;" class="limpiar" ng-click="limpiarClasificacionBarrios()">Limpiar</button>      
+      <br />
+      <br />
+      <button style="width:15em;" class="volver" ng-click="showAdministracionIndex()">Volver</button></center>
+    </form>
+  </div>
+  <div class="form1" ng-if="cant_barrios_zona!='0'" style="top:-3em;position: relative;">           
+    <div class="container">    
+      <div class="panel panel-default">
+        <div class="panel-body">     
+          <center>          
+            <h3>Zona seleccionada: {{clasificacionBarrios.codigoSector.name}}</h3>
+          </center>     
+          <table ng-init='configPages1()' style="width: 80%;">
+            <thead>
+              <tr>                
+                <th style="width: 48%;">Zona</th>                  
+                <th style="width: 48%;">Barrio</th> 
+                <th style="width: 4%;">&nbsp;</th>                    
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat='lista_barrio_zona in lista_barrios_zonas | startFromGrid: currentPage1 * pageSize1 | limitTo: pageSize1'>                 
+                <td style="text-align: left;" ng-click="seleccionarBarrioZona(lista_barrio_zona.id_barrio_zona,lista_barrio_zona.id_zona,lista_barrio_zona.id_barrio)">{{lista_barrio_zona.nombre_zona}}</td>  
+                <td style="text-align: left;" ng-click="seleccionarBarrioZona(lista_barrio_zona.id_barrio_zona,lista_barrio_zona.id_zona,lista_barrio_zona.id_barrio)">{{lista_barrio_zona.nombre_barrio}}</td>  
+                <td style="text-align: center;"><a href="#" ng-click="borrarBarrioZona(lista_barrio_zona.id_barrio_zona,lista_barrio_zona.id_zona,lista_barrio_zona.id_ciudad)"><img src="../../form-images/cross.png"></a></td>            
+              </tr>
+            </tbody>
+          </table>
+          <center>
+          <div class='btn-group'>
+            <button type='button' class='butt' ng-disabled='currentPage1 == 0' ng-click='currentPage1 = currentPage1 - 1'>&laquo;</button>
+            <button type='button' class='butt' ng-disabled='currentPage1 == page.no - 1' ng-click='setPage1(page.no)' ng-repeat='page in pages'>{{page.no}}</button>
+            <button type='button' class='butt' ng-disabled='currentPage1 >= usuarios.length/pageSize1 - 1' , ng-click='currentPage1 = currentPage1  + 1'>&raquo;</button>
+          </div>
+        </center>
+        </div>
+      </div>      
+    </div>
+  </div>
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>
