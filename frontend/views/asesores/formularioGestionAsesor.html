@@ -1,0 +1,68 @@
+
+  <div class="toggle">
+    <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
+  </div>
+  <div class="form">
+    <center><h2 style="font-family:Verdana;">GESTI&Oacute;N ASESORES</h2></center>
+    <br />
+    <form name="formularioAsesor" ng-model="asesor" id="formularioAsesor" method="post" NOVALIDATE>
+      <label>Tipo asesor (*)</label>
+      <select name="asesor_tipo_asesor" ng-options="id_tipo_asesor as id_tipo_asesor.descripcion for id_tipo_asesor in ids_tipo_asesores track by id_tipo_asesor.id_tipo_asesor" ng-model="asesor.tipoAsesor"/>        
+      </select>
+      <label>Nombres (*)</label><input name="asesor_nombres" type="text" ng-model="asesor.nombres"/>      
+      <label>Apellidos (*)</label><input name="asesor_apellidos" type="text" ng-model="asesor.apellidos"/>      
+      <label>Tipo identificaci&oacute;n (*)</label>
+      <select name="asesor_tipo_identificacion" ng-change="showClientsByID()" ng-options="id_tipo_id as id_tipo_id.descripcion for id_tipo_id in ids_tipo_id track by id_tipo_id.id_tipo_identificacion" ng-model="asesor.tipoIdentificacion"/>        
+      </select>      
+      <label>N&uacute;mero identificaci&oacute;n (*)</label><input name="asesor_numero_identificacion" type="number" string-to-number ng-model="asesor.numeroIdentificacion"/>
+      <label>Tipo notificaci&oacute;n (*)</label>
+      <select name="asesor_tipo_notificacion" ng-options="id_tipo_notificacion as id_tipo_notificacion.descripcion for id_tipo_notificacion in ids_tipo_notificacion track by id_tipo_notificacion.id_tipo_notificacion" ng-model="asesor.tipoNotificacion"/>        
+      </select> 
+      <label>Tel&eacute;fono m&oacute;vil</label><input name="asesor_telefono_movil" type="text" ng-model="asesor.telefono_movil"/>      
+      <label>Tel&eacute;fono fijo</label><input name="asesor_telefono_fijo" type="text" ng-model="asesor.telefono_fijo"/>      
+      <label>Correo electr&oacute;nico</label><input name="asesor_correo_electronico" type="email" ng-model="asesor.correo_electronico"/>
+      <label>Direcci&oacute;n de residencia</label><input name="asesor_direccion" type="text" ng-model="asesor.direccion"/>
+      <label>Pa&iacute;s</label>
+      <select name="asesor_codigoPais" id="codigoPais" ng-model="asesor.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosAsesor(asesor.codigoPais.id_pais)"/>       
+      </select>
+      <label>Departamento</label>
+      <select name="asesor_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(asesor.codigoDepartamento)" ng-model="asesor.codigoDepartamento"/>
+      </select>
+      <label>Ciudad</label>
+      <select name="asesor_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="asesor.codigoCiudad" ng-change="getZonasSectores(asesor.codigoCiudad)"/>        
+      </select>
+      <label>Porcentaje comisi&oacute;n</label><input name="asesor_porcentaje_comision" type="number" ng-model="asesor.porcentaje_comision"/>
+      <label ng-if="asesor.tipoAsesor!='4' && asesor.tipoAsesor">Usuario aplicativo</label><input ng-if="asesor.tipoAsesor!='4' && asesor.tipoAsesor" name="asesor_usuario_aplicativo" type="text" ng-model="asesor.usuario_aplicativo"/>
+      <label ng-if="asesor.tipoAsesor!='4' && asesor.tipoAsesor">Contrase&ntilde;a</label><input ng-if="asesor.tipoAsesor!='4' && asesor.tipoAsesor" name="asesor_password" type="password" ng-model="asesor.password"/>
+      <label ng-if="asesor.tipoAsesor!='4' && asesor.tipoAsesor">Confirmar&nbsp;contrase&ntilde;a</label><input ng-if="asesor.tipoAsesor!='4' && asesor.tipoAsesor" name="asesor_password_confirm" type="password" ng-model="asesor.password_confirm"/>
+      <label ng-if="asesor.id_asesor">Empleado&nbsp;activo</label>    
+      <label ng-if="asesor.id_asesor" class="switch">
+        <input type="checkbox" id="asesor_empleado_activo" name="asesor_empleado_activo" ng-model="asesor.empleado_activo" ng-change="cambiarValorEstadoUsuario(asesor.empleado_activo)">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label>   
+      <label ng-if="asesor.id_asesor && asesor.tipoAsesor && asesor.tipoAsesor!='4'">Usuario&nbsp;aplicativo&nbsp;activo</label>    
+      <label ng-if="asesor.id_asesor && asesor.tipoAsesor && asesor.tipoAsesor!='4'" class="switch">
+        <input type="checkbox" id="asesor_usuario_activo" name="asesor_usuario_activo" ng-model="asesor.usuario_activo">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label>   
+      <label ng-if="asesor.id_asesor && asesor.tipoAsesor && asesor.cambio_estado=='1'">Motivo&nbsp;de&nbsp;Modificaci&oacute;n</label>
+      <textarea name="asesor_motivo" id="asesor_motivo" ng-if="asesor.id_asesor && asesor.cambio_estado=='1'" ng-model="asesor.motivo"></textarea>
+      <input type="hidden" name="asesor_id_asesor" ng-model="asesor.id_asesor">    
+      <br />
+      <label>(*) Informaci&oacute;n&nbsp;requerida</label>
+      <br />
+      <center>      
+      <button style="width:15em;" class="consultar" ng-click="saveAsesores()" >Guardar</button>
+      <br />
+      <br />     
+      <button style="width:15em;" class="limpiar" ng-click="limpiarAsesores()">Limpiar</button>      
+      <br />
+      <br />
+      <button style="width:15em;" class="volver" ng-click="showAsesoresInmobiliariaIndex()">Volver</button></center>
+    </form>
+  </div>
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>
+
+ 

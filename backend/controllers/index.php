@@ -70,9 +70,16 @@
 
     //Servicio que entrega la lista de barrios asociados a una zona
     if($request->accion=='listarBarriosZona'){
-      require_once('services/Zona.php');        
-      $obj = new Zona(); 
+      require_once('services/Zonas.php');        
+      $obj = new Zonas(); 
       $obj->listarBarriosZona($request->id_sector,$request->id_ciudad);
+    }
+
+    //Servicio para des-asociar un barrio de una zona
+    if($request->accion=='borrarBarrioZona'){      
+      require_once('services/Zonas.php');        
+      $obj = new Zonas(); 
+      $obj->borrarBarrioZona($request->id_zona_barrio);
     }
 
     if($request->accion=='borrarCuentaRedSocialCliente'){

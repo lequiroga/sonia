@@ -44,6 +44,12 @@
         echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
     }
 
+    //Des-asocia la relación entre un barrio y una zona de una ciudad
+    function borrarBarrioZona($id_zona_barrio){
+        $output = $this->objZonas->borrarBarrioZona($id_zona_barrio);
+        echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+    }
+
     //Función para listar los barrios asociados a una zona de una ciudad
     function listarBarriosZona($id_sector,$id_ciudad){
         $output = $this->objZonas->listarBarriosZona($id_sector,$id_ciudad);

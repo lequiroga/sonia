@@ -36,6 +36,7 @@ app.controller("siniController",
     $scope.cant_redes_sociales_cliente = '';
     $scope.lista_redes_sociales_cliente = [];
     $scope.clasificacionBarrios = [];
+    $scope.ids_tipo_asesores = [];
 
     //$scope.seleccionarCliente = [];
 
@@ -71,6 +72,12 @@ app.controller("siniController",
       $scope.showContent = '../clientes/formularioCliente.html'; 	
     }
 
+    //Cargar el formulario o pantalla de gestión de asesores
+    $scope.showAsesoresCreate = function(){
+
+      $scope.showContent = '../asesores/formularioGestionAsesor.html';  
+    }
+
     $scope.showInmueblesIndex = function(){
       $scope.showContent = '../inmuebles/formularioInmueble.html'; 	
     }
@@ -91,9 +98,21 @@ app.controller("siniController",
       $scope.showContent = '../inmuebles/formularioGestionInmueble.html'	
     }
 
+    //Formulario de asesores de la inmobiliaria
+    $scope.showAsesoresInmobiliariaIndex = function(){
+      $scope.showContent = '../asesores/formularioAsesor.html'  
+    }
+
     $scope.limpiarRedesClientes = function(){
       $scope.redesCliente.red_social = undefined;
       $scope.redesCliente.nombre_cuenta = undefined;
+    }
+
+    $scope.listarTiposAsesores = function(){
+      $http.post($scope.endpoint,{'accion':'listarTiposAsesores'})
+      .then(function(response){               
+        $scope.ids_tipo_asesores = response.data.tipos_asesores;
+      });
     }
 
     $scope.showRedesSocialesClientes = function(){  
@@ -115,7 +134,7 @@ app.controller("siniController",
 
     $scope.seleccionarRedSocialCliente = function(id_redes_sociales_cliente){    
     //alert(id_redes_sociales_cliente);  
-    console.log($scope.lista_redes_sociales_cliente);
+    //console.log($scope.lista_redes_sociales_cliente);
       angular.forEach($scope.lista_redes_sociales_cliente, function(value, key) {
         if(value.id_red_social_cliente==id_redes_sociales_cliente){
           $scope.redesCliente.red_social={'id_red_social':value.id_red_social,'nombre':value.red_social};          
@@ -138,18 +157,25 @@ app.controller("siniController",
     }
 
     //Función para des-asociar un barrio de una zona
-    $scope.borrarBarrioZona = function(id_zona_barrio,id_zona,id_ciudad){      
+    $scope.borrarBarrioZona = function(id_zona_barrio,id_zona,id_ciudad){        
       if(confirm("Realmente desea borrar el barrio de dicha zona?")){
         $http.post($scope.endpoint,{'accion':'borrarBarrioZona','id_zona_barrio':id_zona_barrio})
-        .then(function(response){               
-          alert("Se ha borrado el barrio de la zona con éxito");
-          $scope.listarBarriosZona(id_zona,id_ciudad);          
+        .then(function(response){   
+          if(response.data = '1'){
+            alert("Se ha borrado el barrio de la zona con éxito");
+            $scope.listarBarriosZona(id_zona,id_ciudad); 
+          }            
+                   
         });
       }
     }
 
     //Función que lista todos los barrios asociados a una zona
     $scope.listarBarriosZona = function(id_sector,id_ciudad){
+      $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;
+      $scope.clasificacionBarrios.codigoBarrio = {};
+      $scope.clasificacionBarrios.codigoZona = {};
+      $scope.clasificacionBarrios.codigoEstrato = {};
       $http.post($scope.endpoint,{'accion':'listarBarriosZona','id_sector':id_sector,'id_ciudad':id_ciudad})
       .then(function(response){     
         if(response.data.cant_barrios_zona == '0'){
@@ -157,10 +183,130 @@ app.controller("siniController",
           $scope.cant_barrios_zona = '0';
         } 
         else{
-          $scope.lista_barrios_zonas = response.data.barrios_zona;  
           $scope.cant_barrios_zona = response.data.cant_barrios_zona;
-        }             
+          $scope.lista_barrios_zonas = response.data.barrios_zona; 
+          //var lista_barrios_restantes = [];           
+          angular.forEach($scope.lista_barrios_zonas, function(value1,key1){              
+            if(id_ciudad=='132'){                          
+              angular.forEach($scope.barrios_comunas_cali, function(value,key){           
+                if(value.codigo == value1.id_barrio){                                    
+                  $scope.lista_barrios_zonas[key1].nombre_barrio = value.nombre;
+                  angular.forEach($scope.lista_comunas_cali, function(value2,key2){           
+                    if(value.comuna == value2.codigo){
+                      $scope.lista_barrios_zonas[key1].nombre_comuna = value2.nombre;
+                    }
+                  });
+                  angular.forEach($scope.lista_estratos_cali, function(value2,key2){           
+                    if(value.estrato == value2.codigo){
+                      $scope.lista_barrios_zonas[key1].nombre_estrato = value2.nombre;
+                    }
+                  });                  
+                }
+                
+              });  
+                           
+            } 
+                    
+          }); 
+          //console.log($scope.lista_barrios_zonas);
+          var lista_barrios_restantes = []; 
+          var i = 0;
+          angular.forEach($scope.barrios_comunas_cali, function(value,key){  
+            var cal = 0;  
+            angular.forEach($scope.lista_barrios_zonas, function(value1,key1){           
+              if(value.codigo == value1.id_barrio){
+                $scope.lista_barrios_zonas[key1].nombre_estrato = value1.nombre;
+                cal = 1;
+              }
+            });        
+            if(cal == 0){
+              lista_barrios_restantes[i] = value;
+              i++;
+            }
+          });
+
+          $scope.barrios_comunas_cali = lista_barrios_restantes;
+          //console.log(lista_barrios_restantes);                
+
+        }        
+
       });
+    }
+
+    //Función que lista todos los barrios asociados a una zona en la lista de selección de barrios
+    $scope.listarBarriosZona1 = function(id_sector,id_ciudad){
+
+      if(!angular.isUndefined(id_sector)){
+
+        $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;  
+        $scope.inmueble.codigoZona = {}; 
+        $scope.inmueble.codigoEstrato = {};   
+        $scope.inmueble.codigoBarrio = {}; 
+        $http.post($scope.endpoint,{'accion':'listarBarriosZona','id_sector':id_sector,'id_ciudad':id_ciudad})
+        .then(function(response){     
+          if(response.data.cant_barrios_zona == '0'){
+            $scope.lista_barrios_zonas = [];
+            $scope.cant_barrios_zona = '0';
+            $scope.barrios_comunas_cali = [];
+          } 
+          else{
+            $scope.cant_barrios_zona = response.data.cant_barrios_zona;
+            $scope.lista_barrios_zonas = response.data.barrios_zona; 
+            //var lista_barrios_restantes = [];           
+            angular.forEach($scope.lista_barrios_zonas, function(value1,key1){              
+              if(id_ciudad=='132'){                          
+                angular.forEach($scope.barrios_comunas_cali, function(value,key){           
+                  if(value.codigo == value1.id_barrio){                                    
+                    $scope.lista_barrios_zonas[key1].nombre_barrio = value.nombre;
+                    angular.forEach($scope.lista_comunas_cali, function(value2,key2){           
+                      if(value.comuna == value2.codigo){
+                        $scope.lista_barrios_zonas[key1].nombre_comuna = value2.nombre;
+                      }
+                    });
+                    angular.forEach($scope.lista_estratos_cali, function(value2,key2){           
+                      if(value.estrato == value2.codigo){
+                        $scope.lista_barrios_zonas[key1].nombre_estrato = value2.nombre;
+                      }
+                    });                  
+                  }
+                
+                });  
+                           
+              } 
+                    
+            }); 
+          
+            var lista_barrios_restantes = []; 
+            var i = 0;
+            angular.forEach($scope.barrios_comunas_cali, function(value,key){  
+              var cal = 0;  
+              angular.forEach($scope.lista_barrios_zonas, function(value1,key1){           
+                if(value.codigo == value1.id_barrio){
+                  $scope.lista_barrios_zonas[key1].nombre_estrato = value1.nombre;
+                  cal = 1;
+                }
+              });        
+              if(cal == 1){
+                lista_barrios_restantes[i] = value;
+                i++;
+              }
+            });
+
+            $scope.barrios_comunas_cali = lista_barrios_restantes;                     
+
+          }        
+
+        });
+
+      }
+      else{
+        $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;
+        $scope.lista_comunas_cali = $scope.lista_comunas_cali_ini;
+        $scope.inmueble.codigoZona = {}; 
+        $scope.inmueble.codigoEstrato = {};   
+        $scope.inmueble.codigoBarrio = {};   
+      }
+      
     }
 
     $scope.showClientsCreate = function(){
@@ -613,7 +759,11 @@ app.controller("siniController",
         $scope.inmueble.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
         $scope.inmueble.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato};
         //console.log($scope.inmueble);
-      }     
+      }
+      /*else{
+        $scope.inmueble.codigoZona = {};
+        $scope.inmueble.codigoEstrato = {};
+      }*/     
       
     }
 
@@ -641,39 +791,51 @@ app.controller("siniController",
 
     $scope.getLocEstCali = function(codigoEstrato){
       $scope.lista_comunas_cali = $scope.lista_comunas_cali_ini;
-      $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;      
-      var estrato = codigoEstrato.codigo;
-      var lista_comunas_cali1 = [];
-      var lista_comunas_barrios_cali1 = [];
-      var i = 0;
-      var j = 0;
+      $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;  
 
-      angular.forEach($scope.lista_comunas_cali, function(value,key){
-        if(value.estrato==estrato){
-          lista_comunas_cali1[i] = value;
-          i++; 
+      if(!angular.isUndefined(codigoEstrato)){
+
+
+        var estrato = codigoEstrato.codigo;
+        var lista_comunas_cali1 = [];
+        var lista_comunas_barrios_cali1 = [];
+        var i = 0;
+        var j = 0;
+
+        angular.forEach($scope.lista_comunas_cali, function(value,key){
+          if(value.estrato==estrato){
+           lista_comunas_cali1[i] = value;
+            i++; 
+          }
+        });
+
+        angular.forEach($scope.barrios_comunas_cali, function(value,key){
+          if(value.estrato==estrato){
+            lista_comunas_barrios_cali1[j] = value;
+            j++; 
+          }
+        });
+
+        if(i!=0){
+          $scope.lista_comunas_cali = lista_comunas_cali1;
         }
-      });
 
-      angular.forEach($scope.barrios_comunas_cali, function(value,key){
-        if(value.estrato==estrato){
-          lista_comunas_barrios_cali1[j] = value;
-          j++; 
-        }
-      });
+        if(j!=0){
+          $scope.barrios_comunas_cali = lista_comunas_barrios_cali1;
+        } 
 
-      if(i!=0){
-        $scope.lista_comunas_cali = lista_comunas_cali1;
-      }
-
-      if(j!=0){
-        $scope.barrios_comunas_cali = lista_comunas_barrios_cali1;
-      }
+      } 
+      /*else{
+        $scope.inmueble.codigoBarrio = {};
+        $scope.inmueble.codigoZona = {};
+      }*/   
+      
     }
 
 
 
-    $scope.getBarriosLocCali = function(codigoLocalidad){      
+    $scope.getBarriosLocCali = function(codigoLocalidad){    
+
       if(codigoLocalidad != null){
         $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;
         var localidad = codigoLocalidad.codigo;      
@@ -788,7 +950,7 @@ app.controller("siniController",
           $scope.getTiposCaracteristicasInm();
         }
         else{
-          console.log(response.data);
+          //console.log(response.data);
           $scope.cant_caract_inm_opc=response.data.caracteristicasInmueble.cantidad_opc;
           $scope.cant_caract_inm_obl=response.data.caracteristicasInmueble.cantidad_obl; 
           $scope.cant_caract_inm_obl_show='0';  
@@ -848,6 +1010,8 @@ app.controller("siniController",
       $scope.getDepartamentosCliente('1');
       $scope.clasificacionBarrios.codigoDepartamento = {id_departamento:'32',name:'Valle del Cauca'}; 
       $scope.getCiudadesCliente('32');
+      $scope.cant_barrios_zona = '0';
+      $scope.lista_barrios_zonas = [];
       
     } 
 
@@ -881,6 +1045,10 @@ app.controller("siniController",
         .then(function(response){ 
           if(response.data.respuesta=='1'){
             alert("Se ha relacionado el barrio a la zona correctamente.");
+            /*$scope.listarBarriosZona();
+            $scope.clasificacionBarrios.codigoZona = {}; 
+            $scope.clasificacionBarrios.codigoEstrato= {};*/           
+            $scope.listarBarriosZona($scope.clasificacionBarrios.codigoSector.id_sector,$scope.clasificacionBarrios.codigoCiudad.id_ciudad);
           }
           else{
             alert("No se ha podido relacionar la zona, por favor verifique.");

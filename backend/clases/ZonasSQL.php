@@ -54,9 +54,48 @@
     } 
 
     //Consulta en la base de datos la información de los barrios asociados a una determinada zona
-    function listarBarriosZona($id_sector,$id_ciudad){
+    function listarBarriosZona($id_zona,$id_ciudad){
+
+      $output = array();
+      $output['cant_barrios_zona'] = 0;
+      
+      $query = "SELECT
+                  id_zona_barrio AS id_zona_barrio,
+                  id_zona AS id_zona,
+                  id_barrio AS id_barrio,
+                  id_ciudad AS id_ciudad
+                FROM
+                  generales.tb_zonas_barrios
+                WHERE
+                  estado = '1'
+                  AND id_zona = $id_zona  
+                  AND id_ciudad = $id_ciudad
+               ";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());     
+
+      if(pg_num_rows($result)>0){
+
+          $i = 0; 
+          while($row = pg_fetch_array($result, null)){      
+            $output['barrios_zona'][$i]['id_zona_barrio'] = $row['id_zona_barrio'];
+            $output['barrios_zona'][$i]['id_zona']  = $row['id_zona'];
+            $output['barrios_zona'][$i]['id_barrio']  = $row['id_barrio'];
+            $output['barrios_zona'][$i]['id_ciudad']  = $row['id_ciudad'];
+            $i++;     
+          } 
+
+          $output['cant_barrios_zona'] = $i;
+
+          // Liberando el conjunto de resultados
+          pg_free_result($result);          
+
+      }      
+      
+      return $output;    
 
     }
+
 
     //Guarda en la base de datos la relación de la zona con el barrio
     function guardarClasificacionBarrio($datosClasificacion){
@@ -134,7 +173,7 @@
         $row['respuesta'] = '1';
 
       }    
-
+      //print_r($row);exit;
       return $row;    
 
     }     

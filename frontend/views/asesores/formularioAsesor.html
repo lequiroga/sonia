@@ -1,0 +1,70 @@
+<div ng-controller="siniController1">
+
+  <div class="toggle">
+    <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
+  </div>
+  <div class="form">
+    <center><h2 style="font-family:Verdana;">ASESORES&nbsp;INMOBILIARIA</h2></center>
+    <br />
+    <form name="formularioBusqAsesor" id="formularioBusqAsesor" ng-model="asesor_busq" method="post" NOVALIDATE>
+      <label>N&uacute;mero identificaci&oacute;n</label><input name="asesor_busq_numero_identificacion" id="asesor_busq_numero_identificacion" type="number" ng-model="asesor_busq.numero_identificacion" value="0"/>
+      <label>Nombres</label><input name="asesor_busq_nombres" id="asesor_busq_nombres" ng-model="asesor_busq.nombres" type="text"/>
+      <label>Apellidos</label><input name="asesor_busq_apellidos" id="asesor_busq_apellidos" ng-model="asesor_busq.apellidos" type="text"/>
+      <label>N&uacute;mero telef&oacute;nico</label><input name="asesor_busq_telefono" id="asesor_busq_telefono" ng-model="asesor_busq.telefono" type="text"/>
+      <br />
+      <center><button style="width:15em;" type="submit" ng-click="consultarAsesores()" class="consultar">Consultar</button>
+      <br />
+      <br />  
+      <button style="width:15em;" class="limpiar" ng-click="limpiarAsesoresBusq()">Limpiar consulta</button>  
+      <br />
+      <br />  
+      <button style="width:15em;" class="crear_cliente" ng-click="showAsesoresCreate()">Gesti&oacute;n asesor</button>
+      <br />
+      <br />
+      <button style="width:15em;" class="volver" ng-click="showAdministracionIndex()">Volver</button></center>
+    </form>
+  </div>
+  <div class="form1" ng-show="cant_ases_busq=='0'">
+    <center><h2 style="font-family:Verdana;">LISTA ASESORES</h2></center>       
+    <div class="container">    
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <br />
+          <table ng-init='configPages()' style="width:80%;">
+            <thead>
+              <tr>                
+                <th style="width:15%;">Identificaci&oacute;n</th>
+                <th style="width:35%;">Asesor</th> 
+                <th style="width:35%;">Usuario</th>   
+                <th style="width:15%;">Gesti&oacute;n</th>           
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat='lista_asesor_busq in lista_asesores_busq | startFromGrid: currentPage * pageSize | limitTo: pageSize'>         
+                <td style="text-align: left;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.identificacion}}</td>
+                <td style="text-align: left;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.asesor}}</td>  
+                <td style="text-align: left;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.usuario}}</td>   
+                <td style="text-align: center;"><a href="#" ng-click="verSolicitudesAsesor(lista_asesor_busq.id_asesor)">Solicitudes</a></td>         
+              </tr>
+            </tbody>
+          </table>
+          <center>
+          <div class='btn-group'>
+            <button type='button' class='butt' ng-disabled='currentPage == 0' ng-click='currentPage = currentPage - 1'>&laquo;</button>
+            <button type='button' class='butt' ng-disabled='currentPage == page.no - 1' ng-click='setPage(page.no)' ng-repeat='page in pages'>{{page.no}}</button>
+            <button type='button' class='butt' ng-disabled='currentPage >= usuarios.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'>&raquo;</button>
+          </div>
+        </center>
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <center><button style="width:15em;" class="volver" ng-click="volverBusqAsesores()">Nueva B&uacute;squeda</button></center>
+    </div>
+  </div>  
+  <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
+  <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
+  </div>
+
+</div>
