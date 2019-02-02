@@ -35,6 +35,24 @@
 
     }
 
+    //Función para consultar la zona a la cual se encuentra asociado un barrio de Cali
+    function getZonaBarrioCali($id_barrio){
+
+      $query = "SELECT
+                  id_zona AS id_zona
+                FROM
+                  generales.tb_zonas_barrios
+                WHERE
+                  id_barrio = $id_barrio    
+               ";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+      $row = pg_fetch_array($result, null);
+
+      return $row['id_zona'];         
+
+    }
+
     //Des-asocia la relación entre un barrio y una zona de una ciudad
     function borrarBarrioZona($id_zona_barrio){
 
@@ -147,7 +165,9 @@
         $query = "UPDATE
                     generales.tb_zonas_barrios
                   SET
-                    estado='0' 
+                    estado='0',
+                    id_user_modificacion = ".$_SESSION['id_user'].",
+                    fecha_modificacion = CURRENT_TIMESTAMP 
                   WHERE
                     id_zona <> $id_zona
                     AND id_ciudad = $id_ciudad
@@ -159,7 +179,9 @@
         $query = "UPDATE
                     generales.tb_zonas_barrios
                   SET
-                    estado='1' 
+                    estado='1',
+                    id_user_modificacion = ".$_SESSION['id_user'].",
+                    fecha_modificacion = CURRENT_TIMESTAMP 
                   WHERE
                     id_zona = $id_zona
                     AND id_ciudad = $id_ciudad

@@ -28,8 +28,8 @@
 
 	  			$i = 0;	
 	  			while($row = pg_fetch_array($result, null)){	  	
-	    			$output[$i]['id_tipo_asesor'] = $row['id_tipo_asesor'];
-	    			$output[$i]['descripcion']  = $row['descripcion'];
+	    			$output['tipos_asesores'][$i]['id_tipo_asesor'] = $row['id_tipo_asesor'];
+	    			$output['tipos_asesores'][$i]['descripcion']  = $row['descripcion'];
 	    			$i++;	    
 	  			}	  
 

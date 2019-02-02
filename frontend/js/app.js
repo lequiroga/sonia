@@ -13,23 +13,28 @@ app.controller("siniController",
     $scope.ids_paises = [];
     $scope.ids_departamentos = [];
     $scope.ids_ciudades = [];
+    $scope.ids_sectores = [];
     $scope.caracteristicasInmuebles = [];    
     $scope.cant_caract_inm = '0';
     $scope.cant_caract_inm_opc = '0';
     $scope.cant_caract_inm_obl = '0';
     $scope.cant_caract_inm_obl_show = '0';
     $scope.cant_barrios_zona = '0';
+    $scope.cant_ases_busq = '1';
     $scope.lista_caracteristicas_inmueble = [];
     $scope.lista_caracteristicas_obligatorias_inmueble = [];
     $scope.lista_caracteristicas_opcionales_inmueble = [];
     $scope.ids_tipo_caracteristicasInm = [];
     $scope.ids_tipo_caracteristicasInm1 = [];
+    $scope.ids_tipo_asesores = [];
     $scope.caracteristicas_inmueble_busq = [];   
     $scope.lista_comunas_cali = []; 
     $scope.lista_estratos_cali = []; 
     $scope.lista_estratos_barrios_cali = []; 
     $scope.lista_barrios_zonas = [];
     $scope.barrios_comunas_cali_ini = [];
+    $scope.lista_comunas_cali_ini = [];
+    $scope.lista_estratos_cali_ini = [];
     $scope.barrios_comunas_cali = [];
     $scope.redesCliente.red_seleccionada = '';
     $scope.redesCliente.id_cliente = '';
@@ -37,6 +42,7 @@ app.controller("siniController",
     $scope.lista_redes_sociales_cliente = [];
     $scope.clasificacionBarrios = [];
     $scope.ids_tipo_asesores = [];
+    $scope.lista_asesores_busq = [];
 
     //$scope.seleccionarCliente = [];
 
@@ -75,7 +81,20 @@ app.controller("siniController",
     //Cargar el formulario o pantalla de gestión de asesores
     $scope.showAsesoresCreate = function(){
 
-      $scope.showContent = '../asesores/formularioGestionAsesor.html';  
+      $scope.asesor = [];
+      $scope.ids_paises = [];
+      $scope.ids_departamentos = [];
+      $scope.ids_ciudades = [];  
+      $scope.getTiposIdentificacion();      
+      $scope.getPaises();
+      $scope.getTiposNotificacion();
+      $scope.listarTiposAsesores();
+      $scope.showContent = '../asesores/formularioGestionAsesor.html'; 
+
+      $scope.asesor.codigoPais = {id_pais:'1',name:'Colombia'};        
+      $scope.getDepartamentosCliente($scope.asesor.codigoPais.id_pais);
+
+       
     }
 
     $scope.showInmueblesIndex = function(){
@@ -143,6 +162,16 @@ app.controller("siniController",
           $scope.redesCliente.id_redes_cliente=value.id_red_social_cliente;          
         }  
       });      
+    }
+
+    $scope.saveAsesores = function(){
+      /*if(angular.){
+
+      }*/
+      $http.post($scope.endpoint,{'accion':'saveAsesores',})
+      .then(function(response){               
+        $scope.ids_tipo_asesores = response.data.tipos_asesores;
+      });
     }
 
     $scope.borrarRedSocialCliente = function(id_red_social_cliente,red_social,cuenta){      
@@ -215,7 +244,7 @@ app.controller("siniController",
             var cal = 0;  
             angular.forEach($scope.lista_barrios_zonas, function(value1,key1){           
               if(value.codigo == value1.id_barrio){
-                $scope.lista_barrios_zonas[key1].nombre_estrato = value1.nombre;
+                //$scope.lista_barrios_zonas[key1].nombre_estrato = value1.nombre;
                 cal = 1;
               }
             });        
@@ -303,7 +332,7 @@ app.controller("siniController",
         $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;
         $scope.lista_comunas_cali = $scope.lista_comunas_cali_ini;
         $scope.inmueble.codigoZona = {}; 
-        $scope.inmueble.codigoEstrato = {};   
+        $scope.inmueble.codigoEstrato = undefined;   
         $scope.inmueble.codigoBarrio = {};   
       }
       
@@ -558,7 +587,11 @@ app.controller("siniController",
       $scope.ids_sectores=null;	
       $scope.clasificacionBarrios.codigoBarrio = [];
       $scope.clasificacionBarrios.codigoZona = [];   
-      $scope.clasificacionBarrios.codigoEstrato = [];    
+      $scope.clasificacionBarrios.codigoEstrato = [];
+      $scope.inmueble.codigoSector = undefined;
+      $scope.inmueble.codigoBarrio = [];
+      $scope.inmueble.codigoZona = [];   
+      $scope.inmueble.codigoEstrato = undefined;     
       if(codigoCiudad!=null){
         var id_ciudad = codigoCiudad.id_ciudad;   
         $http.post($scope.endpoint,{'accion':'listaSectores','id_ciudad':id_ciudad})
@@ -618,7 +651,8 @@ app.controller("siniController",
                
             $scope.lista_comunas_cali = lista_comunas_cali;
             $scope.lista_comunas_cali_ini = lista_comunas_cali;
-            $scope.lista_estratos_cali = lista_estratos_cali;   
+            $scope.lista_estratos_cali = lista_estratos_cali; 
+            $scope.lista_estratos_cali_ini = lista_estratos_cali;  
             $scope.lista_estratos_barrios_cali = lista_estratos_barrios_cali;                                  
           });
           //Barrios y comunas Cali
@@ -743,11 +777,15 @@ app.controller("siniController",
     } 
 
     $scope.getEstratoComunaCali = function(codigoBarrio){ 
+      $scope.lista_comunas_cali = $scope.lista_comunas_cali_ini;
+      //console.log($scope.lista_comunas_cali);
       if(!angular.isUndefined(codigoBarrio)&&(codigoBarrio!=null)){
         var comuna = '';
+        var exist_comuna = 0;
         angular.forEach($scope.lista_comunas_cali,function(value,key){
           if(value.codigo == codigoBarrio.comuna){
             comuna = value.nombre;
+            exist_comuna = 1;
           }
         });
         var estrato = '';
@@ -756,8 +794,36 @@ app.controller("siniController",
             estrato = value.nombre;
           }
         });
+        if(exist_comuna == 1){
+          $scope.inmueble.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
+        }
+        else{
+          $scope.inmueble.codigoZona = {}; 
+        }
         $scope.inmueble.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
         $scope.inmueble.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato};
+        $http.post($scope.endpoint,{'accion':'getZonaBarrioCali','id_barrio':codigoBarrio.codigo})
+        .then(function(response){          
+          if(!angular.isUndefined(response.data)){
+            var id_zona = response.data.replace('"','');  
+            id_zona = id_zona.replace('"','');          
+            var nombre_zona = '';
+            var ind = 0;
+            angular.forEach($scope.ids_sectores,function(value,key){              
+              if(value.id_sector.toString() == id_zona){
+                ind = 1;
+                nombre_zona = value.name;
+              }
+            });
+            if(ind == 1){
+              $scope.inmueble.codigoSector = {'id_sector':id_zona,'name':nombre_zona};   
+              //console.log($scope.inmueble.codigoSector);            
+            }
+          }
+          else{
+            $scope.inmueble.codigoSector = undefined; 
+          }       
+        });
         //console.log($scope.inmueble);
       }
       /*else{
@@ -790,11 +856,11 @@ app.controller("siniController",
     }
 
     $scope.getLocEstCali = function(codigoEstrato){
+
       $scope.lista_comunas_cali = $scope.lista_comunas_cali_ini;
       $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;  
 
-      if(!angular.isUndefined(codigoEstrato)){
-
+      if(!angular.isUndefined(codigoEstrato) && (codigoEstrato!=null)){
 
         var estrato = codigoEstrato.codigo;
         var lista_comunas_cali1 = [];
@@ -824,11 +890,11 @@ app.controller("siniController",
           $scope.barrios_comunas_cali = lista_comunas_barrios_cali1;
         } 
 
-      } 
-      /*else{
-        $scope.inmueble.codigoBarrio = {};
+      }      
+      else{
         $scope.inmueble.codigoZona = {};
-      }*/   
+        $scope.inmueble.codigoBarrio = {};
+      }     
       
     }
 
@@ -837,14 +903,14 @@ app.controller("siniController",
     $scope.getBarriosLocCali = function(codigoLocalidad){    
 
       if(codigoLocalidad != null){
-        $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;
+        $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;        
         var localidad = codigoLocalidad.codigo;      
         var barrios_comunas_cali1 = [];
         var i = 0;
       
         angular.forEach($scope.barrios_comunas_cali, function(value,key){
           if(value.comuna==localidad){
-            barrios_comunas_cali1[i] = value;
+            barrios_comunas_cali1[i] = value;            
             i++; 
           }
         });      

@@ -11,7 +11,8 @@
           $this->objAsesores=new AsesoresSQL();
 		}		
 
-		function getTiposAsesores(){
+		//Para obtener el tipo de asesor o empleado de la inmobiliaria
+		function getTiposAsesores(){			
 			$output = $this->objAsesores->getTiposAsesores();
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE); 
 		}		

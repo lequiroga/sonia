@@ -1,9 +1,8 @@
-<div ng-controller="siniController1">
 
   <div class="toggle">
     <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
   </div>
-  <div class="form">
+  <div class="form" ng-show="cant_ases_busq=='1'">
     <center><h2 style="font-family:Verdana;">ASESORES&nbsp;INMOBILIARIA</h2></center>
     <br />
     <form name="formularioBusqAsesor" id="formularioBusqAsesor" ng-model="asesor_busq" method="post" NOVALIDATE>
@@ -67,4 +66,4 @@
   <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
   </div>
 
-</div>
+

@@ -25,6 +25,20 @@
       $obj->getTiposClientes();
     }
 
+    //Obtiene la zona a la cual pertenece un barrio
+    if($request->accion=='getZonaBarrioCali'){
+      require_once('services/Zonas.php');        
+      $obj = new Zonas();       
+      $obj->getZonaBarrioCali($request->id_barrio);
+    }
+
+    //Listar tipos asesores
+    if($request->accion=='listarTiposAsesores'){      
+      require_once('services/Asesores.php');        
+      $obj = new Asesores(); 
+      $obj->getTiposAsesores();
+    }
+
     if($request->accion=='consultarClientes'){
       require_once('services/Clientes.php');        
       $obj = new Clientes(); 

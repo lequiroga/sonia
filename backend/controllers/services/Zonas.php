@@ -56,6 +56,12 @@
         echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
     }
 
+    //Función para obtener la zona a la que se encuentra asociado un determinado barrio de Cali
+    function getZonaBarrioCali($id_barrio){
+        $output = $this->objZonas->getZonaBarrioCali($id_barrio);
+        echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+    }
+
 	}
 	
 
