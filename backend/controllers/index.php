@@ -58,6 +58,12 @@
       $obj->datosClientePorID($request->id_cliente);
     }
 
+    if($request->accion=='saveAsesores'){
+      require_once('services/Asesores.php');        
+      $obj = new Asesores();       
+      $obj->saveAsesores($request->datos_asesor);
+    }
+
     if($request->accion=='listaRedesSociales'){
       require_once('services/Clientes.php');        
       $obj = new Clientes(); 

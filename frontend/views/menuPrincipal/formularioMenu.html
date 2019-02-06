@@ -11,6 +11,24 @@
             window.history.forward();
         }
   </script>
+  <script> 
+
+    // muestra vista previa de la imagen cargada
+    function openFile(event) {      
+      var input = event.target;
+      var reader = new FileReader();
+      reader.onload = function(){
+        var dataURL = reader.result;
+        var output = document.getElementById('output');
+        document.formularioAsesor.foto = dataURL;
+        output.src = dataURL;
+        output.style.display = "block";
+        //$scope.imgAsesorTemp = dataURL;
+      };
+      reader.readAsDataURL(input.files[0]);
+    };
+
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
   <script src="../../js/app.js"></script> 
   <script src="../../js/appImages.js"></script>  

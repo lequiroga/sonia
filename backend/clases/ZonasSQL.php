@@ -43,7 +43,8 @@
                 FROM
                   generales.tb_zonas_barrios
                 WHERE
-                  id_barrio = $id_barrio    
+                  id_barrio = $id_barrio 
+                  AND estado='1'   
                ";
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());

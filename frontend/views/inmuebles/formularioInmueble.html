@@ -26,8 +26,8 @@
       <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmueble.codigoZona"/> 
         <!--option value="" label="Seleccione">Seleccione</option-->        
       </select> 
-      <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-disabled="inmueble.codigoSector||inmueble.codigoEstrato" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>   
-        <!--option value="" label="Seleccione">Seleccione</option-->     
+      <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-disabled="(inmueble.codigoSector||inmueble.codigoEstrato)" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>   
+        <option value="" label="Seleccione">Sin&nbsp;informaci&oacute;n</option>     
       </select>   
       <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Barrio</label>
       <select name="inmueble_barrio" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-change="getEstratoComunaCali(inmueble.codigoBarrio)" ng-model="inmueble.codigoBarrio"/> 
