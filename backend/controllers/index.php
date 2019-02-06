@@ -59,9 +59,15 @@
     }
 
     if($request->accion=='saveAsesores'){
+      if(isset($request->foto)){
+        $foto = $request->foto;
+      }
+      else{
+        $foto = null;
+      }
       require_once('services/Asesores.php');        
       $obj = new Asesores();       
-      $obj->saveAsesores($request->datos_asesor);
+      $obj->saveAsesores($request->datos_asesor,$foto);
     }
 
     if($request->accion=='listaRedesSociales'){
@@ -194,6 +200,7 @@
       $obj = new Sectores(); 
       $obj->listaSectores($request->id_ciudad);
   	}
+    //Por ahora para la ciudad de Cali. Devuelve las comunas y estratos
     if($request->accion=='getComunasEstratosCiudad'){
       require_once('services/Inmuebles.php');        
       $obj = new Inmuebles(); 

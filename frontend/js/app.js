@@ -50,7 +50,8 @@ app.controller("siniController",
     $scope.valor_usuario_activo = false;
     $scope.cambia_motivo_empleado = '0';
     $scope.asesor.motivo = "";
-    $scope.imgAsesorTemp = "";
+    $scope.imgAsesorTemp = "";    
+    $scope.asesor.foto_asesor = undefined;
 
     //$scope.seleccionarCliente = [];
 
@@ -292,7 +293,12 @@ app.controller("siniController",
     //Guarda o actualiza la información de los asesores
     $scope.saveAsesores = function(){
 
-      var datos_asesor = {};            
+      var datos_asesor = {};        
+      var foto = {};    
+      var foto1 = {};
+      var base64StringFile = '';
+      var fileName = '';
+      var fileType = '';
 
       if(angular.isUndefined($scope.asesor.tipoAsesor)){
         alert("Debe seleccionar el tipo de asesor o empleado de la inmobiliaria");
@@ -438,6 +444,9 @@ app.controller("siniController",
           datos_asesor.password = $scope.asesor.password;
         }
 
+        $scope.asesor.password = undefined;
+        $scope.asesor.password_confirm = undefined;  
+
       }          
 
       if(!angular.isUndefined($scope.asesor.empleado_activo)){
@@ -462,67 +471,111 @@ app.controller("siniController",
         datos_asesor.telefono_fijo = $scope.asesor.telefono_fijo;
       }
 
+      //datos_asesor.photo = {};
+
       if(document.formularioAsesor.file.value!=''&&document.formularioAsesor.file.value!=null){
 
         var foto_asesor = document.formularioAsesor.file;
         var extension = foto_asesor.value.substring(foto_asesor.value.length-3,foto_asesor.value.length);
-        if(!(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG')){
-          alert("La foto debe ser de uno de los formatos permitidos (jpg, bmp o png)");
-          document.formularioAsesor.file.value = '';
-          return false;
-        }
-        else{        
-          var file = document.querySelector('input[type="file"]').files[0];          
+
+        if(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG'){
+                  
+          var file = document.querySelector('input[type="file"]').files[0];   
+
           $scope.getFile(file).then((customJsonFile) => {
              //customJsonFile is your newly constructed file.
-             datos_asesor.photo = customJsonFile;
+             foto.base64StringFile = customJsonFile.base64StringFile;
+             foto.fileName = customJsonFile.fileName;
+             foto.fileType = customJsonFile.fileType;
+
+             $http.post($scope.endpoint,{'accion':'saveAsesores','datos_asesor':datos_asesor,'foto':foto})
+            .then(function(response){          
+                if(response.data.respuesta=='1'){ 
+                  $scope.asesor.id_asesor=response.data.id_asesor;
+                  $scope.asesor.empleado_activo=response.data.empleado_activo;
+                  $scope.asesor.usuario_activo=response.data.usuario_activo;
+                  $scope.asesor.foto_asesor=response.data.fotoAsesor;
+
+                  document.formularioAsesor.file.value = '';
+                  var output = document.getElementById('output');      
+                  output.style.display = "none";
+
+                  alert('Asesor almacenado exitosamente');                 
+              
+                }
+                else if(response.data.respuesta=='2'){
+                  alert('Ya existe un asesor con ese número de documento, por favor verifique');          
+                }
+                else if(response.data.respuesta=='3'){
+                  $scope.asesor.id_asesor=response.data.id_asesor;
+                  $scope.asesor.empleado_activo=response.data.empleado_activo;
+                  $scope.asesor.usuario_activo=response.data.usuario_activo;
+                  $scope.asesor.foto_asesor=response.data.fotoAsesor;
+
+                  document.formularioAsesor.file.value = '';
+                  var output = document.getElementById('output');      
+                  output.style.display = "none";
+
+                  alert('Asesor actualizado exitosamente');      
+          
+                }
+                else if(response.data.respuesta=='4'){
+                  alert('No se ha podido actualizar el asesor, por favor verifique');            
+                }  
+                else if(response.data.respuesta=='5'){ 
+                  $scope.asesor.id_asesor=response.data.id_asesor;
+                  $scope.asesor.empleado_activo=response.data.empleado_activo;
+                  $scope.asesor.usuario_activo=response.data.usuario_activo;
+                  alert('Asesor almacenado exitosamente, pero el usuario para el aplicativo ingresado ya existe para otro empleado, por favor verifique');                 
+          
+                }        
+            })
+            .catch(function(data){
+                alert(response.data);
+            });            
+             
           });
-          /*$scope.getBase64(file);
-          datos_asesor.photo = $scope.imgAsesorTemp; 
-          console.log(datos_asesor.photo);*/
+          
         }  
 
-      }    
-      
-      console.log(datos_asesor);
-      //return false;
-      $scope.asesor.password = undefined;
-      $scope.asesor.password_confirm = undefined;
-      
-      $http.post($scope.endpoint,{'accion':'saveAsesores','datos_asesor':datos_asesor})
-      .then(function(response){          
-        if(response.data.respuesta=='1'){ 
-          $scope.asesor.id_asesor=response.data.id_asesor;
-          $scope.asesor.empleado_activo=response.data.empleado_activo;
-          $scope.asesor.usuario_activo=response.data.usuario_activo;
-          alert('Asesor almacenado exitosamente');                 
+      }
+      else{
+
+        $http.post($scope.endpoint,{'accion':'saveAsesores','datos_asesor':datos_asesor})
+        .then(function(response){          
+            if(response.data.respuesta=='1'){ 
+              $scope.asesor.id_asesor=response.data.id_asesor;
+              $scope.asesor.empleado_activo=response.data.empleado_activo;
+              $scope.asesor.usuario_activo=response.data.usuario_activo;
+              alert('Asesor almacenado exitosamente');                 
+              
+            }
+            else if(response.data.respuesta=='2'){
+              alert('Ya existe un asesor con ese número de documento, por favor verifique');          
+            }
+            else if(response.data.respuesta=='3'){
+              $scope.asesor.id_asesor=response.data.id_asesor;
+              $scope.asesor.empleado_activo=response.data.empleado_activo;
+              $scope.asesor.usuario_activo=response.data.usuario_activo;
+              alert('Asesor actualizado exitosamente');      
           
-        }
-        else if(response.data.respuesta=='2'){
-          alert('Ya existe un asesor con ese número de documento, por favor verifique');
+            }
+            else if(response.data.respuesta=='4'){
+              alert('No se ha podido actualizar el asesor, por favor verifique');            
+            }  
+            else if(response.data.respuesta=='5'){ 
+              $scope.asesor.id_asesor=response.data.id_asesor;
+              $scope.asesor.empleado_activo=response.data.empleado_activo;
+              $scope.asesor.usuario_activo=response.data.usuario_activo;
+              alert('Asesor almacenado exitosamente, pero el usuario para el aplicativo ingresado ya existe para otro empleado, por favor verifique');                 
           
-        }
-        else if(response.data.respuesta=='3'){
-          $scope.asesor.id_asesor=response.data.id_asesor;
-          $scope.asesor.empleado_activo=response.data.empleado_activo;
-          $scope.asesor.usuario_activo=response.data.usuario_activo;
-          alert('Asesor actualizado exitosamente');      
-          
-        }
-        else if(response.data.respuesta=='4'){
-          alert('No se ha podido actualizar el asesor, por favor verifique');            
-        }  
-        else if(response.data.respuesta=='5'){ 
-          $scope.asesor.id_asesor=response.data.id_asesor;
-          $scope.asesor.empleado_activo=response.data.empleado_activo;
-          $scope.asesor.usuario_activo=response.data.usuario_activo;
-          alert('Asesor almacenado exitosamente, pero el usuario para el aplicativo ingresado ya existe para otro empleado, por favor verifique');                 
-          
-        }        
-      })
-      .catch(function(data){
-        alert(response.data);
-      });    
+            }        
+        })
+        .catch(function(data){
+            alert(response.data);
+        });
+
+      }        
       
     }
 

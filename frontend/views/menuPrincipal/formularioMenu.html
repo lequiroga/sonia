@@ -14,15 +14,26 @@
   <script> 
 
     // muestra vista previa de la imagen cargada
-    function openFile(event) {      
-      var input = event.target;
+    function openFile(event) {            
+      var input = event.target;      
       var reader = new FileReader();
       reader.onload = function(){
-        var dataURL = reader.result;
-        var output = document.getElementById('output');
-        document.formularioAsesor.foto = dataURL;
-        output.src = dataURL;
-        output.style.display = "block";
+        var dataURL = reader.result; 
+        var extension = input.files[0].name.substring(input.files[0].name.length-3,input.files[0].name.length); 
+        if(!(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG')){
+          alert("La foto debe ser de uno de los formatos permitidos (jpg, bmp o png)");
+          document.formularioAsesor.file.value = '';
+          var output = document.getElementById('output');
+          output.src = undefined;
+          output.style.display = "none"; 
+          return false;
+        } 
+        else{
+          var output = document.getElementById('output');
+          document.formularioAsesor.foto = dataURL;
+          output.src = dataURL;
+          output.style.display = "block";  
+        }            
         //$scope.imgAsesorTemp = dataURL;
       };
       reader.readAsDataURL(input.files[0]);

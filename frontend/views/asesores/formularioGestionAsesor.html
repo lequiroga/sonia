@@ -6,6 +6,11 @@
     <center><h2 style="font-family:Verdana;">GESTI&Oacute;N ASESORES</h2></center>
     <br />
     <form name="formularioAsesor" ng-model="asesor" id="formularioAsesor" method="post" NOVALIDATE>
+      <center ng-if="asesor.foto_asesor">
+        <img id='fotoAsesor' width="150em" height="180em" src="{{asesor.foto_asesor}}">
+        <br />
+        <br />
+      </center>      
       <label>Tipo asesor (*)</label>
       <select name="asesor_tipo_asesor" ng-options="id_tipo_asesor as id_tipo_asesor.descripcion for id_tipo_asesor in ids_tipo_asesores track by id_tipo_asesor.id_tipo_asesor" ng-model="asesor.tipoAsesor"/> 
       </select>

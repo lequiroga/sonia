@@ -46,6 +46,19 @@
 
     }
 
+    function guardarImagenAsesores($id_asesor,$urlImagen){
+
+      $query = "UPDATE 
+                  rrhh.tb_personal
+                SET
+                  photo = '$urlImagen'   
+                WHERE
+                  id_personal=$id_asesor";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+    }
+
     function getTiposAsesoresAdministrador(){  
             
       $query = "SELECT 
