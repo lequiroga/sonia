@@ -54,8 +54,10 @@ app.controller("siniController",
     $scope.asesor.foto_asesor = undefined;    
     $scope.lista_asesores_busq.foto = undefined; 
     $scope.asesor_busq =[];   
-    $scope.inmobiliaria = [];
-
+    $scope.inmobiliaria = [];    
+    $scope.inmobiliaria.codigoPais = {};
+    $scope.inmobiliaria.codigoDepartamento = {};
+    $scope.inmobiliaria.codigoCiudad = {};
     //$scope.seleccionarCliente = [];
 
     $http.post($scope.endpoint,{'accion':'validateLogin'})
@@ -192,8 +194,63 @@ app.controller("siniController",
       $scope.getDepartamentosInmobiliaria($scope.cliente.codigoPais.id_pais);*/
       $scope.getPaises();
       $http.post($scope.endpoint,{'accion':'informacionInmobiliaria'})
-      .then(function(response){         
-        $scope.inmobiliaria=response.data.datosInmobiliaria;       
+      .then(function(response){        
+        //console.log(response.data.datosInmobiliaria); 
+
+        $scope.inmobiliaria = response.data.datosInmobiliaria;
+
+        if(!angular.isUndefined(response.data.datosInmobiliaria.id_pais)){
+          var length = $scope.ids_paises.length;
+          var pais = "";
+          for (i = 0; i < length; i++) {
+            if($scope.ids_paises[i].id_pais == response.data.datosInmobiliaria.id_pais){
+              pais = $scope.ids_paises[i].name;
+              i = length+1;
+            }       
+          }
+          $scope.inmobiliaria.codigoPais = {};          
+          $scope.inmobiliaria.codigoPais = {'id_pais':response.data.datosInmobiliaria.id_pais,'name':pais};
+          //console.log($scope.inmobiliaria.codigoPais);
+          $scope.getDepartamentosCliente($scope.inmobiliaria.codigoPais.id_pais);
+
+          if(!angular.isUndefined(response.data.datosInmobiliaria.id_departamento)){
+            var length = $scope.ids_departamentos.length;
+            var departamento = "";
+            for (i = 0; i < length; i++) {
+              if($scope.ids_departamentos[i].id_departamento == response.data.datosInmobiliaria.id_departamento){
+                departamento = $scope.ids_departamentos[i].name;
+                i = length+1;
+              }       
+            }
+            $scope.inmobiliaria.codigoDepartamento = {'id_departamento':response.data.datosInmobiliaria.id_departamento,'name':departamento};
+            $scope.getCiudadesCliente($scope.inmobiliaria.codigoDepartamento.id_departamento);
+
+            if(!angular.isUndefined(response.data.datosInmobiliaria.id_ciudad)){
+              var length = $scope.ids_ciudades.length;
+              var ciudad = "";
+              for (i = 0; i < length; i++) {
+                if($scope.ids_ciudades[i].id_ciudad == response.data.datosInmobiliaria.id_ciudad){
+                  ciudad = $scope.ids_ciudades[i].name;
+                  i = length+1;
+                }       
+              }
+              $scope.inmobiliaria.codigoCiudad = {'id_ciudad':response.data.datosInmobiliaria.id_ciudad,'name':ciudad};            
+
+            }
+
+          }
+
+        } 
+
+        /*$scope.inmobiliaria.codigoPais = {};
+        $scope.inmobiliaria.codigoDepartamento = {};
+        $scope.inmobiliaria.codigoCiudad = {};
+        $scope.inmobiliaria=response.data.datosInmobiliaria;  
+        $scope.inmobiliaria.codigoPais.id_pais=response.data.datosInmobiliaria.id_pais; 
+        $scope.getDepartamentos(response.data.datosInmobiliaria.id_pais); 
+        $scope.inmobiliaria.codigoDepartamento.id_departamento=response.data.datosInmobiliaria.id_departamento;
+        $scope.getCiudades(response.data.datosInmobiliaria.id_departamento);   
+        $scope.inmobiliaria.codigoCiudad.id_ciudad=response.data.datosInmobiliaria.id_ciudad;*/
       });
 
       $scope.showContent = '../inmobiliaria/formularioInmobiliaria.html';
@@ -215,6 +272,30 @@ app.controller("siniController",
       }
       else{
         inmobiliaria.nombre_razon_social = $scope.inmobiliaria.nombre_razon_social;
+      }
+
+      if(!(angular.isUndefined($scope.inmobiliaria.correo_electronico) || $scope.inmobiliaria.correo_electronico=='')){
+        inmobiliaria.correo_electronico = $scope.inmobiliaria.correo_electronico;
+      }
+
+      if(!(angular.isUndefined($scope.inmobiliaria.telefono) || $scope.inmobiliaria.telefono=='')){
+        inmobiliaria.telefono = $scope.inmobiliaria.telefono;
+      }
+      
+      if(!(angular.isUndefined($scope.inmobiliaria.direccion) || $scope.inmobiliaria.direccion=='')){
+        inmobiliaria.direccion = $scope.inmobiliaria.direccion;
+      }
+
+      if(!angular.isUndefined($scope.inmobiliaria.codigoPais)){
+        inmobiliaria.id_pais = $scope.inmobiliaria.codigoPais.id_pais;
+      }
+
+      if(!angular.isUndefined($scope.inmobiliaria.codigoDepartamento)){
+        inmobiliaria.id_departamento = $scope.inmobiliaria.codigoDepartamento.id_departamento;
+      }
+
+      if(!angular.isUndefined($scope.inmobiliaria.codigoCiudad)){
+        inmobiliaria.id_ciudad = $scope.inmobiliaria.codigoCiudad.id_ciudad;
       }
 
       if(document.formularioInmobiliaria.file.value!=''&&document.formularioInmobiliaria.file.value!=null){

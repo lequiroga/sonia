@@ -9,22 +9,22 @@
       <label>Correo&nbsp;Electr&oacute;nico</label><input name="inmobiliaria_correo_electronico" type="text" ng-model="inmobiliaria.correo_electronico"/>       
       <label>Tel&eacute;fono</label><input name="inmobiliaria_telefono" type="text" ng-model="inmobiliaria.telefono"/>      
       <label>Direcci&oacute;n</label><input name="inmobiliaria_direccion" type="text" ng-model="inmobiliaria.direccion"/> 
-      <label>Pa&iacute;s (*)</label>
+      <label>Pa&iacute;s</label>
       <select name="inmobiliaria_codigoPais" id="codigoPais" ng-model="inmobiliaria.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosInmobiliaria(inmobiliaria.codigoPais.id_pais)"/>       
       </select>
-      <label>Departamento (*)</label>
+      <label>Departamento</label>
       <select name="inmobiliaria_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmobiliaria.codigoDepartamento)" ng-model="inmobiliaria.codigoDepartamento"/>
       </select>
-      <label>Ciudad (*)</label>
+      <label>Ciudad</label>
       <select name="inmobiliaria_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmobiliaria.codigoCiudad"/>        
       </select>
-      <label>Imagen&nbsp;/&nbsp;logo&nbsp;actual</label>
+      <label>Imagen&nbsp;o&nbsp;logo&nbsp;actual</label>
       <center ng-if="inmobiliaria.imagen_logo">
         <img id='imagen_logo' width="150em" height="180em" src="{{inmobiliaria.imagen_logo}}">
         <br />
         <br />
       </center> 
-      <label>Cambiar&nbsp;imagen&nbsp;/&nbsp;logo</label><input name="file" type="file" onchange="openFile1(event)" ng-model="inmobiliaria.file"/>      
+      <label>Cambiar&nbsp;imagen&nbsp;o&nbsp;logo</label><input name="file" type="file" onchange="openFile1(event)" ng-model="inmobiliaria.file"/>      
       <center>
         <img id='outputInm' width="150em" height="180em" style="display: none;">
       </center>  
