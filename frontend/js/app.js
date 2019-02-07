@@ -58,6 +58,7 @@ app.controller("siniController",
     $scope.inmobiliaria.codigoPais = {};
     $scope.inmobiliaria.codigoDepartamento = {};
     $scope.inmobiliaria.codigoCiudad = {};
+    $scope.asesor = {};
     //$scope.seleccionarCliente = [];
 
     $http.post($scope.endpoint,{'accion':'validateLogin'})
@@ -108,11 +109,12 @@ app.controller("siniController",
       $scope.getPaises();
       $scope.getTiposNotificacion();
       $scope.listarTiposAsesores();
-      $scope.showContent = '../asesores/formularioGestionAsesor.html'; 
-              
-      asesor.numeroIdentificacion = parseInt(asesor.numeroIdentificacion);
-      asesor.tipoIdentificacion = {id_tipo_identificacion:asesor.tipoIdentificacion,descripcion:asesor.descIdentificacion};
-      asesor.tipoNotificacion = {id_tipo_notificacion:asesor.tipoNotificacion,descripcion:asesor.descNotificacion};
+      $scope.showContent = '../asesores/formularioGestionAsesor.html';      
+
+      $scope.asesor.numeroIdentificacion = parseInt(asesor.numeroIdentificacion);
+      $scope.asesor.porcentaje_comision = parseFloat(asesor.porcentaje_comision);
+      $scope.asesor.tipoIdentificacion = {id_tipo_identificacion:asesor.tipoIdentificacion,descripcion:asesor.descIdentificacion};
+      $scope.asesor.tipoNotificacion = {id_tipo_notificacion:asesor.tipoNotificacion,descripcion:asesor.descNotificacion};
       
       var length = $scope.ids_tipo_asesores.length;
       var tipoAsesor = "";
@@ -122,42 +124,57 @@ app.controller("siniController",
           i = length+1;
         }       
       }
-      asesor.tipoAsesor = {id_tipo_asesor:asesor.tipoAsesor,descripcion:tipoAsesor};
+      $scope.asesor.tipoAsesor = {id_tipo_asesor:asesor.tipoAsesor,descripcion:tipoAsesor};
 
-      if(!angular.isUndefined(asesor.id_pais)){
+      if(asesor.empleado_activo == 1){
+        $scope.asesor.empleado_activo = true;
+      }
+      else{
+        $scope.asesor.empleado_activo = false;
+      }
+
+      if(asesor.usuario_activo == 1){
+        $scope.asesor.usuario_activo = true;
+      }
+      else{
+        $scope.asesor.usuario_activo = false;
+      }      
+
+      if(!angular.isUndefined(asesor.codigoPais)){
         var length = $scope.ids_paises.length;
         var pais = "";
         for (i = 0; i < length; i++) {
-          if($scope.ids_paises[i].id_pais == cliente.id_pais){
+          if($scope.ids_paises[i].id_pais == asesor.codigoPais){
             pais = $scope.ids_paises[i].name;
             i = length+1;
           }       
         }
-        cliente.codigoPais = {id_pais:cliente.id_pais,name:pais};
-        $scope.getDepartamentosCliente(cliente.codigoPais.id_pais);
+        $scope.asesor.codigoPais = {id_pais:asesor.codigoPais,name:pais};
+        
+        $scope.getDepartamentosCliente($scope.asesor.codigoPais.id_pais);
 
-        if(!angular.isUndefined(cliente.id_departamento)){
+        if(!angular.isUndefined(asesor.codigoDepartamento)){
           var length = $scope.ids_departamentos.length;
           var departamento = "";
           for (i = 0; i < length; i++) {
-            if($scope.ids_departamentos[i].id_departamento == cliente.id_departamento){
+            if($scope.ids_departamentos[i].id_departamento == asesor.codigoDepartamento){
               departamento = $scope.ids_departamentos[i].name;
               i = length+1;
             }       
           }
-          cliente.codigoDepartamento = {id_departamento:cliente.id_departamento,name:departamento};
-          $scope.getCiudadesCliente(cliente.codigoDepartamento.id_departamento);
+          $scope.asesor.codigoDepartamento = {id_departamento:asesor.codigoDepartamento,name:departamento};
+          $scope.getCiudadesCliente($scope.asesor.codigoDepartamento.id_departamento);
 
-          if(!angular.isUndefined(cliente.id_ciudad)){
+          if(!angular.isUndefined(asesor.codigoCiudad)){
             var length = $scope.ids_ciudades.length;
             var ciudad = "";
             for (i = 0; i < length; i++) {
-              if($scope.ids_ciudades[i].id_ciudad == cliente.id_ciudad){
+              if($scope.ids_ciudades[i].id_ciudad == asesor.codigoCiudad){
                 ciudad = $scope.ids_ciudades[i].name;
                 i = length+1;
               }       
             }
-            cliente.codigoCiudad = {id_ciudad:cliente.id_ciudad,name:ciudad};            
+            $scope.asesor.codigoCiudad = {id_ciudad:asesor.codigoCiudad,name:ciudad};            
 
           }
 
@@ -165,7 +182,7 @@ app.controller("siniController",
 
       } 
 
-      $scope.cliente=cliente; 
+      //$scope.asesor=asesor; 
 
     }
 
@@ -417,6 +434,8 @@ app.controller("siniController",
 
     //Formulario de asesores de la inmobiliaria
     $scope.showAsesoresInmobiliariaIndex = function(){
+      $scope.cant_ases_busq = '1';
+      //$scope.lista_asesores_busq = [];
       $scope.showContent = '../asesores/formularioAsesor.html'  
     }
 

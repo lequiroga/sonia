@@ -58,6 +58,12 @@
       $obj->datosClientePorID($request->id_cliente);
     }
 
+    if($request->accion=='datosAsesorPorID'){
+      require_once('services/Asesores.php');        
+      $obj = new Asesores(); 
+      $obj->datosAsesorPorID($request->id_asesor);
+    }
+
     if($request->accion=='saveAsesores'){
       if(isset($request->foto)){
         $foto = $request->foto;

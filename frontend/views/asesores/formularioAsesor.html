@@ -3,7 +3,7 @@
     <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
   </div>
   <div class="form" ng-show="cant_ases_busq=='1'">
-    <center><h2 style="font-family:Verdana;">ASESORES&nbsp;INMOBILIARIA</h2></center>
+    <center><h2 style="font-family:Verdana;">ASESORES</h2></center>
     <br />
     <form name="formularioBusqAsesor" id="formularioBusqAsesor" ng-model="asesor_busq" method="post" NOVALIDATE>
       <label>N&uacute;mero identificaci&oacute;n</label><input name="asesor_busq_numero_identificacion" id="asesor_busq_numero_identificacion" type="number" ng-model="asesor_busq.numero_identificacion" value="0"/>
@@ -16,14 +16,14 @@
       <button style="width:15em;" class="limpiar" ng-click="limpiarAsesoresBusq()">Limpiar consulta</button>  
       <br />
       <br />  
-      <button style="width:15em;" class="crear_cliente" ng-click="showAsesoresCreate()">Gesti&oacute;n asesor</button>
+      <button style="width:15em;" class="crear_cliente" ng-click="showAsesoresCreate()">Crear asesor</button>
       <br />
       <br />
       <button style="width:15em;" class="volver" ng-click="showAdministracionIndex()">Volver</button></center>
     </form>
   </div>
   <div class="form1" ng-show="cant_ases_busq=='0'">
-    <center><h2 style="font-family:Verdana;">CONSULTA ASESORES</h2></center>       
+    <center><h2 style="font-family:Verdana;">ASESORES</h2></center>       
     <div class="container">    
       <div class="panel panel-default">
         <div class="panel-body">
@@ -32,15 +32,15 @@
             <thead>
               <tr>                
                 <th style="width:38%;">Identificaci&oacute;n</th>
-                <th style="width:50%;">Empleado / Asesor</th> 
+                <th style="width:50%;">Empleado o Asesor</th> 
                 <th style="width:10%;">Foto</th>                          
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat='lista_asesor_busq in lista_asesores_busq | startFromGrid: currentPage * pageSize | limitTo: pageSize'>         
-                <td style="text-align: left; vertical-align: middle;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.identificacion}}</td>
-                <td style="text-align: left; vertical-align: middle;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.asesor}}</td>  
-                <td style="text-align: left; vertical-align: middle;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'><img src="{{lista_asesor_busq.foto}}" ng-if="lista_asesor_busq.foto" width="80em" height="100em"></td>                       
+              <tr ng-repeat='lista_asesor_busq in lista_asesores_busq | startFromGrid: currentPage * pageSize | limitTo: pageSize' ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>         
+                <td style="text-align: left; vertical-align: middle;">{{lista_asesor_busq.identificacion}}</td>
+                <td style="text-align: left; vertical-align: middle;">{{lista_asesor_busq.asesor}}</td>  
+                <td style="text-align: left; vertical-align: middle;"><img src="{{lista_asesor_busq.foto}}" ng-if="lista_asesor_busq.foto" width="80em" height="100em"></td>                       
               </tr>
             </tbody>
           </table>

@@ -132,27 +132,29 @@
                     a.numero_telefono AS telefono_fijo,
                     a.numero_celular AS telefono_movil,
                     UPPER(a.correo_electronico) AS correo_electronico,
-                    UPPER(a.direccion) AS direccion,
+                    UPPER(a.address) AS direccion,
                     a.id_ciudad AS id_ciudad,
                     a.id_departamento AS id_departamento,
                     a.id_pais AS id_pais,
                     a.id_personal AS id_asesor,
                     a.porcentaje_ganancia AS porcentaje_ganancia,
                     a.photo AS foto,
-                    a.estado AS estado_empleado,
-                    COALESCE(c.estado,'') AS estado_usuario_app,
-                    COALESCE(c.userlogin,'') AS login_usuario_app
+                    a.estado AS empleado_activo,
+                    COALESCE(c.estado,1) AS usuario_activo,
+                    COALESCE(UPPER(c.userlogin),'') AS usuario_aplicativo
                   FROM 
                     rrhh.tb_personal a
                     LEFT JOIN session.tb_users_app c ON a.id_personal = c.id_personal 
                   WHERE 
                     a.id_personal=$id_asesor  
-      	         ";      	
+      	         ";    
+
+                 //print_r($query);exit;  	
                          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
         $row = pg_fetch_assoc($result, null);        
 
-        $output['datosAsesor']['tipoCliente']=$row['tipoasesor'];
+        $output['datosAsesor']['tipoAsesor']=$row['tipoasesor'];
         $output['datosAsesor']['nombres']=$row['nombres'];
         $output['datosAsesor']['apellidos']=$row['apellidos'];
         $output['datosAsesor']['tipoIdentificacion']=$row['tipoidentificacion'];
@@ -162,15 +164,17 @@
         $output['datosAsesor']['telefono_movil']=$row['telefono_movil'];
         $output['datosAsesor']['correo_electronico']=$row['correo_electronico'];
         $output['datosAsesor']['direccion']=$row['direccion'];
-        $output['datosAsesor']['id_ciudad']=$row['id_ciudad'];
-        $output['datosAsesor']['id_departamento']=$row['id_departamento'];
-        $output['datosAsesor']['id_pais']=$row['id_pais'];
+        $output['datosAsesor']['codigoCiudad']=$row['id_ciudad'];
+        $output['datosAsesor']['codigoDepartamento']=$row['id_departamento'];
+        $output['datosAsesor']['codigoPais']=$row['id_pais'];
         $output['datosAsesor']['id_asesor']=$row['id_asesor'];
-        $output['datosAsesor']['porcentaje_ganancia']=$row['porcentaje_ganancia'];
-        $output['datosAsesor']['foto']=$row['foto'];
-        $output['datosAsesor']['estado_empleado']=$row['estado_empleado'];
-        $output['datosAsesor']['estado_usuario_app']=$row['estado_usuario_app'];
-        $output['datosAsesor']['login_usuario_app']=$row['login_usuario_app'];
+        $output['datosAsesor']['porcentaje_comision']=$row['porcentaje_ganancia'];
+        $output['datosAsesor']['foto_asesor']=$row['foto'];
+        $output['datosAsesor']['empleado_activo']=$row['empleado_activo'];
+        $output['datosAsesor']['usuario_activo']=$row['usuario_activo'];
+        $output['datosAsesor']['usuario_aplicativo']=$row['usuario_aplicativo'];
+
+        //print_r($output);exit;
 
         return $output;
 
@@ -392,17 +396,9 @@
                     porcentaje_ganancia=".$datosAsesor->porcentaje_comision.",                    
                     estado = CASE WHEN UPPER('".$empleado_activo."')='1' THEN '1' ELSE '0' END,
                     id_user_modificacion = ".$_SESSION['id_user'].",
-                    fecha_modificacion = CURRENT_TIMESTAMP";
-
-          if($photo!=null){
-            $query.=",photo='$photo' ";
-          }
-          else{
-            $query.=",photo=null ";
-          } 
-
-          $query.="WHERE
-                    id_personal=".$datosAsesor->id_asesor.""; 
+                    fecha_modificacion = CURRENT_TIMESTAMP
+                  WHERE  
+                    id_personal=".$datosAsesor->id_asesor;           
 
           $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());          
 
@@ -676,8 +672,7 @@
                       id_user_creacion,
                       porcentaje_ganancia,
                       estado,
-                      id_inmobiliaria,
-                      photo
+                      id_inmobiliaria
                     ) 
                   VALUES
                     (
@@ -697,8 +692,7 @@
                      ".$_SESSION['id_user'].",
                      ".$datosAsesor->porcentaje_comision.",
                      '1',
-                     ".$_SESSION['id_inmobiliaria'].",
-                     CASE WHEN '$photo'='null' THEN NULL ELSE '$photo' END)
+                     ".$_SESSION['id_inmobiliaria']."
                   RETURNING id_personal"; 
 
                   //print_r($query);exit;

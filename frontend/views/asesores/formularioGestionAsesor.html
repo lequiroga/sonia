@@ -3,7 +3,7 @@
     <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
   </div>
   <div class="form">
-    <center><h2 style="font-family:Verdana;">GESTI&Oacute;N ASESORES</h2></center>
+    <center><h2 style="font-family:Verdana;">DATOS ASESOR</h2></center>
     <br />
     <form name="formularioAsesor" ng-model="asesor" id="formularioAsesor" method="post" NOVALIDATE>
       <center ng-if="asesor.foto_asesor">
@@ -28,7 +28,7 @@
       <label>Correo electr&oacute;nico (*)</label><input name="asesor_correo_electronico" type="email" ng-model="asesor.correo_electronico"/>
       <label>Direcci&oacute;n de residencia (*)</label><input name="asesor_direccion" type="text" ng-model="asesor.direccion"/>
       <label>Pa&iacute;s (*)</label>
-      <select name="asesor_codigoPais" id="codigoPais" ng-model="asesor.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosAsesor(asesor.codigoPais.id_pais)"/>       
+      <select name="asesor_codigoPais" id="codigoPais" ng-model="asesor.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosCliente(asesor.codigoPais.id_pais)"/>       
       </select>
       <label>Departamento (*)</label>
       <select name="asesor_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(asesor.codigoDepartamento)" ng-model="asesor.codigoDepartamento"/>
