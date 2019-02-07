@@ -1,16 +1,20 @@
-  <div class="toggle">    
+  <div class="toggle">
   </div>
   <div class="form" >
     <center><h2 style="font-family:Verdana;">INICIAR SESI&Oacute;N</h2></center>
     <br />
     <form name="loginFormulario" ng-model="loginFormulario" id="loginFormulario" NOVALIDATE>
-      <label>Usuario (*)</label><input name="user" type="text" ng-model="loginForm.user" required/> 
-      <br />     
-      <label>Contrase&ntilde;a (*)</label><input name="password" ng-model="loginForm.password" type="password" required/>     
+      <label>Usuario (*)</label><input name="user" type="text" ng-model="loginForm.user" required/>
+      <br />
+      <div class="container">
+        <div class="row">
+          <label>Contrase&ntilde;a (*)</label><input name="password" ng-model="loginForm.password" type="password" required/>
+        </div>
+      </div>
       <br />
       <label>(*) Informaci&oacute;n requerida</label>
       <br />
-      <center>      
+      <center>
       <button type="submit" name="Ingresar" value="Ingresar" style="width:15em;" class="crear_cliente" ng-click="validateSession(loginForm.user,loginForm.password)">Ingresar</button>
       </center>
     </form>

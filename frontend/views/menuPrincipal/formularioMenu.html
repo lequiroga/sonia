@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html ng-app="siniModule">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
   <title>SONIA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script type="text/javascript">
         window.history.forward();
         function noBack()
@@ -12,13 +11,17 @@
         }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
-  <script src="../../js/app.js"></script> 
-  <script src="../../js/appImages.js"></script>  
+  <script src="../../js/app.js"></script>
+  <script src="../../js/appImages.js"></script>
   <script type="text/javascript" src="../../js/ajax.js"></script>
-  <script type="text/javascript" src="../../js/ajax-dynamic-content.js"></script>  
+  <script type="text/javascript" src="../../js/ajax-dynamic-content.js"></script>
   <script type="text/javascript" src="../../js/jquery-3.3.1.js"></script>
   <script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
-  
+  <script type="text/javascript" src="../../js/bootstrap/bootstrap.min.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="../../css/bootstrap-theme.min.css" crossorigin="anonymous"> -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
   <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
@@ -29,15 +32,40 @@
 
 <body ng-controller="siniController" onLoad="noBack();" onpageshow="if (event.persisted) noBack();" onUnload="">
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+    Bootstrap
+  </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 <!-- Form Mixin-->
 <!-- Input Mixin-->
 <!-- Button Mixin-->
 <!-- Pen Title-->
 <div class="pen-title" style="background-color:#1137AD;height:7em;">
-  <img class="responsive" style="width:25em;height:4em;margin-top:2em;" src="../../form-images/montes_avila_banner.png">  
+  <img class="responsive" style="width:25em;height:4em;margin-top:2em;" src="../../form-images/montes_avila_banner.png">
 </div>
 <!-- Form Module-->
-<div class="module form-module" ng-controller="setContentDiv" id="formulario" ng-include="showContent">  
+<div class="module form-module" ng-controller="setContentDiv" id="formulario" ng-include="showContent">
 </div>
 </body>
 </html>
