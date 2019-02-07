@@ -39,6 +39,31 @@
       reader.readAsDataURL(input.files[0]);
     };
 
+    function openFile1(event) {            
+      var input = event.target;      
+      var reader = new FileReader();
+      reader.onload = function(){
+        var dataURL = reader.result; 
+        var extension = input.files[0].name.substring(input.files[0].name.length-3,input.files[0].name.length); 
+        if(!(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG')){
+          alert("La imagen o logo debe ser de uno de los formatos permitidos (jpg, bmp o png)");
+          document.formularioInmobiliaria.file.value = '';
+          var outputInm = document.getElementById('outputInm');
+          outputInm.src = undefined;
+          outputInm.style.display = "none"; 
+          return false;
+        } 
+        else{
+          var outputInm = document.getElementById('outputInm');
+          //document.formularioInmobiliaria.foto = dataURL;
+          outputInm.src = dataURL;
+          outputInm.style.display = "block";  
+        }            
+        //$scope.imgAsesorTemp = dataURL;
+      };
+      reader.readAsDataURL(input.files[0]);
+    };
+
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
   <script src="../../js/app.js"></script> 

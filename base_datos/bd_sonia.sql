@@ -5,7 +5,7 @@
 -- Dumped from database version 10.6
 -- Dumped by pg_dump version 10.6
 
--- Started on 2019-02-06 13:58:10
+-- Started on 2019-02-06 22:27:45
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2942,7 +2942,9 @@ CREATE TABLE rrhh.tb_personal (
     id_user_modificacion integer,
     fecha_modificacion timestamp with time zone,
     id_inmobiliaria integer,
-    porcentaje_ganancia numeric(10,2)
+    porcentaje_ganancia numeric(10,2),
+    id_departamento integer,
+    id_pais integer
 );
 
 
@@ -3138,6 +3140,24 @@ COMMENT ON COLUMN rrhh.tb_personal.porcentaje_ganancia IS 'Porcentaje de gananci
 
 
 --
+-- TOC entry 3467 (class 0 OID 0)
+-- Dependencies: 251
+-- Name: COLUMN tb_personal.id_departamento; Type: COMMENT; Schema: rrhh; Owner: postgres
+--
+
+COMMENT ON COLUMN rrhh.tb_personal.id_departamento IS 'Llave foránea que relaciona el departamento de residencia del asesor';
+
+
+--
+-- TOC entry 3468 (class 0 OID 0)
+-- Dependencies: 251
+-- Name: COLUMN tb_personal.id_pais; Type: COMMENT; Schema: rrhh; Owner: postgres
+--
+
+COMMENT ON COLUMN rrhh.tb_personal.id_pais IS 'Llave foránea que relaciona el país del empleado';
+
+
+--
 -- TOC entry 252 (class 1259 OID 17293)
 -- Name: tb_personal_id_personal_seq; Type: SEQUENCE; Schema: rrhh; Owner: postgres
 --
@@ -3154,7 +3174,7 @@ CREATE SEQUENCE rrhh.tb_personal_id_personal_seq
 ALTER TABLE rrhh.tb_personal_id_personal_seq OWNER TO postgres;
 
 --
--- TOC entry 3467 (class 0 OID 0)
+-- TOC entry 3469 (class 0 OID 0)
 -- Dependencies: 252
 -- Name: tb_personal_id_personal_seq; Type: SEQUENCE OWNED BY; Schema: rrhh; Owner: postgres
 --
@@ -3181,7 +3201,7 @@ CREATE TABLE session.tb_users_access (
 ALTER TABLE session.tb_users_access OWNER TO postgres;
 
 --
--- TOC entry 3468 (class 0 OID 0)
+-- TOC entry 3470 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: TABLE tb_users_access; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3190,7 +3210,7 @@ COMMENT ON TABLE session.tb_users_access IS 'Tabla que guarda la información de
 
 
 --
--- TOC entry 3469 (class 0 OID 0)
+-- TOC entry 3471 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: COLUMN tb_users_access.id_user_access; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3199,7 +3219,7 @@ COMMENT ON COLUMN session.tb_users_access.id_user_access IS 'Llave primaria de l
 
 
 --
--- TOC entry 3470 (class 0 OID 0)
+-- TOC entry 3472 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: COLUMN tb_users_access.id_user_app; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3208,7 +3228,7 @@ COMMENT ON COLUMN session.tb_users_access.id_user_app IS 'Llave foránea a la ta
 
 
 --
--- TOC entry 3471 (class 0 OID 0)
+-- TOC entry 3473 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: COLUMN tb_users_access.fecha_acceso; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3217,7 +3237,7 @@ COMMENT ON COLUMN session.tb_users_access.fecha_acceso IS 'Fecha y hora en las q
 
 
 --
--- TOC entry 3472 (class 0 OID 0)
+-- TOC entry 3474 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: COLUMN tb_users_access.datos_sesion; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3226,7 +3246,7 @@ COMMENT ON COLUMN session.tb_users_access.datos_sesion IS 'Cadena JSON que conti
 
 
 --
--- TOC entry 3473 (class 0 OID 0)
+-- TOC entry 3475 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: COLUMN tb_users_access.id_acceso; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3235,7 +3255,7 @@ COMMENT ON COLUMN session.tb_users_access.id_acceso IS 'Id de acceso a la aplica
 
 
 --
--- TOC entry 3474 (class 0 OID 0)
+-- TOC entry 3476 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: COLUMN tb_users_access.datos_host_remoto; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3244,7 +3264,7 @@ COMMENT ON COLUMN session.tb_users_access.datos_host_remoto IS 'Datos obtenidos 
 
 
 --
--- TOC entry 3475 (class 0 OID 0)
+-- TOC entry 3477 (class 0 OID 0)
 -- Dependencies: 253
 -- Name: COLUMN tb_users_access.fecha_salida; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3269,7 +3289,7 @@ CREATE SEQUENCE session.tb_users_access_id_user_access_seq
 ALTER TABLE session.tb_users_access_id_user_access_seq OWNER TO postgres;
 
 --
--- TOC entry 3476 (class 0 OID 0)
+-- TOC entry 3478 (class 0 OID 0)
 -- Dependencies: 254
 -- Name: tb_users_access_id_user_access_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
@@ -3294,7 +3314,7 @@ CREATE SEQUENCE session.tb_users_access_id_user_seq
 ALTER TABLE session.tb_users_access_id_user_seq OWNER TO postgres;
 
 --
--- TOC entry 3477 (class 0 OID 0)
+-- TOC entry 3479 (class 0 OID 0)
 -- Dependencies: 255
 -- Name: tb_users_access_id_user_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
@@ -3327,7 +3347,7 @@ CREATE TABLE session.tb_users_app (
 ALTER TABLE session.tb_users_app OWNER TO postgres;
 
 --
--- TOC entry 3478 (class 0 OID 0)
+-- TOC entry 3480 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_user; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3336,7 +3356,7 @@ COMMENT ON COLUMN session.tb_users_app.id_user IS 'Llave primaria de la tabla de
 
 
 --
--- TOC entry 3479 (class 0 OID 0)
+-- TOC entry 3481 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.userlogin; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3345,7 +3365,7 @@ COMMENT ON COLUMN session.tb_users_app.userlogin IS 'Identificador o nombre úni
 
 
 --
--- TOC entry 3480 (class 0 OID 0)
+-- TOC entry 3482 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.password; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3354,7 +3374,7 @@ COMMENT ON COLUMN session.tb_users_app.password IS 'Password o contraseña asign
 
 
 --
--- TOC entry 3481 (class 0 OID 0)
+-- TOC entry 3483 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.estado; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3363,7 +3383,7 @@ COMMENT ON COLUMN session.tb_users_app.estado IS 'Indica el estado del usuario, 
 
 
 --
--- TOC entry 3482 (class 0 OID 0)
+-- TOC entry 3484 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.fecha_creacion; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3372,7 +3392,7 @@ COMMENT ON COLUMN session.tb_users_app.fecha_creacion IS 'Fecha en la que se cre
 
 
 --
--- TOC entry 3483 (class 0 OID 0)
+-- TOC entry 3485 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_personal; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3381,7 +3401,7 @@ COMMENT ON COLUMN session.tb_users_app.id_personal IS 'Llave foránea hacia la t
 
 
 --
--- TOC entry 3484 (class 0 OID 0)
+-- TOC entry 3486 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_user_app_externo; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3390,7 +3410,7 @@ COMMENT ON COLUMN session.tb_users_app.id_user_app_externo IS 'Llave foránea a 
 
 
 --
--- TOC entry 3485 (class 0 OID 0)
+-- TOC entry 3487 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.user_type; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3399,7 +3419,7 @@ COMMENT ON COLUMN session.tb_users_app.user_type IS 'Tipo de usuario, puede toma
 
 
 --
--- TOC entry 3486 (class 0 OID 0)
+-- TOC entry 3488 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.has_profile; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3408,7 +3428,7 @@ COMMENT ON COLUMN session.tb_users_app.has_profile IS 'Valor booleano (true o fa
 
 
 --
--- TOC entry 3487 (class 0 OID 0)
+-- TOC entry 3489 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.password_ext; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3417,7 +3437,7 @@ COMMENT ON COLUMN session.tb_users_app.password_ext IS 'Password de acceso a la 
 
 
 --
--- TOC entry 3488 (class 0 OID 0)
+-- TOC entry 3490 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_user_creacion; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3426,7 +3446,7 @@ COMMENT ON COLUMN session.tb_users_app.id_user_creacion IS 'Llave foránea que r
 
 
 --
--- TOC entry 3489 (class 0 OID 0)
+-- TOC entry 3491 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.id_user_modificacion; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3435,7 +3455,7 @@ COMMENT ON COLUMN session.tb_users_app.id_user_modificacion IS 'Llave foránea q
 
 
 --
--- TOC entry 3490 (class 0 OID 0)
+-- TOC entry 3492 (class 0 OID 0)
 -- Dependencies: 256
 -- Name: COLUMN tb_users_app.fecha_modificacion; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3463,7 +3483,7 @@ CREATE TABLE session.tb_users_app_externo (
 ALTER TABLE session.tb_users_app_externo OWNER TO postgres;
 
 --
--- TOC entry 3491 (class 0 OID 0)
+-- TOC entry 3493 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: TABLE tb_users_app_externo; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3472,7 +3492,7 @@ COMMENT ON TABLE session.tb_users_app_externo IS 'Tabla que contiene la informac
 
 
 --
--- TOC entry 3492 (class 0 OID 0)
+-- TOC entry 3494 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.id_user_app_externo; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3481,7 +3501,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.id_user_app_externo IS 'Id llave 
 
 
 --
--- TOC entry 3493 (class 0 OID 0)
+-- TOC entry 3495 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.nombres_siglas; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3490,7 +3510,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.nombres_siglas IS 'Nombres de la 
 
 
 --
--- TOC entry 3494 (class 0 OID 0)
+-- TOC entry 3496 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.apellidos_razon_social; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3499,7 +3519,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.apellidos_razon_social IS 'Apelli
 
 
 --
--- TOC entry 3495 (class 0 OID 0)
+-- TOC entry 3497 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.numero_identificacion; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3508,7 +3528,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.numero_identificacion IS 'Número
 
 
 --
--- TOC entry 3496 (class 0 OID 0)
+-- TOC entry 3498 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.id_tipo_identificacion; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3517,7 +3537,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.id_tipo_identificacion IS 'Id for
 
 
 --
--- TOC entry 3497 (class 0 OID 0)
+-- TOC entry 3499 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.numero_telefono; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3526,7 +3546,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.numero_telefono IS 'Número de te
 
 
 --
--- TOC entry 3498 (class 0 OID 0)
+-- TOC entry 3500 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.correo_electronico; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3535,7 +3555,7 @@ COMMENT ON COLUMN session.tb_users_app_externo.correo_electronico IS 'Email del 
 
 
 --
--- TOC entry 3499 (class 0 OID 0)
+-- TOC entry 3501 (class 0 OID 0)
 -- Dependencies: 257
 -- Name: COLUMN tb_users_app_externo.id_ciudad; Type: COMMENT; Schema: session; Owner: postgres
 --
@@ -3560,7 +3580,7 @@ CREATE SEQUENCE session.tb_users_app_externo_id_user_app_externo_seq
 ALTER TABLE session.tb_users_app_externo_id_user_app_externo_seq OWNER TO postgres;
 
 --
--- TOC entry 3500 (class 0 OID 0)
+-- TOC entry 3502 (class 0 OID 0)
 -- Dependencies: 258
 -- Name: tb_users_app_externo_id_user_app_externo_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
@@ -3585,7 +3605,7 @@ CREATE SEQUENCE session.tb_users_app_id_user_creacion_seq
 ALTER TABLE session.tb_users_app_id_user_creacion_seq OWNER TO postgres;
 
 --
--- TOC entry 3501 (class 0 OID 0)
+-- TOC entry 3503 (class 0 OID 0)
 -- Dependencies: 291
 -- Name: tb_users_app_id_user_creacion_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
@@ -3610,7 +3630,7 @@ CREATE SEQUENCE session.tb_users_id_usuario_seq
 ALTER TABLE session.tb_users_id_usuario_seq OWNER TO postgres;
 
 --
--- TOC entry 3502 (class 0 OID 0)
+-- TOC entry 3504 (class 0 OID 0)
 -- Dependencies: 259
 -- Name: tb_users_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: session; Owner: postgres
 --
@@ -3641,7 +3661,7 @@ CREATE TABLE solicitudes.tb_agendas_solicitudes (
 ALTER TABLE solicitudes.tb_agendas_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3503 (class 0 OID 0)
+-- TOC entry 3505 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: TABLE tb_agendas_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3650,7 +3670,7 @@ COMMENT ON TABLE solicitudes.tb_agendas_solicitudes IS 'Tabla que contiene la in
 
 
 --
--- TOC entry 3504 (class 0 OID 0)
+-- TOC entry 3506 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_agenda_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3659,7 +3679,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_agenda_solicitud IS 'Id 
 
 
 --
--- TOC entry 3505 (class 0 OID 0)
+-- TOC entry 3507 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3668,7 +3688,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_solicitud IS 'Llave for�
 
 
 --
--- TOC entry 3506 (class 0 OID 0)
+-- TOC entry 3508 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.fecha_programada; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3677,7 +3697,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.fecha_programada IS 'Fecha 
 
 
 --
--- TOC entry 3507 (class 0 OID 0)
+-- TOC entry 3509 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_persona; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3686,7 +3706,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_persona IS 'Llave forán
 
 
 --
--- TOC entry 3508 (class 0 OID 0)
+-- TOC entry 3510 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_vendedor; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3695,7 +3715,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_vendedor IS 'Llave forá
 
 
 --
--- TOC entry 3509 (class 0 OID 0)
+-- TOC entry 3511 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.fecha_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3704,7 +3724,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.fecha_creacion IS 'Fecha y 
 
 
 --
--- TOC entry 3510 (class 0 OID 0)
+-- TOC entry 3512 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_persona_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3713,7 +3733,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_persona_creacion IS 'Lla
 
 
 --
--- TOC entry 3511 (class 0 OID 0)
+-- TOC entry 3513 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_estado_agenda; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3722,7 +3742,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.id_estado_agenda IS 'Llave 
 
 
 --
--- TOC entry 3512 (class 0 OID 0)
+-- TOC entry 3514 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.fecha_modificacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3731,7 +3751,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.fecha_modificacion IS 'Fech
 
 
 --
--- TOC entry 3513 (class 0 OID 0)
+-- TOC entry 3515 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.observacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3740,7 +3760,7 @@ COMMENT ON COLUMN solicitudes.tb_agendas_solicitudes.observacion IS 'Observació
 
 
 --
--- TOC entry 3514 (class 0 OID 0)
+-- TOC entry 3516 (class 0 OID 0)
 -- Dependencies: 260
 -- Name: COLUMN tb_agendas_solicitudes.id_cliente; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3765,7 +3785,7 @@ CREATE SEQUENCE solicitudes.tb_agendas_solicitudes_id_agenda_solicitud_seq
 ALTER TABLE solicitudes.tb_agendas_solicitudes_id_agenda_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3515 (class 0 OID 0)
+-- TOC entry 3517 (class 0 OID 0)
 -- Dependencies: 261
 -- Name: tb_agendas_solicitudes_id_agenda_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
@@ -3789,7 +3809,7 @@ CREATE TABLE solicitudes.tb_caracteristicas_solicitudes (
 ALTER TABLE solicitudes.tb_caracteristicas_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3516 (class 0 OID 0)
+-- TOC entry 3518 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: TABLE tb_caracteristicas_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3798,7 +3818,7 @@ COMMENT ON TABLE solicitudes.tb_caracteristicas_solicitudes IS 'Tabla que contie
 
 
 --
--- TOC entry 3517 (class 0 OID 0)
+-- TOC entry 3519 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.id_caracteristicas_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3807,7 +3827,7 @@ COMMENT ON COLUMN solicitudes.tb_caracteristicas_solicitudes.id_caracteristicas_
 
 
 --
--- TOC entry 3518 (class 0 OID 0)
+-- TOC entry 3520 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.id_caracteristica_inmueble; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3816,7 +3836,7 @@ COMMENT ON COLUMN solicitudes.tb_caracteristicas_solicitudes.id_caracteristica_i
 
 
 --
--- TOC entry 3519 (class 0 OID 0)
+-- TOC entry 3521 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3825,7 +3845,7 @@ COMMENT ON COLUMN solicitudes.tb_caracteristicas_solicitudes.id_solicitud IS 'Ll
 
 
 --
--- TOC entry 3520 (class 0 OID 0)
+-- TOC entry 3522 (class 0 OID 0)
 -- Dependencies: 262
 -- Name: COLUMN tb_caracteristicas_solicitudes.valor_caracteristica; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3850,7 +3870,7 @@ CREATE SEQUENCE solicitudes.tb_caracteristicas_solicitudes_id_caracteristicas_so
 ALTER TABLE solicitudes.tb_caracteristicas_solicitudes_id_caracteristicas_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3521 (class 0 OID 0)
+-- TOC entry 3523 (class 0 OID 0)
 -- Dependencies: 263
 -- Name: tb_caracteristicas_solicitudes_id_caracteristicas_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
@@ -3881,7 +3901,7 @@ CREATE TABLE solicitudes.tb_estados_solicitudes (
 ALTER TABLE solicitudes.tb_estados_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3522 (class 0 OID 0)
+-- TOC entry 3524 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: TABLE tb_estados_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3890,7 +3910,7 @@ COMMENT ON TABLE solicitudes.tb_estados_solicitudes IS 'Tabla de estados de las 
 
 
 --
--- TOC entry 3523 (class 0 OID 0)
+-- TOC entry 3525 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_estado_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3899,7 +3919,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_estado_solicitud IS 'ID 
 
 
 --
--- TOC entry 3524 (class 0 OID 0)
+-- TOC entry 3526 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_solicitud_estado; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3908,7 +3928,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_solicitud_estado IS 'Lla
 
 
 --
--- TOC entry 3525 (class 0 OID 0)
+-- TOC entry 3527 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_persona; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3917,7 +3937,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_persona IS 'Llave forán
 
 
 --
--- TOC entry 3526 (class 0 OID 0)
+-- TOC entry 3528 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.observacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3926,7 +3946,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.observacion IS 'Observació
 
 
 --
--- TOC entry 3527 (class 0 OID 0)
+-- TOC entry 3529 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.fecha_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3935,7 +3955,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.fecha_creacion IS 'Fecha en
 
 
 --
--- TOC entry 3528 (class 0 OID 0)
+-- TOC entry 3530 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_tipo_actividad; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3944,7 +3964,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.id_tipo_actividad IS 'Llave
 
 
 --
--- TOC entry 3529 (class 0 OID 0)
+-- TOC entry 3531 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.actividad_programada; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3953,7 +3973,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.actividad_programada IS 'Va
 
 
 --
--- TOC entry 3530 (class 0 OID 0)
+-- TOC entry 3532 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.fecha_programada; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3962,7 +3982,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.fecha_programada IS 'Fecha 
 
 
 --
--- TOC entry 3531 (class 0 OID 0)
+-- TOC entry 3533 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.valor_negocio; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3971,7 +3991,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.valor_negocio IS 'Valor rea
 
 
 --
--- TOC entry 3532 (class 0 OID 0)
+-- TOC entry 3534 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.porcentaje_comision; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -3980,7 +4000,7 @@ COMMENT ON COLUMN solicitudes.tb_estados_solicitudes.porcentaje_comision IS 'Por
 
 
 --
--- TOC entry 3533 (class 0 OID 0)
+-- TOC entry 3535 (class 0 OID 0)
 -- Dependencies: 264
 -- Name: COLUMN tb_estados_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4005,7 +4025,7 @@ CREATE SEQUENCE solicitudes.tb_estados_solicitudes_id_estado_solicitud_seq
 ALTER TABLE solicitudes.tb_estados_solicitudes_id_estado_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3534 (class 0 OID 0)
+-- TOC entry 3536 (class 0 OID 0)
 -- Dependencies: 265
 -- Name: tb_estados_solicitudes_id_estado_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
@@ -4029,7 +4049,7 @@ CREATE TABLE solicitudes.tb_intereses_solicitudes (
 ALTER TABLE solicitudes.tb_intereses_solicitudes OWNER TO postgres;
 
 --
--- TOC entry 3535 (class 0 OID 0)
+-- TOC entry 3537 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: TABLE tb_intereses_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4038,7 +4058,7 @@ COMMENT ON TABLE solicitudes.tb_intereses_solicitudes IS 'Tabla que asocia los i
 
 
 --
--- TOC entry 3536 (class 0 OID 0)
+-- TOC entry 3538 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.id_interes_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4047,7 +4067,7 @@ COMMENT ON COLUMN solicitudes.tb_intereses_solicitudes.id_interes_solicitud IS '
 
 
 --
--- TOC entry 3537 (class 0 OID 0)
+-- TOC entry 3539 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.id_interes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4056,7 +4076,7 @@ COMMENT ON COLUMN solicitudes.tb_intereses_solicitudes.id_interes IS 'Llave for�
 
 
 --
--- TOC entry 3538 (class 0 OID 0)
+-- TOC entry 3540 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.id_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4065,7 +4085,7 @@ COMMENT ON COLUMN solicitudes.tb_intereses_solicitudes.id_solicitud IS 'Llave fo
 
 
 --
--- TOC entry 3539 (class 0 OID 0)
+-- TOC entry 3541 (class 0 OID 0)
 -- Dependencies: 266
 -- Name: COLUMN tb_intereses_solicitudes.observacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4090,7 +4110,7 @@ CREATE SEQUENCE solicitudes.tb_intereses_solicitudes_id_interes_solicitud_seq
 ALTER TABLE solicitudes.tb_intereses_solicitudes_id_interes_solicitud_seq OWNER TO postgres;
 
 --
--- TOC entry 3540 (class 0 OID 0)
+-- TOC entry 3542 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: tb_intereses_solicitudes_id_interes_solicitud_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
@@ -4128,7 +4148,7 @@ CREATE TABLE solicitudes.tb_solicitudes_compra (
 ALTER TABLE solicitudes.tb_solicitudes_compra OWNER TO postgres;
 
 --
--- TOC entry 3541 (class 0 OID 0)
+-- TOC entry 3543 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: TABLE tb_solicitudes_compra; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4137,7 +4157,7 @@ COMMENT ON TABLE solicitudes.tb_solicitudes_compra IS 'Tabla que contiene la inf
 
 
 --
--- TOC entry 3542 (class 0 OID 0)
+-- TOC entry 3544 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_solicitudes; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4146,7 +4166,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_solicitudes IS 'Id de la 
 
 
 --
--- TOC entry 3543 (class 0 OID 0)
+-- TOC entry 3545 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_cliente; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4155,7 +4175,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_cliente IS 'Llave foráne
 
 
 --
--- TOC entry 3544 (class 0 OID 0)
+-- TOC entry 3546 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_tipo_inmueble; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4164,7 +4184,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_tipo_inmueble IS 'Llave f
 
 
 --
--- TOC entry 3545 (class 0 OID 0)
+-- TOC entry 3547 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.observaciones; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4173,7 +4193,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.observaciones IS 'Observacio
 
 
 --
--- TOC entry 3546 (class 0 OID 0)
+-- TOC entry 3548 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.valor_inmueble; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4182,7 +4202,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.valor_inmueble IS 'Valor del
 
 
 --
--- TOC entry 3547 (class 0 OID 0)
+-- TOC entry 3549 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_forma_pago; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4191,7 +4211,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_forma_pago IS 'Llave for�
 
 
 --
--- TOC entry 3548 (class 0 OID 0)
+-- TOC entry 3550 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_urgencia; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4200,7 +4220,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_urgencia IS 'Llave forán
 
 
 --
--- TOC entry 3549 (class 0 OID 0)
+-- TOC entry 3551 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_zona; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4209,7 +4229,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_zona IS 'Zona de la ciuda
 
 
 --
--- TOC entry 3550 (class 0 OID 0)
+-- TOC entry 3552 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.fecha_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4218,7 +4238,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.fecha_creacion IS 'Fecha en 
 
 
 --
--- TOC entry 3551 (class 0 OID 0)
+-- TOC entry 3553 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_usuario_creacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4227,7 +4247,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_usuario_creacion IS 'Id d
 
 
 --
--- TOC entry 3552 (class 0 OID 0)
+-- TOC entry 3554 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_usuario_modifica; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4236,7 +4256,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_usuario_modifica IS 'Id d
 
 
 --
--- TOC entry 3553 (class 0 OID 0)
+-- TOC entry 3555 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.fecha_modificacion; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4245,7 +4265,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.fecha_modificacion IS 'Fecha
 
 
 --
--- TOC entry 3554 (class 0 OID 0)
+-- TOC entry 3556 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.id_estado_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4254,7 +4274,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.id_estado_solicitud IS 'Llav
 
 
 --
--- TOC entry 3555 (class 0 OID 0)
+-- TOC entry 3557 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.numero_solicitud; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4263,7 +4283,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.numero_solicitud IS 'Número
 
 
 --
--- TOC entry 3556 (class 0 OID 0)
+-- TOC entry 3558 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.cantidad_ninos; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4272,7 +4292,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.cantidad_ninos IS 'Cantidad 
 
 
 --
--- TOC entry 3557 (class 0 OID 0)
+-- TOC entry 3559 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.cantidad_adultos; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4281,7 +4301,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.cantidad_adultos IS 'Cantida
 
 
 --
--- TOC entry 3558 (class 0 OID 0)
+-- TOC entry 3560 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.cantidad_adultos_mayores; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4290,7 +4310,7 @@ COMMENT ON COLUMN solicitudes.tb_solicitudes_compra.cantidad_adultos_mayores IS 
 
 
 --
--- TOC entry 3559 (class 0 OID 0)
+-- TOC entry 3561 (class 0 OID 0)
 -- Dependencies: 268
 -- Name: COLUMN tb_solicitudes_compra.fecha_requerida; Type: COMMENT; Schema: solicitudes; Owner: postgres
 --
@@ -4315,7 +4335,7 @@ CREATE SEQUENCE solicitudes.tb_solicitudes_id_solicitudes_seq
 ALTER TABLE solicitudes.tb_solicitudes_id_solicitudes_seq OWNER TO postgres;
 
 --
--- TOC entry 3560 (class 0 OID 0)
+-- TOC entry 3562 (class 0 OID 0)
 -- Dependencies: 269
 -- Name: tb_solicitudes_id_solicitudes_seq; Type: SEQUENCE OWNED BY; Schema: solicitudes; Owner: postgres
 --
@@ -4337,7 +4357,7 @@ CREATE TABLE tipos.tb_tipos_actividades (
 ALTER TABLE tipos.tb_tipos_actividades OWNER TO postgres;
 
 --
--- TOC entry 3561 (class 0 OID 0)
+-- TOC entry 3563 (class 0 OID 0)
 -- Dependencies: 270
 -- Name: TABLE tb_tipos_actividades; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4346,7 +4366,7 @@ COMMENT ON TABLE tipos.tb_tipos_actividades IS 'Tabla que contiene los tipos de 
 
 
 --
--- TOC entry 3562 (class 0 OID 0)
+-- TOC entry 3564 (class 0 OID 0)
 -- Dependencies: 270
 -- Name: COLUMN tb_tipos_actividades.id_tipo_actividad; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4355,7 +4375,7 @@ COMMENT ON COLUMN tipos.tb_tipos_actividades.id_tipo_actividad IS 'Id llave prim
 
 
 --
--- TOC entry 3563 (class 0 OID 0)
+-- TOC entry 3565 (class 0 OID 0)
 -- Dependencies: 270
 -- Name: COLUMN tb_tipos_actividades.descripcion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4380,7 +4400,7 @@ CREATE SEQUENCE tipos.tb_tipos_actividades_id_tipo_actividad_seq
 ALTER TABLE tipos.tb_tipos_actividades_id_tipo_actividad_seq OWNER TO postgres;
 
 --
--- TOC entry 3564 (class 0 OID 0)
+-- TOC entry 3566 (class 0 OID 0)
 -- Dependencies: 271
 -- Name: tb_tipos_actividades_id_tipo_actividad_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
@@ -4402,7 +4422,7 @@ CREATE TABLE tipos.tb_tipos_asesores (
 ALTER TABLE tipos.tb_tipos_asesores OWNER TO postgres;
 
 --
--- TOC entry 3565 (class 0 OID 0)
+-- TOC entry 3567 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: TABLE tb_tipos_asesores; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4411,7 +4431,7 @@ COMMENT ON TABLE tipos.tb_tipos_asesores IS 'Tabla que contiene la información 
 
 
 --
--- TOC entry 3566 (class 0 OID 0)
+-- TOC entry 3568 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: COLUMN tb_tipos_asesores.id_tipo_asesor; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4420,7 +4440,7 @@ COMMENT ON COLUMN tipos.tb_tipos_asesores.id_tipo_asesor IS 'ID Llave primaria d
 
 
 --
--- TOC entry 3567 (class 0 OID 0)
+-- TOC entry 3569 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: COLUMN tb_tipos_asesores.descripcion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4445,7 +4465,7 @@ CREATE SEQUENCE tipos.tb_tipos_asesores_id_tipo_asesor_seq
 ALTER TABLE tipos.tb_tipos_asesores_id_tipo_asesor_seq OWNER TO postgres;
 
 --
--- TOC entry 3568 (class 0 OID 0)
+-- TOC entry 3570 (class 0 OID 0)
 -- Dependencies: 285
 -- Name: tb_tipos_asesores_id_tipo_asesor_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
@@ -4467,7 +4487,7 @@ CREATE TABLE tipos.tb_tipos_clientes (
 ALTER TABLE tipos.tb_tipos_clientes OWNER TO postgres;
 
 --
--- TOC entry 3569 (class 0 OID 0)
+-- TOC entry 3571 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: TABLE tb_tipos_clientes; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4476,7 +4496,7 @@ COMMENT ON TABLE tipos.tb_tipos_clientes IS 'Tabla que contiene la información 
 
 
 --
--- TOC entry 3570 (class 0 OID 0)
+-- TOC entry 3572 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: COLUMN tb_tipos_clientes.id_tipo_cliente; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4485,7 +4505,7 @@ COMMENT ON COLUMN tipos.tb_tipos_clientes.id_tipo_cliente IS 'ID llave primaria 
 
 
 --
--- TOC entry 3571 (class 0 OID 0)
+-- TOC entry 3573 (class 0 OID 0)
 -- Dependencies: 272
 -- Name: COLUMN tb_tipos_clientes.descripcion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4510,7 +4530,7 @@ CREATE SEQUENCE tipos.tb_tipos_clientes_id_tipo_cliente_seq
 ALTER TABLE tipos.tb_tipos_clientes_id_tipo_cliente_seq OWNER TO postgres;
 
 --
--- TOC entry 3572 (class 0 OID 0)
+-- TOC entry 3574 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: tb_tipos_clientes_id_tipo_cliente_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
@@ -4532,7 +4552,7 @@ CREATE TABLE tipos.tb_tipos_inmuebles (
 ALTER TABLE tipos.tb_tipos_inmuebles OWNER TO postgres;
 
 --
--- TOC entry 3573 (class 0 OID 0)
+-- TOC entry 3575 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: TABLE tb_tipos_inmuebles; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4541,7 +4561,7 @@ COMMENT ON TABLE tipos.tb_tipos_inmuebles IS 'Tabla que contiene los tipos de in
 
 
 --
--- TOC entry 3574 (class 0 OID 0)
+-- TOC entry 3576 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: COLUMN tb_tipos_inmuebles.id_tipo_inmueble; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4550,7 +4570,7 @@ COMMENT ON COLUMN tipos.tb_tipos_inmuebles.id_tipo_inmueble IS 'Id de la tabla q
 
 
 --
--- TOC entry 3575 (class 0 OID 0)
+-- TOC entry 3577 (class 0 OID 0)
 -- Dependencies: 274
 -- Name: COLUMN tb_tipos_inmuebles.nombre; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4572,7 +4592,7 @@ CREATE TABLE tipos.tb_tipos_notificacion (
 ALTER TABLE tipos.tb_tipos_notificacion OWNER TO postgres;
 
 --
--- TOC entry 3576 (class 0 OID 0)
+-- TOC entry 3578 (class 0 OID 0)
 -- Dependencies: 275
 -- Name: TABLE tb_tipos_notificacion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4581,7 +4601,7 @@ COMMENT ON TABLE tipos.tb_tipos_notificacion IS 'Tabla que contiene la informaci
 
 
 --
--- TOC entry 3577 (class 0 OID 0)
+-- TOC entry 3579 (class 0 OID 0)
 -- Dependencies: 275
 -- Name: COLUMN tb_tipos_notificacion.descripcion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4606,7 +4626,7 @@ CREATE SEQUENCE tipos.tb_tipos_notificacion_id_tipo_notificacion_seq
 ALTER TABLE tipos.tb_tipos_notificacion_id_tipo_notificacion_seq OWNER TO postgres;
 
 --
--- TOC entry 3578 (class 0 OID 0)
+-- TOC entry 3580 (class 0 OID 0)
 -- Dependencies: 276
 -- Name: tb_tipos_notificacion_id_tipo_notificacion_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
@@ -4629,7 +4649,7 @@ CREATE TABLE tipos.tb_tiposidentificacion (
 ALTER TABLE tipos.tb_tiposidentificacion OWNER TO postgres;
 
 --
--- TOC entry 3579 (class 0 OID 0)
+-- TOC entry 3581 (class 0 OID 0)
 -- Dependencies: 277
 -- Name: TABLE tb_tiposidentificacion; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4638,7 +4658,7 @@ COMMENT ON TABLE tipos.tb_tiposidentificacion IS 'Tabla que contiene los tipos d
 
 
 --
--- TOC entry 3580 (class 0 OID 0)
+-- TOC entry 3582 (class 0 OID 0)
 -- Dependencies: 277
 -- Name: COLUMN tb_tiposidentificacion.id_tipo_ident; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4647,7 +4667,7 @@ COMMENT ON COLUMN tipos.tb_tiposidentificacion.id_tipo_ident IS 'Id primary key 
 
 
 --
--- TOC entry 3581 (class 0 OID 0)
+-- TOC entry 3583 (class 0 OID 0)
 -- Dependencies: 277
 -- Name: COLUMN tb_tiposidentificacion.desc_tipo_id; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4656,7 +4676,7 @@ COMMENT ON COLUMN tipos.tb_tiposidentificacion.desc_tipo_id IS 'Descripción o n
 
 
 --
--- TOC entry 3582 (class 0 OID 0)
+-- TOC entry 3584 (class 0 OID 0)
 -- Dependencies: 277
 -- Name: COLUMN tb_tiposidentificacion.abreviatura; Type: COMMENT; Schema: tipos; Owner: postgres
 --
@@ -4681,7 +4701,7 @@ CREATE SEQUENCE tipos.tb_tiposdocumento_id_tipo_ident_seq
 ALTER TABLE tipos.tb_tiposdocumento_id_tipo_ident_seq OWNER TO postgres;
 
 --
--- TOC entry 3583 (class 0 OID 0)
+-- TOC entry 3585 (class 0 OID 0)
 -- Dependencies: 278
 -- Name: tb_tiposdocumento_id_tipo_ident_seq; Type: SEQUENCE OWNED BY; Schema: tipos; Owner: postgres
 --
@@ -5071,6 +5091,8 @@ INSERT INTO clientes.tb_redes_sociales_cliente (id_redes_sociales_cliente, id_cl
 INSERT INTO clientes.tb_redes_sociales_cliente (id_redes_sociales_cliente, id_cliente, id_red_social, cuenta, id_user, fecha_creacion, id_user_mod, fecha_modificacion, estado) VALUES (20, 19, 2, '@luis_quiroga', 1, '2019-01-28 20:25:52.963695-05', NULL, NULL, '1');
 INSERT INTO clientes.tb_redes_sociales_cliente (id_redes_sociales_cliente, id_cliente, id_red_social, cuenta, id_user, fecha_creacion, id_user_mod, fecha_modificacion, estado) VALUES (21, 18, 1, 'luis.quiroga1', 1, '2019-01-28 20:30:15.860732-05', NULL, NULL, '1');
 INSERT INTO clientes.tb_redes_sociales_cliente (id_redes_sociales_cliente, id_cliente, id_red_social, cuenta, id_user, fecha_creacion, id_user_mod, fecha_modificacion, estado) VALUES (22, 18, 2, '@luis_quiroga1', 1, '2019-01-28 20:30:34.089775-05', 1, '2019-01-28 20:30:45.267414-05', '0');
+INSERT INTO clientes.tb_redes_sociales_cliente (id_redes_sociales_cliente, id_cliente, id_red_social, cuenta, id_user, fecha_creacion, id_user_mod, fecha_modificacion, estado) VALUES (23, 16, 1, 'francisco.quiroga', 1, '2019-02-06 20:42:26.212134-05', NULL, NULL, '1');
+INSERT INTO clientes.tb_redes_sociales_cliente (id_redes_sociales_cliente, id_cliente, id_red_social, cuenta, id_user, fecha_creacion, id_user_mod, fecha_modificacion, estado) VALUES (24, 16, 2, '@francisco.quiroga', 1, '2019-02-06 20:43:08.034526-05', NULL, NULL, '1');
 
 
 --
@@ -5278,7 +5300,6 @@ INSERT INTO generales.tb_redes_sociales (id_red_social, nombre, imagen) VALUES (
 --
 
 INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (1, 60739, 1775, 1, '09:49:39.889872-05', NULL, NULL, 132, '1', NULL);
-INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (2, 111005, 1787, 1, '10:43:19.992052-05', NULL, NULL, 132, '1', NULL);
 INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (3, 111005, 1782, 1, '10:47:34.429605-05', NULL, NULL, 132, '1', NULL);
 INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (4, 111005, 1784, 1, '10:50:26.788463-05', NULL, NULL, 132, '1', NULL);
 INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (5, 111005, 1783, 1, '10:52:26.810328-05', NULL, NULL, 132, '1', NULL);
@@ -5296,6 +5317,7 @@ INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_u
 INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (17, 111006, 2296, 1, '14:18:51.235474-05', NULL, NULL, 132, '1', NULL);
 INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (18, 111006, 1778, 1, '14:19:07.556407-05', NULL, NULL, 132, '0', NULL);
 INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (19, 60739, 798, 1, '20:28:32.945663-05', NULL, NULL, 132, '0', NULL);
+INSERT INTO generales.tb_zonas_barrios (id_zona_barrio, id_zona, id_barrio, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_ciudad, estado, id_inmobiliaria) VALUES (2, 111005, 1787, 1, '10:43:19.992052-05', 1, '21:10:49.14639-05', 132, '1', NULL);
 
 
 --
@@ -5386,7 +5408,7 @@ INSERT INTO inmuebles.tb_tipos_caracteristicas_inmuebles (id_tipos_caracteristic
 -- Data for Name: tb_inmobiliaria; Type: TABLE DATA; Schema: rrhh; Owner: postgres
 --
 
-INSERT INTO rrhh.tb_inmobiliaria (id_inmobiliaria, nombre_razon_social, imagen_logo, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion) VALUES (1, 'MONTES AVILA INMOBILIARIA', NULL, NULL, '2019-02-04 14:41:57.060359-05', NULL, NULL);
+INSERT INTO rrhh.tb_inmobiliaria (id_inmobiliaria, nombre_razon_social, imagen_logo, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion) VALUES (1, 'MONTES AVILA INMOBILIARIA', 'https://lquiroga1130612.s3.amazonaws.com/sonia/inmobiliarias/1/logo/montes_avila.png', NULL, '2019-02-04 14:41:57.060359-05', NULL, NULL);
 
 
 --
@@ -5403,8 +5425,10 @@ INSERT INTO rrhh.tb_inmobiliaria (id_inmobiliaria, nombre_razon_social, imagen_l
 -- Data for Name: tb_personal; Type: TABLE DATA; Schema: rrhh; Owner: postgres
 --
 
-INSERT INTO rrhh.tb_personal (id_personal, id_tipo_identificacion, nombres, apellidos, numero_identificacion, numero_telefono, correo_electronico, id_ciudad, address, photo, numero_celular, id_tipo_asesor, id_tipo_notificacion, estado, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_inmobiliaria, porcentaje_ganancia) VALUES (4, 2, 'LUIS', 'QUIROGA', '1130612051', NULL, 'LEQUIROGA@GMAIL.COM', 132, NULL, NULL, '3217461973', 5, NULL, '1', NULL, '2019-02-04 15:11:39.567313-05', NULL, NULL, 1, NULL);
-INSERT INTO rrhh.tb_personal (id_personal, id_tipo_identificacion, nombres, apellidos, numero_identificacion, numero_telefono, correo_electronico, id_ciudad, address, photo, numero_celular, id_tipo_asesor, id_tipo_notificacion, estado, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_inmobiliaria, porcentaje_ganancia) VALUES (54, 5, 'JOHN ALEJANDRO', 'MONTES GARCIA', '230165', '', 'LEQUIROGA@GMAIL.COM', 281, 'DDWQW', 'https://lquiroga1130612.s3.amazonaws.com/sonia/inmobiliarias/1/asesores/54/31286880_10211661383025888_5477288629137047552_n.jpg', '3217461973', 1, 1, '1', 1, '2019-02-06 13:54:27.916486-05', 1, '2019-02-06 13:54:55.645072-05', 1, 6.00);
+INSERT INTO rrhh.tb_personal (id_personal, id_tipo_identificacion, nombres, apellidos, numero_identificacion, numero_telefono, correo_electronico, id_ciudad, address, photo, numero_celular, id_tipo_asesor, id_tipo_notificacion, estado, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_inmobiliaria, porcentaje_ganancia, id_departamento, id_pais) VALUES (4, 2, 'LUIS', 'QUIROGA', '1130612051', NULL, 'LEQUIROGA@GMAIL.COM', 132, NULL, NULL, '3217461973', 5, NULL, '1', NULL, '2019-02-04 15:11:39.567313-05', NULL, NULL, 1, NULL, NULL, NULL);
+INSERT INTO rrhh.tb_personal (id_personal, id_tipo_identificacion, nombres, apellidos, numero_identificacion, numero_telefono, correo_electronico, id_ciudad, address, photo, numero_celular, id_tipo_asesor, id_tipo_notificacion, estado, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_inmobiliaria, porcentaje_ganancia, id_departamento, id_pais) VALUES (59, 2, 'JOHN ALEJANDRO', 'MONTES GARCIA', '18897', '0324061529', 'MONTEAVILA.001@GMAIL.COM', 132, 'CRA 5 # 10-63. OFC 309', 'https://lquiroga1130612.s3.amazonaws.com/sonia/inmobiliarias/1/asesores/59/b20170404123729.jpg', '3012108106', 1, 3, '1', 1, '2019-02-06 16:46:06.686856-05', NULL, NULL, 1, 20.00, 32, 1);
+INSERT INTO rrhh.tb_personal (id_personal, id_tipo_identificacion, nombres, apellidos, numero_identificacion, numero_telefono, correo_electronico, id_ciudad, address, photo, numero_celular, id_tipo_asesor, id_tipo_notificacion, estado, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_inmobiliaria, porcentaje_ganancia, id_departamento, id_pais) VALUES (60, 2, 'JEFREY', 'LEON', '23335', '4061529', 'JEFFREY.LEON@HOTMAIL.COM', 132, '.', 'https://lquiroga1130612.s3.amazonaws.com/sonia/inmobiliarias/1/asesores/60/b20170816110634.png', '3006975259', 2, 3, '1', 51, '2019-02-06 17:03:32.005978-05', NULL, NULL, 1, 10.00, 32, 1);
+INSERT INTO rrhh.tb_personal (id_personal, id_tipo_identificacion, nombres, apellidos, numero_identificacion, numero_telefono, correo_electronico, id_ciudad, address, photo, numero_celular, id_tipo_asesor, id_tipo_notificacion, estado, id_user_creacion, fecha_creacion, id_user_modificacion, fecha_modificacion, id_inmobiliaria, porcentaje_ganancia, id_departamento, id_pais) VALUES (61, 2, 'WILSON', 'BONILLA DIAZ', '27689', '', 'AGENTEINMOBILIARIOWB@GMAIL.COM', 132, 'ALHAMBRA', 'https://lquiroga1130612.s3.amazonaws.com/sonia/inmobiliarias/1/asesores/61/b20180213101422.png', '3162278927', 2, 3, '1', 1, '2019-02-06 20:59:04.828847-05', NULL, NULL, 1, 5.00, 32, 1);
 
 
 --
@@ -5422,7 +5446,9 @@ INSERT INTO rrhh.tb_personal (id_personal, id_tipo_identificacion, nombres, apel
 --
 
 INSERT INTO session.tb_users_app (id_user, userlogin, password, estado, fecha_creacion, id_personal, id_user_app_externo, user_type, has_profile, password_ext, id_user_creacion, id_user_modificacion, fecha_modificacion) VALUES (1, 'lquiroga', 'e78caf56938df35dc210cca36f591e38', 1, '2018-12-09 15:27:50.105712', 4, NULL, NULL, NULL, NULL, 2, NULL, NULL);
-INSERT INTO session.tb_users_app (id_user, userlogin, password, estado, fecha_creacion, id_personal, id_user_app_externo, user_type, has_profile, password_ext, id_user_creacion, id_user_modificacion, fecha_modificacion) VALUES (47, 'JMONTES', 'c4c3f5f4f9331de30f395acb3d3aa76a', 1, '2019-02-06 13:54:27.925486', 54, NULL, NULL, NULL, NULL, 1, 1, '2019-02-06 13:54:55.648072-05');
+INSERT INTO session.tb_users_app (id_user, userlogin, password, estado, fecha_creacion, id_personal, id_user_app_externo, user_type, has_profile, password_ext, id_user_creacion, id_user_modificacion, fecha_modificacion) VALUES (51, 'JMONTES', 'e706c0ce5e39be9bd5b37ecb5a0f983c', 1, '2019-02-06 16:46:06.691857', 59, NULL, NULL, NULL, NULL, 1, NULL, NULL);
+INSERT INTO session.tb_users_app (id_user, userlogin, password, estado, fecha_creacion, id_personal, id_user_app_externo, user_type, has_profile, password_ext, id_user_creacion, id_user_modificacion, fecha_modificacion) VALUES (52, 'JLEON', 'bc06df8f21ab805ccb2a7d9f396ed918', 1, '2019-02-06 17:03:32.088983', 60, NULL, NULL, NULL, NULL, 51, NULL, NULL);
+INSERT INTO session.tb_users_app (id_user, userlogin, password, estado, fecha_creacion, id_personal, id_user_app_externo, user_type, has_profile, password_ext, id_user_creacion, id_user_modificacion, fecha_modificacion) VALUES (53, 'WBONILLA', '25d55ad283aa400af464c76d713c07ad', 1, '2019-02-06 20:59:05.109647', 61, NULL, NULL, NULL, NULL, 1, NULL, NULL);
 
 
 --
@@ -5540,7 +5566,7 @@ INSERT INTO tipos.tb_tiposidentificacion (id_tipo_ident, desc_tipo_id, abreviatu
 
 
 --
--- TOC entry 3584 (class 0 OID 0)
+-- TOC entry 3586 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: tb_clientes_id_cliente_seq; Type: SEQUENCE SET; Schema: clientes; Owner: postgres
 --
@@ -5549,16 +5575,16 @@ SELECT pg_catalog.setval('clientes.tb_clientes_id_cliente_seq', 19, true);
 
 
 --
--- TOC entry 3585 (class 0 OID 0)
+-- TOC entry 3587 (class 0 OID 0)
 -- Dependencies: 279
 -- Name: tb_redes_sociales_cliente_id_redes_sociales_cliente_seq; Type: SEQUENCE SET; Schema: clientes; Owner: postgres
 --
 
-SELECT pg_catalog.setval('clientes.tb_redes_sociales_cliente_id_redes_sociales_cliente_seq', 22, true);
+SELECT pg_catalog.setval('clientes.tb_redes_sociales_cliente_id_redes_sociales_cliente_seq', 24, true);
 
 
 --
--- TOC entry 3586 (class 0 OID 0)
+-- TOC entry 3588 (class 0 OID 0)
 -- Dependencies: 206
 -- Name: tb_aut_externas_id_aut_externas_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5567,7 +5593,7 @@ SELECT pg_catalog.setval('generales.tb_aut_externas_id_aut_externas_seq', 4, tru
 
 
 --
--- TOC entry 3587 (class 0 OID 0)
+-- TOC entry 3589 (class 0 OID 0)
 -- Dependencies: 208
 -- Name: tb_aut_externas_services_id_aut_externas_services_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5576,7 +5602,7 @@ SELECT pg_catalog.setval('generales.tb_aut_externas_services_id_aut_externas_ser
 
 
 --
--- TOC entry 3588 (class 0 OID 0)
+-- TOC entry 3590 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: tb_cargos_id_cargo_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5585,7 +5611,7 @@ SELECT pg_catalog.setval('generales.tb_cargos_id_cargo_seq', 1, false);
 
 
 --
--- TOC entry 3589 (class 0 OID 0)
+-- TOC entry 3591 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: tb_ciudades_id_ciudad_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5594,7 +5620,7 @@ SELECT pg_catalog.setval('generales.tb_ciudades_id_ciudad_seq', 1, false);
 
 
 --
--- TOC entry 3590 (class 0 OID 0)
+-- TOC entry 3592 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: tb_criterios_diligenciamiento_id_criterio_diligenciamiento_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5603,7 +5629,7 @@ SELECT pg_catalog.setval('generales.tb_criterios_diligenciamiento_id_criterio_di
 
 
 --
--- TOC entry 3591 (class 0 OID 0)
+-- TOC entry 3593 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: tb_departamentos_id_departamento_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5612,7 +5638,7 @@ SELECT pg_catalog.setval('generales.tb_departamentos_id_departamento_seq', 53, t
 
 
 --
--- TOC entry 3592 (class 0 OID 0)
+-- TOC entry 3594 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: tb_estado_agenda_id_estado_agenda_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5621,7 +5647,7 @@ SELECT pg_catalog.setval('generales.tb_estado_agenda_id_estado_agenda_seq', 1, f
 
 
 --
--- TOC entry 3593 (class 0 OID 0)
+-- TOC entry 3595 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: tb_estados_civiles_id_estado_civil_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5630,7 +5656,7 @@ SELECT pg_catalog.setval('generales.tb_estados_civiles_id_estado_civil_seq', 1, 
 
 
 --
--- TOC entry 3594 (class 0 OID 0)
+-- TOC entry 3596 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: tb_formas_pago_id_forma_pago_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5639,7 +5665,7 @@ SELECT pg_catalog.setval('generales.tb_formas_pago_id_forma_pago_seq', 1, false)
 
 
 --
--- TOC entry 3595 (class 0 OID 0)
+-- TOC entry 3597 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: tb_inmuebles_estados_id_inmueble_estado_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5648,7 +5674,7 @@ SELECT pg_catalog.setval('generales.tb_inmuebles_estados_id_inmueble_estado_seq'
 
 
 --
--- TOC entry 3596 (class 0 OID 0)
+-- TOC entry 3598 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: tb_intereses_id_interes_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5657,7 +5683,7 @@ SELECT pg_catalog.setval('generales.tb_intereses_id_interes_seq', 1, false);
 
 
 --
--- TOC entry 3597 (class 0 OID 0)
+-- TOC entry 3599 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: tb_jornadas_id_jornada_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5666,7 +5692,7 @@ SELECT pg_catalog.setval('generales.tb_jornadas_id_jornada_seq', 1, false);
 
 
 --
--- TOC entry 3598 (class 0 OID 0)
+-- TOC entry 3600 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: tb_paises_id_pais_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5675,7 +5701,7 @@ SELECT pg_catalog.setval('generales.tb_paises_id_pais_seq', 1, true);
 
 
 --
--- TOC entry 3599 (class 0 OID 0)
+-- TOC entry 3601 (class 0 OID 0)
 -- Dependencies: 281
 -- Name: tb_redes_sociales_id_red_social_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5684,7 +5710,7 @@ SELECT pg_catalog.setval('generales.tb_redes_sociales_id_red_social_seq', 9, tru
 
 
 --
--- TOC entry 3600 (class 0 OID 0)
+-- TOC entry 3602 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: tb_solicitudes_estados_id_solicitud_estado_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5693,7 +5719,7 @@ SELECT pg_catalog.setval('generales.tb_solicitudes_estados_id_solicitud_estado_s
 
 
 --
--- TOC entry 3601 (class 0 OID 0)
+-- TOC entry 3603 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: tb_urgencias_id_urgencia_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5702,7 +5728,7 @@ SELECT pg_catalog.setval('generales.tb_urgencias_id_urgencia_seq', 1, false);
 
 
 --
--- TOC entry 3602 (class 0 OID 0)
+-- TOC entry 3604 (class 0 OID 0)
 -- Dependencies: 283
 -- Name: tb_zonas_barrios_id_zona_barrio_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5711,7 +5737,7 @@ SELECT pg_catalog.setval('generales.tb_zonas_barrios_id_zona_barrio_seq', 19, tr
 
 
 --
--- TOC entry 3603 (class 0 OID 0)
+-- TOC entry 3605 (class 0 OID 0)
 -- Dependencies: 236
 -- Name: tb_zonas_id_zona_seq; Type: SEQUENCE SET; Schema: generales; Owner: postgres
 --
@@ -5720,7 +5746,7 @@ SELECT pg_catalog.setval('generales.tb_zonas_id_zona_seq', 1, false);
 
 
 --
--- TOC entry 3604 (class 0 OID 0)
+-- TOC entry 3606 (class 0 OID 0)
 -- Dependencies: 238
 -- Name: tb_caracteristicas_inmuebles_id_tb_caracterisitica_inmueble_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
@@ -5729,7 +5755,7 @@ SELECT pg_catalog.setval('inmuebles.tb_caracteristicas_inmuebles_id_tb_caracteri
 
 
 --
--- TOC entry 3605 (class 0 OID 0)
+-- TOC entry 3607 (class 0 OID 0)
 -- Dependencies: 240
 -- Name: tb_caracteristicas_tipo_inmue_id_caracteristicas_tipo_inmue_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
@@ -5738,7 +5764,7 @@ SELECT pg_catalog.setval('inmuebles.tb_caracteristicas_tipo_inmue_id_caracterist
 
 
 --
--- TOC entry 3606 (class 0 OID 0)
+-- TOC entry 3608 (class 0 OID 0)
 -- Dependencies: 242
 -- Name: tb_estados_inmuebles_id_estado_inmueble_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
@@ -5747,7 +5773,7 @@ SELECT pg_catalog.setval('inmuebles.tb_estados_inmuebles_id_estado_inmueble_seq'
 
 
 --
--- TOC entry 3607 (class 0 OID 0)
+-- TOC entry 3609 (class 0 OID 0)
 -- Dependencies: 244
 -- Name: tb_horarios_inmuebles_id_horario_inmueble_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
@@ -5756,7 +5782,7 @@ SELECT pg_catalog.setval('inmuebles.tb_horarios_inmuebles_id_horario_inmueble_se
 
 
 --
--- TOC entry 3608 (class 0 OID 0)
+-- TOC entry 3610 (class 0 OID 0)
 -- Dependencies: 246
 -- Name: tb_inmuebles_registrados_id_inmueble_registrado_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
@@ -5765,7 +5791,7 @@ SELECT pg_catalog.setval('inmuebles.tb_inmuebles_registrados_id_inmueble_registr
 
 
 --
--- TOC entry 3609 (class 0 OID 0)
+-- TOC entry 3611 (class 0 OID 0)
 -- Dependencies: 248
 -- Name: tb_tipos_caracteristicas_inmu_id_tipos_caracteristicas_inmu_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
@@ -5774,7 +5800,7 @@ SELECT pg_catalog.setval('inmuebles.tb_tipos_caracteristicas_inmu_id_tipos_carac
 
 
 --
--- TOC entry 3610 (class 0 OID 0)
+-- TOC entry 3612 (class 0 OID 0)
 -- Dependencies: 250
 -- Name: tb_tipos_inmuebles_id_tipos_inmuebles_seq; Type: SEQUENCE SET; Schema: inmuebles; Owner: postgres
 --
@@ -5783,7 +5809,7 @@ SELECT pg_catalog.setval('inmuebles.tb_tipos_inmuebles_id_tipos_inmuebles_seq', 
 
 
 --
--- TOC entry 3611 (class 0 OID 0)
+-- TOC entry 3613 (class 0 OID 0)
 -- Dependencies: 289
 -- Name: tb_inmobiliaria_id_inmobiliaria_seq; Type: SEQUENCE SET; Schema: rrhh; Owner: postgres
 --
@@ -5792,7 +5818,7 @@ SELECT pg_catalog.setval('rrhh.tb_inmobiliaria_id_inmobiliaria_seq', 1, true);
 
 
 --
--- TOC entry 3612 (class 0 OID 0)
+-- TOC entry 3614 (class 0 OID 0)
 -- Dependencies: 287
 -- Name: tb_motivos_inactivacion_id_motivo_inactivacion_seq; Type: SEQUENCE SET; Schema: rrhh; Owner: postgres
 --
@@ -5801,16 +5827,16 @@ SELECT pg_catalog.setval('rrhh.tb_motivos_inactivacion_id_motivo_inactivacion_se
 
 
 --
--- TOC entry 3613 (class 0 OID 0)
+-- TOC entry 3615 (class 0 OID 0)
 -- Dependencies: 252
 -- Name: tb_personal_id_personal_seq; Type: SEQUENCE SET; Schema: rrhh; Owner: postgres
 --
 
-SELECT pg_catalog.setval('rrhh.tb_personal_id_personal_seq', 54, true);
+SELECT pg_catalog.setval('rrhh.tb_personal_id_personal_seq', 61, true);
 
 
 --
--- TOC entry 3614 (class 0 OID 0)
+-- TOC entry 3616 (class 0 OID 0)
 -- Dependencies: 254
 -- Name: tb_users_access_id_user_access_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
@@ -5819,7 +5845,7 @@ SELECT pg_catalog.setval('session.tb_users_access_id_user_access_seq', 1, false)
 
 
 --
--- TOC entry 3615 (class 0 OID 0)
+-- TOC entry 3617 (class 0 OID 0)
 -- Dependencies: 255
 -- Name: tb_users_access_id_user_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
@@ -5828,7 +5854,7 @@ SELECT pg_catalog.setval('session.tb_users_access_id_user_seq', 1, false);
 
 
 --
--- TOC entry 3616 (class 0 OID 0)
+-- TOC entry 3618 (class 0 OID 0)
 -- Dependencies: 258
 -- Name: tb_users_app_externo_id_user_app_externo_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
@@ -5837,7 +5863,7 @@ SELECT pg_catalog.setval('session.tb_users_app_externo_id_user_app_externo_seq',
 
 
 --
--- TOC entry 3617 (class 0 OID 0)
+-- TOC entry 3619 (class 0 OID 0)
 -- Dependencies: 291
 -- Name: tb_users_app_id_user_creacion_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
@@ -5846,16 +5872,16 @@ SELECT pg_catalog.setval('session.tb_users_app_id_user_creacion_seq', 2, true);
 
 
 --
--- TOC entry 3618 (class 0 OID 0)
+-- TOC entry 3620 (class 0 OID 0)
 -- Dependencies: 259
 -- Name: tb_users_id_usuario_seq; Type: SEQUENCE SET; Schema: session; Owner: postgres
 --
 
-SELECT pg_catalog.setval('session.tb_users_id_usuario_seq', 47, true);
+SELECT pg_catalog.setval('session.tb_users_id_usuario_seq', 53, true);
 
 
 --
--- TOC entry 3619 (class 0 OID 0)
+-- TOC entry 3621 (class 0 OID 0)
 -- Dependencies: 261
 -- Name: tb_agendas_solicitudes_id_agenda_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
@@ -5864,7 +5890,7 @@ SELECT pg_catalog.setval('solicitudes.tb_agendas_solicitudes_id_agenda_solicitud
 
 
 --
--- TOC entry 3620 (class 0 OID 0)
+-- TOC entry 3622 (class 0 OID 0)
 -- Dependencies: 263
 -- Name: tb_caracteristicas_solicitudes_id_caracteristicas_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
@@ -5873,7 +5899,7 @@ SELECT pg_catalog.setval('solicitudes.tb_caracteristicas_solicitudes_id_caracter
 
 
 --
--- TOC entry 3621 (class 0 OID 0)
+-- TOC entry 3623 (class 0 OID 0)
 -- Dependencies: 265
 -- Name: tb_estados_solicitudes_id_estado_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
@@ -5882,7 +5908,7 @@ SELECT pg_catalog.setval('solicitudes.tb_estados_solicitudes_id_estado_solicitud
 
 
 --
--- TOC entry 3622 (class 0 OID 0)
+-- TOC entry 3624 (class 0 OID 0)
 -- Dependencies: 267
 -- Name: tb_intereses_solicitudes_id_interes_solicitud_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
@@ -5891,7 +5917,7 @@ SELECT pg_catalog.setval('solicitudes.tb_intereses_solicitudes_id_interes_solici
 
 
 --
--- TOC entry 3623 (class 0 OID 0)
+-- TOC entry 3625 (class 0 OID 0)
 -- Dependencies: 269
 -- Name: tb_solicitudes_id_solicitudes_seq; Type: SEQUENCE SET; Schema: solicitudes; Owner: postgres
 --
@@ -5900,7 +5926,7 @@ SELECT pg_catalog.setval('solicitudes.tb_solicitudes_id_solicitudes_seq', 1, fal
 
 
 --
--- TOC entry 3624 (class 0 OID 0)
+-- TOC entry 3626 (class 0 OID 0)
 -- Dependencies: 271
 -- Name: tb_tipos_actividades_id_tipo_actividad_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
@@ -5909,7 +5935,7 @@ SELECT pg_catalog.setval('tipos.tb_tipos_actividades_id_tipo_actividad_seq', 1, 
 
 
 --
--- TOC entry 3625 (class 0 OID 0)
+-- TOC entry 3627 (class 0 OID 0)
 -- Dependencies: 285
 -- Name: tb_tipos_asesores_id_tipo_asesor_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
@@ -5918,7 +5944,7 @@ SELECT pg_catalog.setval('tipos.tb_tipos_asesores_id_tipo_asesor_seq', 5, true);
 
 
 --
--- TOC entry 3626 (class 0 OID 0)
+-- TOC entry 3628 (class 0 OID 0)
 -- Dependencies: 273
 -- Name: tb_tipos_clientes_id_tipo_cliente_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
@@ -5927,7 +5953,7 @@ SELECT pg_catalog.setval('tipos.tb_tipos_clientes_id_tipo_cliente_seq', 2, true)
 
 
 --
--- TOC entry 3627 (class 0 OID 0)
+-- TOC entry 3629 (class 0 OID 0)
 -- Dependencies: 276
 -- Name: tb_tipos_notificacion_id_tipo_notificacion_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
@@ -5936,7 +5962,7 @@ SELECT pg_catalog.setval('tipos.tb_tipos_notificacion_id_tipo_notificacion_seq',
 
 
 --
--- TOC entry 3628 (class 0 OID 0)
+-- TOC entry 3630 (class 0 OID 0)
 -- Dependencies: 278
 -- Name: tb_tiposdocumento_id_tipo_ident_seq; Type: SEQUENCE SET; Schema: tipos; Owner: postgres
 --
@@ -5944,7 +5970,7 @@ SELECT pg_catalog.setval('tipos.tb_tipos_notificacion_id_tipo_notificacion_seq',
 SELECT pg_catalog.setval('tipos.tb_tiposdocumento_id_tipo_ident_seq', 9, true);
 
 
--- Completed on 2019-02-06 13:58:13
+-- Completed on 2019-02-06 22:27:49
 
 --
 -- PostgreSQL database dump complete

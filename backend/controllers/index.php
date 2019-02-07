@@ -76,6 +76,31 @@
       $obj->getListaRedesSociales();
     }
 
+    if($request->accion=='consultarAsesores'){
+      require_once('services/Asesores.php');        
+      $obj = new Asesores(); 
+      $obj->getListaAsesores($request->asesorBusq);
+    }
+
+    if($request->accion=='informacionInmobiliaria'){
+      require_once('services/Inmobiliaria.php');        
+      $obj = new Inmobiliaria(); 
+      $obj->getInformacionInmobiliaria();
+    }
+
+    //Para guardar o actualizar la información de la inmobiliaria
+    if($request->accion=='guardarInformacionInmobiliaria'){
+      if(isset($request->foto)){
+        $foto = $request->foto;
+      }
+      else{
+        $foto = null;
+      }
+      require_once('services/Inmobiliaria.php');        
+      $obj = new Inmobiliaria(); 
+      $obj->guardarInformacionInmobiliaria($request->datos_inmobiliaria,$foto);
+    }
+
     if($request->accion=='guardarRedesSocialesCliente'){
       require_once('services/Clientes.php');        
       $obj = new Clientes(); 

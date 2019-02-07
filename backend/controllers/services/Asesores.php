@@ -23,7 +23,7 @@
 			$output = $this->objAsesores->guardarAsesores($datosAsesor);
 			
 			if($output["respuesta"]=='1'||$output["respuesta"]=='3'){
-			  if($foto!=null){
+			  if(isset($foto->fileName)){
 
 			  	$output1 = '../tmp_files/'.$foto->fileName; 
  				$outputFile = $this->base64_to_jpeg($foto->base64StringFile, $output1);							
@@ -36,13 +36,18 @@
 			  	$output["fotoAsesor"] = $urlImagen; 	
 
 			  }		
-			}
-			
+			}			
 			
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 		}	
 
-		function base64_to_jpeg($base64_string, $output_file) {
+		function getListaAsesores($datosAsesor){
+			//print_r($datosAsesor);exit;
+			$output = $this->objAsesores->consultarAsesores($datosAsesor);
+	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+		}
+
+		public function base64_to_jpeg($base64_string, $output_file) {
     		// open the output file for writing
     		$ifp = fopen( $output_file, 'wb' ); 
 

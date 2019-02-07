@@ -246,16 +246,14 @@
                    tipos.tb_tipos_asesores aa
                  WHERE
                    aa.id_tipo_asesor=a.id_tipo_asesor      
-                ) AS tipo
+                ) AS tipo,
+                a.photo AS foto
               FROM  
                 rrhh.tb_personal a
               WHERE
                 CAST(a.numero_identificacion AS VARCHAR) LIKE '%".$datosAsesor->numero_identificacion."%' 
                 AND UPPER(a.nombres) LIKE UPPER('%".$datosAsesor->nombres."%')
-                AND UPPER(a.apellidos) LIKE UPPER('%".$datosAsesor->apellidos."%')  
-                AND (a.numero_celular LIKE '%".$datosAsesor->telefono."%' OR 
-                     a.numero_telefono LIKE '%".$datosAsesor->telefono."%'
-                    )
+                AND UPPER(a.apellidos) LIKE UPPER('%".$datosAsesor->apellidos."%')                
              ";         
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -267,7 +265,7 @@
 	       $output['lista_asesores'][$i]['id_asesor'] = $row['id_asesor'];
 	       $output['lista_asesores'][$i]['identificacion']  = $row['identificacion'];
 	       $output['lista_asesores'][$i]['asesor']  = $row['asesor'];
-	       $output['lista_asesores'][$i]['telefonos']  = $row['telefonos'];
+	       $output['lista_asesores'][$i]['foto']  = $row['foto'];
 	       $i++;	    
 	  	  }	  
 
@@ -389,6 +387,8 @@
                     correo_electronico=UPPER('".$correo_electronico."'),
                     address=UPPER('".$direccion."'),
                     id_ciudad=".$id_ciudad.",
+                    id_departamento=".$id_departamento.",
+                    id_pais=".$id_pais.",
                     porcentaje_ganancia=".$datosAsesor->porcentaje_comision.",                    
                     estado = CASE WHEN UPPER('".$empleado_activo."')='1' THEN '1' ELSE '0' END,
                     id_user_modificacion = ".$_SESSION['id_user'].",
@@ -670,7 +670,9 @@
                       numero_celular,
                       correo_electronico,
                       address,
-                      id_ciudad,                      
+                      id_ciudad,  
+                      id_departamento,
+                      id_pais,                    
                       id_user_creacion,
                       porcentaje_ganancia,
                       estado,
@@ -689,13 +691,17 @@
                      '".$telefono_movil."',
                      UPPER('".$correo_electronico."'),
                      UPPER('".$direccion."'),
-                     ".$id_ciudad.",                    
+                     ".$id_ciudad.",     
+                     ".$id_departamento.",
+                     ".$id_pais.",               
                      ".$_SESSION['id_user'].",
                      ".$datosAsesor->porcentaje_comision.",
                      '1',
                      ".$_SESSION['id_inmobiliaria'].",
                      CASE WHEN '$photo'='null' THEN NULL ELSE '$photo' END)
                   RETURNING id_personal"; 
+
+                  //print_r($query);exit;
 
           $empleado_activo = true;        
 
