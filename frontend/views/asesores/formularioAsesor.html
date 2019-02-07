@@ -8,8 +8,7 @@
     <form name="formularioBusqAsesor" id="formularioBusqAsesor" ng-model="asesor_busq" method="post" NOVALIDATE>
       <label>N&uacute;mero identificaci&oacute;n</label><input name="asesor_busq_numero_identificacion" id="asesor_busq_numero_identificacion" type="number" ng-model="asesor_busq.numero_identificacion" value="0"/>
       <label>Nombres</label><input name="asesor_busq_nombres" id="asesor_busq_nombres" ng-model="asesor_busq.nombres" type="text"/>
-      <label>Apellidos</label><input name="asesor_busq_apellidos" id="asesor_busq_apellidos" ng-model="asesor_busq.apellidos" type="text"/>
-      <label>N&uacute;mero telef&oacute;nico</label><input name="asesor_busq_telefono" id="asesor_busq_telefono" ng-model="asesor_busq.telefono" type="text"/>
+      <label>Apellidos</label><input name="asesor_busq_apellidos" id="asesor_busq_apellidos" ng-model="asesor_busq.apellidos" type="text"/>      
       <br />
       <center><button style="width:15em;" type="submit" ng-click="consultarAsesores()" class="consultar">Consultar</button>
       <br />
@@ -24,7 +23,7 @@
     </form>
   </div>
   <div class="form1" ng-show="cant_ases_busq=='0'">
-    <center><h2 style="font-family:Verdana;">LISTA ASESORES</h2></center>       
+    <center><h2 style="font-family:Verdana;">CONSULTA ASESORES</h2></center>       
     <div class="container">    
       <div class="panel panel-default">
         <div class="panel-body">
@@ -32,18 +31,16 @@
           <table ng-init='configPages()' style="width:80%;">
             <thead>
               <tr>                
-                <th style="width:15%;">Identificaci&oacute;n</th>
-                <th style="width:35%;">Asesor</th> 
-                <th style="width:35%;">Usuario</th>   
-                <th style="width:15%;">Gesti&oacute;n</th>           
+                <th style="width:38%;">Identificaci&oacute;n</th>
+                <th style="width:50%;">Empleado / Asesor</th> 
+                <th style="width:10%;">Foto</th>                          
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat='lista_asesor_busq in lista_asesores_busq | startFromGrid: currentPage * pageSize | limitTo: pageSize'>         
-                <td style="text-align: left;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.identificacion}}</td>
-                <td style="text-align: left;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.asesor}}</td>  
-                <td style="text-align: left;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.usuario}}</td>   
-                <td style="text-align: center;"><a href="#" ng-click="verSolicitudesAsesor(lista_asesor_busq.id_asesor)">Solicitudes</a></td>         
+                <td style="text-align: left; vertical-align: middle;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.identificacion}}</td>
+                <td style="text-align: left; vertical-align: middle;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>{{lista_asesor_busq.asesor}}</td>  
+                <td style="text-align: left; vertical-align: middle;" ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'><img src="{{lista_asesor_busq.foto}}" ng-if="lista_asesor_busq.foto" width="80em" height="100em"></td>                       
               </tr>
             </tbody>
           </table>
@@ -51,7 +48,7 @@
           <div class='btn-group'>
             <button type='button' class='butt' ng-disabled='currentPage == 0' ng-click='currentPage = currentPage - 1'>&laquo;</button>
             <button type='button' class='butt' ng-disabled='currentPage == page.no - 1' ng-click='setPage(page.no)' ng-repeat='page in pages'>{{page.no}}</button>
-            <button type='button' class='butt' ng-disabled='currentPage >= usuarios.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'>&raquo;</button>
+            <button type='button' class='butt' ng-disabled='currentPage >= asesores.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'>&raquo;</button>
           </div>
         </center>
         </div>

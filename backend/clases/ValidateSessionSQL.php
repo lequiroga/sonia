@@ -23,13 +23,21 @@
 		$output = array();
 
         $query = "SELECT                     
-                    id_user AS id_user
+                    a.id_user AS id_user,
+                    ( 
+                    SELECT
+                      aa.id_inmobiliaria
+                    FROM
+                      rrhh.tb_personal aa 
+                    WHERE
+                      aa.id_personal = a.id_personal
+                    ) AS id_inmobiliaria
                   FROM 
-                    session.tb_users_app
+                    session.tb_users_app a
                   WHERE 
-                    UPPER(userlogin)=UPPER('$user')
-                    AND password=MD5('$password')
-                    AND estado=1
+                    UPPER(a.userlogin)=UPPER('$user')
+                    AND a.password=MD5('$password')
+                    AND a.estado=1
                   ";
 
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -39,12 +47,14 @@
           $output['respuesta']='1';
           $_SESSION['userlogin']=$user;
           $_SESSION['id_user']=$row['id_user'];
+          $_SESSION['id_inmobiliaria']=$row['id_inmobiliaria'];
           //echo '1'; 
         }
         else{
           $output['respuesta']='0'; 
           unset($_SESSION['userlogin']);
           unset($_SESSION['id_user']);
+          unset($_SESSION['id_inmobiliaria']);
           //echo '0'; 
         }
 
