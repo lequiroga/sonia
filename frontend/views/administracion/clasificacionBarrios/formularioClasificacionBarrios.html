@@ -23,10 +23,12 @@
       <label ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'||clasificacionBarrios.codigoCiudad.id_ciudad=='794'">Localidad / Comuna</label>
       <select name="clasificacionBarrios_zona" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="clasificacionBarrios.codigoZona"/>        
       </select> 
-      <select name="clasificacionBarrios_zona" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-disabled="clasificacionBarrios.codigoCiudad.id_ciudad" ng-change="getBarriosLocCali(clasificacionBarrios.codigoZona)" ng-model="clasificacionBarrios.codigoZona"/>       
+      <select name="clasificacionBarrios_zona" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-disabled="clasificacionBarrios.codigoCiudad.id_ciudad" ng-change="getBarriosLocCali(clasificacionBarrios.codigoZona)" ng-model="clasificacionBarrios.codigoZona"/> 
+        <option value="" label="Sin&nbsp;informaci&oacute;n">Sin&nbsp;informaci&oacute;n</option>       
       </select>      
       <label ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'">Estrato</label>
-      <select name="clasificacionBarrios_codigoEstratoCali" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(clasificacionBarrios.codigoEstrato)" ng-model="clasificacionBarrios.codigoEstrato" ng-disabled="clasificacionBarrios.codigoCiudad.id_ciudad"/>    
+      <select name="clasificacionBarrios_codigoEstratoCali" ng-if="clasificacionBarrios.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(clasificacionBarrios.codigoEstrato)" ng-model="clasificacionBarrios.codigoEstrato" ng-disabled="clasificacionBarrios.codigoCiudad.id_ciudad"/> 
+        <option value="" label="Sin&nbsp;informaci&oacute;n">Sin&nbsp;informaci&oacute;n</option>    
       </select>         
       <br />
       <label>(*) Informaci&oacute;n requerida</label>      

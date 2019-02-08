@@ -9,10 +9,14 @@
         }
 
         if(isset($_SESSION['userlogin'])){
-          echo '1';
+          $output['respuesta'] = '1';
+          $output['logo_empresa'] = $_SESSION['logo_empresa'];
+          //echo '1';
+          echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
         }
         else{
-          echo '0';
+          $output['respuesta'] = '0';
+          echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
         }
 
     }  

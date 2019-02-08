@@ -10,8 +10,8 @@
 
   	function ValidateSessionSQL(){
       $conn   = new ConectaBD();
-	  $dbConn = $conn->conectarBD();   
-	  unset($this->conn);
+	    $dbConn = $conn->conectarBD();   
+	    unset($this->conn);
   	}
 
     function validarSession($user,$password){         
@@ -20,20 +20,16 @@
           session_start();
         }              			
 
-		$output = array();
+		    $output = array();
 
         $query = "SELECT                     
                     a.id_user AS id_user,
-                    ( 
-                    SELECT
-                      aa.id_inmobiliaria
-                    FROM
-                      rrhh.tb_personal aa 
-                    WHERE
-                      aa.id_personal = a.id_personal
-                    ) AS id_inmobiliaria
+                    aa.id_inmobiliaria AS id_inmobiliaria,
+                    b.imagen_logo AS logo_empresa
                   FROM 
                     session.tb_users_app a
+                    INNER JOIN rrhh.tb_personal aa ON aa.id_personal = a.id_personal
+                    LEFT JOIN rrhh.tb_inmobiliaria b ON aa.id_inmobiliaria = b.id_inmobiliaria 
                   WHERE 
                     UPPER(a.userlogin)=UPPER('$user')
                     AND a.password=MD5('$password')
@@ -45,9 +41,11 @@
 
         if(isset($row['id_user'])){
           $output['respuesta']='1';
+          $output['logo_empresa']=$row['logo_empresa'];
           $_SESSION['userlogin']=$user;
           $_SESSION['id_user']=$row['id_user'];
           $_SESSION['id_inmobiliaria']=$row['id_inmobiliaria'];
+          $_SESSION['logo_empresa']=$row['logo_empresa'];
           //echo '1'; 
         }
         else{

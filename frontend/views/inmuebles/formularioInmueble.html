@@ -47,10 +47,10 @@
       <table ng-init='configPages1()' style="width: 70%;" ng-if="cant_caract_inm_obl!='0'">            
             <tbody>
               <tr ng-repeat='lista_caracteristica_inmueble in lista_caracteristicas_obligatorias_inmueble'>                      
-                <td style="width: 50%;text-align: left;vertical-align: top;padding-top: 1em;">
+                <td style="width: 50%;text-align: left;vertical-align: middle;padding-top: 1em;">
                   {{lista_caracteristica_inmueble.tipo_caracteristica}}                      
                 </td>  
-                <td ng-if="lista_caracteristica_inmueble.criterio_diligenciamiento=='Obligatorio'" style="width: 50%;vertical-align: top;padding-top: 1em;">
+                <td ng-if="lista_caracteristica_inmueble.criterio_diligenciamiento=='Obligatorio'" style="width: 50%;;vertical-align: middle;padding-top: 1em;">
                   <div class="tooltip">
                    <input type="text" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Descriptivo'">
                    <input type="number" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Numérico'">
@@ -72,10 +72,10 @@
       <table ng-init='configPages1()' style="width: 70%;" ng-if="cant_caract_inm_obl_show!='0'">            
             <tbody>
               <tr ng-repeat='lista_caracteristica_inmueble in lista_caracteristicas_opcionales_inmueble'>                      
-                <td style="width: 50%;text-align: left;vertical-align: top;padding-top: 1em;">
+                <td style="width: 50%;text-align: left;vertical-align: middle;padding-top: 1em;">
                   {{lista_caracteristica_inmueble.tipo_caracteristica}}                      
                 </td>  
-                <td style="width: 50%;vertical-align: top;padding-top: 1em;">
+                <td style="width: 50%;vertical-align: middle;padding-top: 1em;">
                   <div class="tooltip">
                    <input type="text" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Descriptivo'">
                    <input type="number" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Numérico'">

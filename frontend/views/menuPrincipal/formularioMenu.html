@@ -73,7 +73,7 @@
   <script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="../../js/bootstrap/bootstrap.min.js" crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" crossorigin="anonymous">
+  <!--link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" crossorigin="anonymous"-->
   <!-- <link rel="stylesheet" href="../../css/bootstrap-theme.min.css" crossorigin="anonymous"> -->
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
@@ -115,8 +115,9 @@
 <!-- Input Mixin-->
 <!-- Button Mixin-->
 <!-- Pen Title-->
-<div class="pen-title" style="background-color:#1137AD;height:7em;">
-  <img class="responsive" style="width:25em;height:4em;margin-top:2em;" src="../../form-images/montes_avila_banner.png">
+<div class="pen-title" style="background-color:#1137AD;height:9em;">
+  <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="logo_empresa" src="{{logo_empresa}}">  
+  <img class="responsive" style="width:41em;height:7em;margin-top:1em;" src="../../form-images/montes_avila_banner.png">  
 </div>
 <!-- Form Module-->
 <div class="module form-module" ng-controller="setContentDiv" id="formulario" ng-include="showContent">

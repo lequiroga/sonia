@@ -52,6 +52,7 @@ app.controller("siniController",
     $scope.asesor.motivo = "";
     $scope.imgAsesorTemp = "";    
     $scope.asesor.foto_asesor = undefined;    
+    $scope.logo_empresa = undefined;   
     $scope.lista_asesores_busq.foto = undefined; 
     $scope.asesor_busq =[];   
     $scope.inmobiliaria = [];    
@@ -63,7 +64,8 @@ app.controller("siniController",
 
     $http.post($scope.endpoint,{'accion':'validateLogin'})
      .then(function(response){      	
-       if(response.data == '1'){
+       if(response.data.respuesta == '1'){
+         $scope.logo_empresa = response.data.logo_empresa;
        	 $scope.showContent = '../menuPrincipal/formularioMenu1.html';
        }
        else{
@@ -335,6 +337,7 @@ app.controller("siniController",
               if(response.data.respuesta=='1'){
                 alert("Se ha actualizado con éxito la información de la inmobiliaria");
                 $scope.inmobiliaria.imagen_logo = response.data.imagen_logo;
+                $scope.logo_empresa = $scope.inmobiliaria.imagen_logo; 
                 $scope.inmobiliaria.id_inmobiliaria = response.data.id_inmobiliaria;
                 document.formularioInmobiliaria.file.value = '';
                 var outputInm = document.getElementById('outputInm');      
@@ -892,8 +895,8 @@ app.controller("siniController",
     $scope.listarBarriosZona = function(id_sector,id_ciudad){
       $scope.barrios_comunas_cali = $scope.barrios_comunas_cali_ini;
       $scope.clasificacionBarrios.codigoBarrio = {};
-      $scope.clasificacionBarrios.codigoZona = {};
-      $scope.clasificacionBarrios.codigoEstrato = {};
+      $scope.clasificacionBarrios.codigoZona = undefined;
+      $scope.clasificacionBarrios.codigoEstrato = undefined;
       $http.post($scope.endpoint,{'accion':'listarBarriosZona','id_sector':id_sector,'id_ciudad':id_ciudad})
       .then(function(response){     
         if(response.data.cant_barrios_zona == '0'){
@@ -938,13 +941,24 @@ app.controller("siniController",
               }
             });        
             if(cal == 0){
+
+              //value.estrato = ;
               lista_barrios_restantes[i] = value;
               i++;
             }
           });
 
           $scope.barrios_comunas_cali = lista_barrios_restantes;
-          //console.log(lista_barrios_restantes);                
+
+          angular.forEach($scope.barrios_comunas_cali, function(value,key){
+            angular.forEach($scope.lista_estratos_barrios_cali , function(value1,key1){
+              if(value.codigo == value1.codigo){
+                $scope.barrios_comunas_cali[key].estrato = value1.estrato;
+              }
+            });            
+          });
+
+          //console.log($scope.barrios_comunas_cali);                
 
         }        
 
@@ -1014,7 +1028,15 @@ app.controller("siniController",
               }
             });
 
-            $scope.barrios_comunas_cali = lista_barrios_restantes;                     
+            $scope.barrios_comunas_cali = lista_barrios_restantes; 
+
+            angular.forEach($scope.barrios_comunas_cali, function(value,key){
+              angular.forEach($scope.lista_estratos_barrios_cali , function(value1,key1){
+                if(value.codigo == value1.codigo){
+                  $scope.barrios_comunas_cali[key].estrato = value1.estrato;
+                }
+              });            
+            });                    
 
           }        
 
@@ -1209,7 +1231,8 @@ app.controller("siniController",
       else{      	
         $http.post($scope.endpoint,{'accion':'validateSession','user':user,'password':password})
         .then(function(response){          
-          if(response.data.respuesta=='1'){          	
+          if(response.data.respuesta=='1'){   
+            $scope.logo_empresa = response.data.logo_empresa;      	
           	$scope.showContent = '../menuPrincipal/formularioMenu1.html';
           }
           else{
@@ -1296,8 +1319,8 @@ app.controller("siniController",
       $scope.ids_zonas=null; 
       $scope.ids_sectores=null;	
       $scope.clasificacionBarrios.codigoBarrio = [];
-      $scope.clasificacionBarrios.codigoZona = [];   
-      $scope.clasificacionBarrios.codigoEstrato = [];
+      $scope.clasificacionBarrios.codigoZona = undefined;   
+      $scope.clasificacionBarrios.codigoEstrato = undefined;
       $scope.inmueble.codigoSector = undefined;
       $scope.inmueble.codigoBarrio = [];
       $scope.inmueble.codigoZona = undefined;   
@@ -1565,6 +1588,7 @@ app.controller("siniController",
 
     //clasificacionBarrios
     $scope.getEstratoComunaCaliClasif = function(codigoBarrio){ 
+      //console.log(codigoBarrio);
       if(!angular.isUndefined(codigoBarrio)&&(codigoBarrio!=null)){
         var comuna = '';
         angular.forEach($scope.lista_comunas_cali,function(value,key){
@@ -1903,7 +1927,8 @@ app.controller("siniController",
     $scope.closeSession = function(){            
       if(confirm("Desea cerrar la sesion?")){
       	$http.post($scope.endpoint,{'accion':'closeSession'})
-        .then(function(response){             	
+        .then(function(response){  
+          $scope.logo_empresa = undefined;           	
           $scope.showContent = '../login/formularioLogin.html';
         });
       }

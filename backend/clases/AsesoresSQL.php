@@ -257,7 +257,8 @@
               WHERE
                 CAST(a.numero_identificacion AS VARCHAR) LIKE '%".$datosAsesor->numero_identificacion."%' 
                 AND UPPER(a.nombres) LIKE UPPER('%".$datosAsesor->nombres."%')
-                AND UPPER(a.apellidos) LIKE UPPER('%".$datosAsesor->apellidos."%')                
+                AND UPPER(a.apellidos) LIKE UPPER('%".$datosAsesor->apellidos."%')
+                AND a.id_tipo_asesor <> 5                
              ";         
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
