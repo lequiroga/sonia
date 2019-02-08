@@ -200,6 +200,10 @@ app.controller("siniController",
       $scope.showContent = '../clientes/formularioCliente.html'; 	
     }
 
+    $scope.showSolicitudesIndex = function(){
+      alert("Módulo en construcción");
+    }
+
     $scope.limpiarInmobiliaria = function(){
       document.formularioInmobiliaria.file.value = '';
       var outputInm = document.getElementById('outputInm');      
@@ -963,6 +967,18 @@ app.controller("siniController",
         }        
 
       });
+    }
+
+    //Función que reestablece los campos de búsqueda de inmuebles por rango de fechas
+    $scope.cambiarValorRangosFechas = function(){
+      $scope.inmueble.fecha_inicial = undefined;
+      $scope.inmueble.fecha_final = undefined;
+    }
+
+    //Función que reestablece los campos de búsqueda de inmuebles por rango de precios
+    $scope.cambiarValorRangosPrecios = function(){
+      $scope.inmueble.precio_inicial = undefined;
+      $scope.inmueble.precio_final = undefined;
     }
 
     //Función que lista todos los barrios asociados a una zona en la lista de selección de barrios

@@ -5,13 +5,13 @@
     <center><h2 style="font-family:Verdana;">INMUEBLES</h2></center>
     <br />
     <form name="formularioInmueble" id="formularioInmueble" ng-model="formularioInmueble" method="post" NOVALIDATE>
-      <label>Pa&iacute;s (*)</label>
+      <label>Pa&iacute;s</label>
       <select name="inmueble_codigoPais" id="codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmueble.codigoPais" ng-change="getDepartamentos(inmueble.codigoPais)" ng-init="getPaises()"/>        
       </select>
-      <label>Departamento (*)</label>
+      <label>Departamento</label>
       <select name="inmueble_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmueble.codigoDepartamento)" ng-model="inmueble.codigoDepartamento"/>
       </select>
-      <label>Ciudad (*)</label>
+      <label>Ciudad</label>
       <select name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/>        
       </select>      
       <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Sector&nbsp;/&nbsp;Zona</label>
@@ -33,11 +33,10 @@
       <select name="inmueble_barrio" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-change="getEstratoComunaCali(inmueble.codigoBarrio)" ng-model="inmueble.codigoBarrio"/> 
         <!--option value="" label="Seleccione">Seleccione</option-->        
       </select>   
-      <label>Tipo inmueble (*)</label>
+      <label>Tipo inmueble</label>
       <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>  
       </select> 
-      <label>&Aacute;rea&nbsp;(m2)</label><input name="inmueble_area" type="number" ng-model="inmueble.area"/>
-      <label>Precio</label><input name="inmueble_precio" type="number" ng-model="inmueble.precio"/>
+      <label>&Aacute;rea&nbsp;(m2)</label><input name="inmueble_area" type="number" ng-model="inmueble.area"/>      
       <label>Moneda</label>
       <select name="inmueble_moneda" ng-options="id_moneda as id_moneda.denominacion for id_moneda in ids_monedas track by id_moneda.id_moneda" ng-model="inmueble.moneda" ng-init="getMonedas()" ng-change="getConversionPesos(inmueble.moneda.id_moneda)"/>     
       </select>
@@ -89,7 +88,22 @@
               </tr>
             </tbody>
           </table> 
-      <br />    
+      <br ng-if="cant_caract_inm_obl_show!='0'" />  
+      <label>Rango de precios</label>    
+      <label class="switch">
+        <input type="checkbox" id="inmueble_rango_precios" name="inmueble_rango_precios" ng-change="cambiarValorRangosPrecios()" ng-model="inmueble.rango_precios">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label>  
+      <label ng-if="inmueble.rango_precios">Precio inicial (*)</label><input name="inmueble_precio_inicial" ng-if="inmueble.rango_precios" type="number" ng-model="inmueble.precio_inicial"/> 
+      <label ng-if="inmueble.rango_precios">Precio final (*)</label><input name="inmueble_precio_final" ng-if="inmueble.rango_precios" type="number" ng-model="inmueble.precio_final"/> 
+      <label>Rango de fechas de publicaci&oacute;n</label>    
+      <label class="switch">
+        <input type="checkbox" id="inmueble_rango_fechas" name="inmueble_rango_fechas" ng-change="cambiarValorRangosFechas()" ng-model="inmueble.rango_fechas">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label>
+      <label ng-if="inmueble.rango_fechas">Fecha inicial (*)</label><input name="inmueble_fecha_inicial" ng-if="inmueble.rango_fechas" type="date" ng-model="inmueble.fecha_inicial"/> 
+      <label ng-if="inmueble.rango_fechas">Fecha final (*)</label><input name="inmueble_fecha_final" ng-if="inmueble.rango_fechas" type="date" ng-model="inmueble.fecha_final"/> 
+      <br />  
       <center><button style="width:15em;" type="submit" class="consultar" ng-click="consultarInmueblesCaracteristicas()">Consultar</button>
       <br />
       <br />  
