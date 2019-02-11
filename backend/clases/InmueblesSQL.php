@@ -44,6 +44,68 @@
 
     }
 
+    //Obtiene las formas de pago posibles de los negocios inmobiliarios
+    function getListaFormasPago(){
+
+      $output = array();
+
+      $query = "SELECT 
+                  id_forma_pago AS id_forma_pago,
+                  descripcion AS descripcion
+                FROM 
+                  generales.tb_formas_pago";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());     
+
+      if(pg_num_rows($result)>0){
+
+          $i = 0; 
+          while($row = pg_fetch_array($result, null)){      
+            $output['listaFormasPago'][$i]['id_forma_pago'] = $row['id_forma_pago'];
+            $output['listaFormasPago'][$i]['descripcion']  = $row['descripcion'];
+            $i++;     
+          } 
+
+                // Liberando el conjunto de resultados
+        pg_free_result($result);          
+
+      }
+
+      return $output;       
+
+    }
+
+    //Obtiene las prioridades o urgencias de negocio
+    function getListaPrioridades(){
+
+      $output = array();
+
+      $query = "SELECT 
+                  id_prioridad AS id_prioridad,
+                  descripcion AS descripcion
+                FROM 
+                  generales.tb_prioridades";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());     
+
+      if(pg_num_rows($result)>0){
+
+          $i = 0; 
+          while($row = pg_fetch_array($result, null)){      
+            $output['listaPrioridades'][$i]['id_prioridad'] = $row['id_prioridad'];
+            $output['listaPrioridades'][$i]['descripcion']  = $row['descripcion'];
+            $i++;     
+          } 
+
+                // Liberando el conjunto de resultados
+        pg_free_result($result);          
+
+      }
+
+      return $output;       
+
+    }
+
     function getCriteriosDiligenciamiento(){                            
 
       $output = array();
@@ -76,13 +138,21 @@
 
 
     function consultarCaracteristicaTipoInmueble($id_tipo_inmueble,$id_caracteristica){
+
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+
         $query = "SELECT
                     COUNT(*) AS cant_caracteristicas
                   FROM 
                     inmuebles.tb_caracteristicas_tipo_inmueble 
                   WHERE 
-                    id_tipo_inmueble='$id_tipo_inmueble' AND 
-                    id_caracteristica='$id_caracteristica'
+                    id_tipo_inmueble='$id_tipo_inmueble' 
+                    AND id_caracteristica='$id_caracteristica'
+                    AND id_inmobiliaria = $id_inmobiliaria
                  ";
          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -93,13 +163,21 @@
 
 
     function consultarCantidadCaracteristicasTipoInmueble($id_tipo_inmueble){
+  
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+
         $query = "SELECT
                     COUNT(*) AS cantidad
                   FROM 
                     inmuebles.tb_caracteristicas_tipo_inmueble 
                   WHERE 
-                    id_tipo_inmueble='$id_tipo_inmueble' AND 
-                    estado='1'
+                    id_tipo_inmueble='$id_tipo_inmueble' 
+                    AND estado='1'
+                    AND id_inmobiliaria=$id_inmobiliaria
                  ";
          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -110,14 +188,22 @@
 
 
     function consultarCantidadCaracteristicasOblTipoInmueble($id_tipo_inmueble){
+
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+
         $query = "SELECT
                     COUNT(*) AS cantidad
                   FROM 
                     inmuebles.tb_caracteristicas_tipo_inmueble 
                   WHERE 
-                    id_tipo_inmueble='$id_tipo_inmueble' AND 
-                    estado='1' AND
-                    id_criterio_diligenciamiento='2'
+                    id_tipo_inmueble='$id_tipo_inmueble' 
+                    AND estado='1' 
+                    AND id_criterio_diligenciamiento='2'
+                    AND id_inmobiliaria = $id_inmobiliaria
                  ";
          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -128,14 +214,22 @@
 
 
     function consultarCantidadCaracteristicasOpcTipoInmueble($id_tipo_inmueble){
+
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+
         $query = "SELECT
                     COUNT(*) AS cantidad
                   FROM 
                     inmuebles.tb_caracteristicas_tipo_inmueble 
                   WHERE 
-                    id_tipo_inmueble='$id_tipo_inmueble' AND 
-                    estado='1' AND
-                    id_criterio_diligenciamiento='3'
+                    id_tipo_inmueble='$id_tipo_inmueble' 
+                    AND estado='1' 
+                    AND id_criterio_diligenciamiento='3'
+                    AND id_inmobiliaria = id_inmobiliaria
                  ";
          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -146,6 +240,7 @@
 
 
     function seleccionarCaracteristicaInmueble($id_caracteristicas_tipo_inmueble){
+
           $query = "SELECT
                       id_criterio_diligenciamiento AS criterio_diligenciamiento,                      
                       id_tipo_inmueble AS tipoInmueble,
@@ -172,6 +267,12 @@
 
 
     function caracteristicasTiposInmuebles($id_tipo_inmueble,$obligatoriedad){
+
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
 
         if($obligatoriedad == null){
           $sql = "";
@@ -208,6 +309,7 @@
                       INNER JOIN inmuebles.tb_tipos_caracteristicas_inmuebles c ON a.id_tipos_caracteristicas_inmuebles=c.id_tipos_caracteristicas_inmuebles   
                     WHERE
                       a.id_tipo_inmueble=$id_tipo_inmueble
+                      AND a.id_inmobiliaria = $id_inmobiliaria
                       AND a.estado='1' ".$sql;
 
           $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -262,6 +364,13 @@
       }
 
       if($this->consultarCaracteristicaTipoInmueble($datosCaracteristicaTipoInmueble->tipoInmueble,$datosCaracteristicaTipoInmueble->tipoCaracteristica)=='0'){
+
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $id_inmobiliaria = $_SESSION['id_inmobiliaria']; 
+
         $query = "INSERT INTO
                     inmuebles.tb_caracteristicas_tipo_inmueble 
                     (
@@ -271,7 +380,8 @@
                       id_caracteristica,
                       id_tipos_caracteristicas_inmuebles,
                       id_user_creacion,
-                      descripcion
+                      descripcion,
+                      id_inmobiliaria
                     )
                   VALUES 
                     (
@@ -281,7 +391,8 @@
                       ".$datosCaracteristicaTipoInmueble->tipoCaracteristica.",
                       ".$datosCaracteristicaTipoInmueble->tipoCaracteristicaInmueble.",
                       ".$_SESSION['id_user'].",
-                      '".$datosCaracteristicaTipoInmueble->descripcion."'
+                      '".$datosCaracteristicaTipoInmueble->descripcion."',
+                      $id_inmobiliaria
                     )
                     ";
 
@@ -293,6 +404,13 @@
 
       }
       else{
+
+        if(!isset($_SESSION)){
+          session_start();
+        }
+
+        $id_inmobiliaria = $_SESSION['id_inmobiliaria']; 
+
         $query = "UPDATE
                     inmuebles.tb_caracteristicas_tipo_inmueble 
                   SET
@@ -304,7 +422,8 @@
                     descripcion='".$datosCaracteristicaTipoInmueble->descripcion."'
                   WHERE
                     id_tipo_inmueble=".$datosCaracteristicaTipoInmueble->tipoInmueble." AND
-                    id_caracteristica=".$datosCaracteristicaTipoInmueble->tipoCaracteristica;
+                    id_caracteristica=".$datosCaracteristicaTipoInmueble->tipoCaracteristica." AND 
+                    id_inmobiliaria=".$id_inmobiliaria;
 
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());        
           

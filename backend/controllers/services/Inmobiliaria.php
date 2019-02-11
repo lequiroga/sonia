@@ -38,7 +38,18 @@
           $this->objInmobiliaria->guardarImagenInmobiliaria($output["id_inmobiliaria"],$urlImagen); 
           $output["imagen_logo"] = $urlImagen;   
 
-        }   
+        } 
+        else if($output["fotografia"]=='0'){
+
+          $output1 = '../generic_files/inmobiliaria_generica/97805.png'; 
+          $foto->fileName = '97805.png';
+                  
+          $objAutenticaAmazon = new AutenticaAmazon();
+          $urlImagen = $objAutenticaAmazon->autenticaBucketInmobiliaria($foto,$output1,$output["id_inmobiliaria"]);  
+          $this->objInmobiliaria->guardarImagenInmobiliaria($output["id_inmobiliaria"],$urlImagen); 
+          $output["imagen_logo"] = $urlImagen;
+          
+        }
       }
 
       echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);

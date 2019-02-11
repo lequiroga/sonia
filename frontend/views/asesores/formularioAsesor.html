@@ -8,7 +8,15 @@
     <form name="formularioBusqAsesor" id="formularioBusqAsesor" ng-model="asesor_busq" method="post" NOVALIDATE>
       <label>N&uacute;mero identificaci&oacute;n</label><input name="asesor_busq_numero_identificacion" id="asesor_busq_numero_identificacion" type="number" ng-model="asesor_busq.numero_identificacion" value="0"/>
       <label>Nombres</label><input name="asesor_busq_nombres" id="asesor_busq_nombres" ng-model="asesor_busq.nombres" type="text"/>
-      <label>Apellidos</label><input name="asesor_busq_apellidos" id="asesor_busq_apellidos" ng-model="asesor_busq.apellidos" type="text"/>      
+      <label>Apellidos</label><input name="asesor_busq_apellidos" id="asesor_busq_apellidos" ng-model="asesor_busq.apellidos" type="text"/>  
+      <label>Tipo asesor (*)</label>
+      <select name="asesor_busq_tipo_asesor" ng-options="id_tipo_asesor as id_tipo_asesor.descripcion for id_tipo_asesor in ids_tipo_asesores track by id_tipo_asesor.id_tipo_asesor" ng-model="asesor_busq.tipoAsesor"/> 
+      </select>   
+      <label>Usuario&nbsp;aplicativo&nbsp;activo (*)</label>
+      <label class="switch">
+        <input type="checkbox" id="asesor_busq_usuario_activo" name="asesor_busq_usuario_activo" ng-model="asesor_busq.usuario_activo"> 
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label> 
       <br />
       <center><button style="width:15em;" type="submit" ng-click="consultarAsesores()" class="consultar">Consultar</button>
       <br />
@@ -31,8 +39,10 @@
           <table ng-init='configPages()' style="width:80%;">
             <thead>
               <tr>                
-                <th style="width:38%;">Identificaci&oacute;n</th>
-                <th style="width:50%;">Empleado o Asesor</th> 
+                <th style="width:30%;">Identificaci&oacute;n</th>
+                <th style="width:30%;">Empleado</th> 
+                <th style="width:20%;">Tipo empleado</th>
+                <th style="width:10%;">Estado</th>
                 <th style="width:10%;">Foto</th>                          
               </tr>
             </thead>
@@ -40,7 +50,9 @@
               <tr ng-repeat='lista_asesor_busq in lista_asesores_busq | startFromGrid: currentPage * pageSize | limitTo: pageSize' ng-click='seleccionarAsesor(lista_asesor_busq.id_asesor)'>         
                 <td style="text-align: left; vertical-align: middle;">{{lista_asesor_busq.identificacion}}</td>
                 <td style="text-align: left; vertical-align: middle;">{{lista_asesor_busq.asesor}}</td>  
-                <td style="text-align: left; vertical-align: middle;"><img src="{{lista_asesor_busq.foto}}" ng-if="lista_asesor_busq.foto" width="80em" height="100em"></td>                       
+                <td style="text-align: center; vertical-align: middle;">{{lista_asesor_busq.tipo_asesor}}</td>
+                <td style="text-align: center; vertical-align: middle;">{{lista_asesor_busq.estado_usuario}}</td>
+                <td style="text-align: center; vertical-align: middle;"><img src="{{lista_asesor_busq.foto}}" ng-if="lista_asesor_busq.foto" width="80em" height="100em"></td>                       
               </tr>
             </tbody>
           </table>
@@ -56,7 +68,7 @@
       <br />
       <br />
       <br />
-      <center><button style="width:15em;" class="volver" ng-click="volverBusqAsesores()">Nueva B&uacute;squeda</button></center>
+      <center><button style="width:15em;" class="volver" ng-click="volverBusqAsesores()">Volver</button></center>
     </div>
   </div>  
   <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />

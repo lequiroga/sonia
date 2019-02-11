@@ -86,7 +86,7 @@
 
 <body ng-controller="siniController" onLoad="noBack();" onpageshow="if (event.persisted) noBack();" onUnload="">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<!--nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">
     <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
     Bootstrap
@@ -110,13 +110,14 @@
         </li>
       </ul>
     </div>
-  </nav>
+  </nav-->
 <!-- Form Mixin-->
 <!-- Input Mixin-->
 <!-- Button Mixin-->
 <!-- Pen Title-->
 <div class="pen-title" style="background-color:#1137AD;height:9em;">
   <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="logo_empresa" src="{{logo_empresa}}">  
+  <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="!logo_empresa&&showContent!='../login/formularioLogin.html'" src="../../form-images/inmobiliaria/97805.png">
   <img class="responsive" style="width:41em;height:7em;margin-top:1em;" src="../../form-images/montes_avila_banner.png">  
 </div>
 <!-- Form Module-->

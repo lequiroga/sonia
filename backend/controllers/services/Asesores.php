@@ -22,7 +22,7 @@
 			
 			$output = $this->objAsesores->guardarAsesores($datosAsesor);
 			
-			if($output["respuesta"]=='1'||$output["respuesta"]=='3'){
+			if($output["respuesta"]=='1'||$output["respuesta"]=='3'||$output["respuesta"]=='6'){
 			  if(isset($foto->fileName)){
 
 			  	$output1 = '../tmp_files/'.$foto->fileName; 
@@ -35,7 +35,27 @@
 			  	$this->objAsesores->guardarImagenAsesores($output["id_asesor"],$urlImagen);	
 			  	$output["fotoAsesor"] = $urlImagen; 	
 
-			  }		
+			  }
+			  else if($output["fotografia"]=='0'){
+
+			  	$foto = new stdClass();
+			  	$output1 = "";
+			  	if($datosAsesor->sexo=='M'){
+			  		$output1 = '../generic_files/asesores_genericos/hombregenerico.jpg'; 
+			  		$foto->fileName = 'hombregenerico.jpg';
+			  	}
+			  	else{
+			  		$output1 = '../generic_files/asesores_genericos/mujergenerico.jpg'; 
+			  		$foto->fileName = 'mujergenerico.jpg';
+			  	}			  	
+
+			  	$objAutenticaAmazon = new AutenticaAmazon();
+			  	$urlImagen = $objAutenticaAmazon->autenticaBucket($foto,$output1,$output["id_asesor"]);		
+
+			  	$this->objAsesores->guardarImagenAsesores($output["id_asesor"],$urlImagen);	
+			  	$output["fotoAsesor"] = $urlImagen; 	
+			  }
+
 			}			
 			
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);

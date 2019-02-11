@@ -20,6 +20,11 @@
       <select name="asesor_tipo_identificacion" ng-change="showClientsByID()" ng-options="id_tipo_id as id_tipo_id.descripcion for id_tipo_id in ids_tipo_id track by id_tipo_id.id_tipo_identificacion" ng-model="asesor.tipoIdentificacion"/>        
       </select>      
       <label>N&uacute;mero identificaci&oacute;n (*)</label><input name="asesor_numero_identificacion" type="number" string-to-number ng-model="asesor.numeroIdentificacion"/>
+      <label>Sexo (*)</label>
+      <select name="asesor_sexo" ng-model="asesor.sexo"/>           
+        <option label="FEMENINO" value="F">FEMENINO</option> 
+        <option label="MASCULINO" value="M">MASCULINO</option>    
+      </select>
       <label>Tipo notificaci&oacute;n (*)</label>
       <select name="asesor_tipo_notificacion" ng-options="id_tipo_notificacion as id_tipo_notificacion.descripcion for id_tipo_notificacion in ids_tipo_notificacion track by id_tipo_notificacion.id_tipo_notificacion" ng-model="asesor.tipoNotificacion"/>        
       </select> 

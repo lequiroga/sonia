@@ -18,6 +18,12 @@
     //Consulta la existencia de la relación zona-barrio-ciudad
     function consultarZonasBarrios($id_barrio,$id_ciudad,$id_zona){
 
+      if(!isset($_SESSION)){
+        session_start();
+      }
+
+      $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+
       $query = "SELECT
                   COUNT(*) AS cant_barrio_zona
                 FROM  
@@ -25,7 +31,8 @@
                 WHERE
                   id_zona=$id_zona
                   AND id_barrio=$id_barrio
-                  AND id_ciudad=$id_ciudad     
+                  AND id_ciudad=$id_ciudad
+                  AND id_inmobiliaria=$id_inmobiliaria     
                ";
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -38,13 +45,20 @@
     //Función para consultar la zona a la cual se encuentra asociado un barrio de Cali
     function getZonaBarrioCali($id_barrio){
 
+      if(!isset($_SESSION)){
+        session_start();
+      }
+
+      $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+
       $query = "SELECT
                   id_zona AS id_zona
                 FROM
                   generales.tb_zonas_barrios
                 WHERE
                   id_barrio = $id_barrio 
-                  AND estado='1'   
+                  AND estado='1' 
+                  AND id_inmobiliaria=$id_inmobiliaria  
                ";
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -77,6 +91,12 @@
 
       $output = array();
       $output['cant_barrios_zona'] = 0;
+
+      if(!isset($_SESSION)){
+        session_start();
+      }
+
+      $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
       
       $query = "SELECT
                   id_zona_barrio AS id_zona_barrio,
@@ -89,6 +109,7 @@
                   estado = '1'
                   AND id_zona = $id_zona  
                   AND id_ciudad = $id_ciudad
+                  AND id_inmobiliaria = $id_inmobiliaria
                ";
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());     
@@ -128,10 +149,12 @@
       }
 
       $id_user = $_SESSION['id_user'];
-
+      $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
       $row = array();      
 
       if($this->consultarZonasBarrios($id_barrio,$id_ciudad,$id_zona)==0){
+
+
 
         $query = "INSERT INTO
                     generales.tb_zonas_barrios
@@ -141,7 +164,8 @@
                       id_user_creacion,
                       fecha_creacion,
                       id_ciudad,
-                      estado
+                      estado,
+                      id_inmobiliaria
                     )
                   VALUES
                     (
@@ -150,7 +174,8 @@
                       $id_user,
                       CURRENT_TIMESTAMP,
                       $id_ciudad,
-                      '1'
+                      '1',
+                      $id_inmobiliaria
                     ) 
                   RETURNING
                     id_zona_barrio   
@@ -173,6 +198,7 @@
                     id_zona <> $id_zona
                     AND id_ciudad = $id_ciudad
                     AND id_barrio = $id_barrio  
+                    AND id_inmobiliaria = $id_inmobiliaria
                  ";
 
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -187,6 +213,7 @@
                     id_zona = $id_zona
                     AND id_ciudad = $id_ciudad
                     AND id_barrio = $id_barrio
+                    AND id_inmobiliaria = $id_inmobiliaria
                   RETURNING
                     id_zona_barrio  
                  ";

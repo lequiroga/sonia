@@ -11,6 +11,394 @@
           $this->objInmuebles=new InmueblesSQL();
     }
 
+    function consultarInmuebles($datosInmueble,$caracteristicas,$caracteristicas_opcionales){
+
+        $autAPI   = new AutenticaAPI();
+        $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedades_todas');
+
+        $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip=0&take=1'), true );
+
+        $totalInmuebles = $data['total'];
+        $totalInmueblesIt = $totalInmuebles;
+        $cant_iteraciones = 0;
+
+        while($totalInmueblesIt>0){
+          $totalInmueblesIt-=100;
+          $cant_iteraciones++;
+        }
+
+        $index = 0;   
+        $inmueblesRespuesta = array();     
+        for($i=0;$i<$cant_iteraciones;$i++){
+          $inicial=$i*100;
+          $data1 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip='.$inicial.'&take=100'), true );
+          unset($data1['total']);
+          unset($data1['status']);
+          for($j=0;$j<count($data1);$j++){
+
+            $validaPais = 0;
+
+            if(isset($datosInmueble->codigoPais)&&$datosInmueble->codigoPais!=''){
+              if($datosInmueble->codigoPais->id_pais==$data1[$j]['id_country']){
+                $validaPais = 1;
+              }
+              else{
+                $validaPais = 0;
+              }
+            }
+            else{
+              $validaPais = 1;
+            }       
+
+            $validaDepto = 0;     
+
+            if(isset($datosInmueble->codigoDepartamento)&&$datosInmueble->codigoDepartamento!=''){
+              if($datosInmueble->codigoDepartamento->id_departamento==$data1[$j]['id_region']){
+                $validaDepto = 1;
+              }
+              else{
+                $validaDepto = 0;
+              }
+            }
+            else{
+              $validaDepto = 1;
+            }            
+
+            $validaCiudad = 0;
+
+            if(isset($datosInmueble->codigoCiudad)&&$datosInmueble->codigoCiudad!=''){
+              if($datosInmueble->codigoCiudad->id_ciudad==$data1[$j]['id_city']){
+                $validaCiudad = 1;
+              }
+              else{
+                $validaCiudad = 0;
+              }
+            }
+            else{
+              $validaCiudad = 1;
+            }
+
+            $validaSector = 0;
+
+            if(isset($datosInmueble->codigoSector)&&$datosInmueble->codigoSector!=''){
+              if($datosInmueble->codigoSector->id_sector==$data1[$j]['id_zone']){
+                $validaSector = 1;
+              }
+              else{
+                $validaSector = 0;
+              }
+            }
+            else{
+              $validaSector = 1;
+            }
+
+            $validaInmueble = 0;
+
+            if(isset($datosInmueble->tipoInmueble)&&$datosInmueble->tipoInmueble!=''){
+
+              if($datosInmueble->tipoInmueble->id_tipo_inmueble==$data1[$j]['id_property_type']){
+                $validaInmueble = 1;
+              }
+              else{
+                $validaInmueble = 0;
+              }
+            }
+            else{
+              $validaInmueble = 1;
+            }   
+
+            $validaEstrato = 0;
+
+            if(isset($datosInmueble->codigoEstrato)&&$datosInmueble->codigoEstrato!=''){
+
+              if($datosInmueble->codigoEstrato->codigo==$data1[$j]['stratum']){
+                $validaEstrato = 1;
+              }
+              else{
+                $validaEstrato = 0;
+              }
+            }
+            else{
+              $validaEstrato = 1;
+            }         
+
+            $validaCondicion = 0;        
+
+            if(isset($datosInmueble->condicion)&&$datosInmueble->condicion!=''){              
+
+              if($datosInmueble->condicion==$data1[$j]['id_property_condition']){
+                $validaCondicion = 1;
+              }
+              else{
+                $validaCondicion = 0;
+              }
+            }
+            else{
+              $validaCondicion = 1;
+            }
+
+            $validaArea = 0;
+
+            if(isset($datosInmueble->area)){
+
+              if($datosInmueble->area==$data1[$j]['area'] || $datosInmueble->area==$data1[$j]['built_area'] || $datosInmueble->area==$data1[$j]['private_area']){
+                $validaArea = 1;
+              }
+              else{
+                $validaArea = 0;
+              }
+            }
+            else{
+              $validaArea = 1;
+            }
+
+            $validaMoneda = 0;
+
+            if(isset($datosInmueble->moneda)){
+
+              if($datosInmueble->moneda->id_moneda==$data1[$j]['id_currency']){
+                $validaMoneda = 1;
+              }
+              else{
+                $validaMoneda = 0;
+              }
+            }
+            else{
+              $validaMoneda = 1;
+            }
+
+            $validaPrecios = 0;
+
+            if(isset($datosInmueble->precio_inicial)&&isset($datosInmueble->precio_final)){
+
+              if(($data1[$j]['sale_price']>=$datosInmueble->precio_inicial)&&($data1[$j]['sale_price']<=$datosInmueble->precio_final)){
+                $validaPrecios = 1;
+              }
+              else{
+                $validaPrecios = 0;
+              }
+            }
+            else{
+              $validaPrecios = 1;
+            }
+
+            $validaFechas = 0;
+
+            if(isset($datosInmueble->fecha_inicial)&&isset($datosInmueble->fecha_final)){
+
+              if(substr($data1[$j]['updated_at'], 0,1) != '0'){
+
+                if(( date($datosInmueble->fecha_inicial) <= date($data1[$j]['updated_at']) )&&( date($datosInmueble->fecha_final) >= date($data1[$j]['updated_at']) )){
+                  $validaFechas = 1;
+                }
+                else{
+                  $validaFechas = 0;
+                }
+
+              }
+              else{
+                
+                if(( date($datosInmueble->fecha_inicial) <= date($data1[$j]['created_at']) )&&( date($datosInmueble->fecha_final) >= date($data1[$j]['created_at']) )){
+                  $validaFechas = 1;
+                }
+                else{
+                  $validaFechas = 0;
+                }
+
+              }
+            }
+            else{
+              $validaFechas = 1;
+            }
+
+            $validaCaracteristicas = 0;  
+            
+            if(isset($caracteristicas)&&$caracteristicas!=null){
+              //print_r($caracteristicas);exit;
+              for($n=0;$n<count($caracteristicas);$n++){
+                //$car = 1;
+                foreach ($caracteristicas[$n] as $key => $value) {   
+                  if($value!=''){        
+                    $validaCaracteristicas = 0;            
+                    if(isset($data1[$j]['features']['internal'])&&count($data1[$j]['features']['internal'])>0){
+                      
+                      for($m=0;$m<count($data1[$j]['features']['internal']);$m++){
+                        //print_r($data1[$j]['features']['internal'][$m]['id']);exit;
+                        if($data1[$j]['features']['internal'][$m]['id']==$key){
+                          $validaCaracteristicas = 1;
+                        }
+                      }
+                  
+                    }
+                    if((isset($data1[$j]['features']['external'])&&count($data1[$j]['features']['external'])>0)&&$value!=''){
+                      //print_r($data1[$j]['features']);exit;
+                      for($m=0;$m<count($data1[$j]['features']['external']);$m++){
+                        if($data1[$j]['features']['external'][$m]['id']==$key){
+                          $validaCaracteristicas = 1;
+                        }
+                      }
+                    }
+
+                  }
+                  else{
+                    $validaCaracteristicas = 1;
+                  }
+                  
+                }
+              }
+            }
+            else{
+              $validaCaracteristicas = 1;
+            }               
+
+
+            $validaCaracteristicasOpcionales = 0;  
+            
+            if(isset($caracteristicas_opcionales)&&$caracteristicas_opcionales!=null){
+              //print_r($caracteristicas);exit;
+              for($n=0;$n<count($caracteristicas_opcionales);$n++){
+                //$car = 1;
+                foreach ($caracteristicas_opcionales[$n] as $key => $value) {   
+                  if($value!=''){        
+                    $validaCaracteristicasOpcionales = 0;            
+                    if(isset($data1[$j]['features']['internal'])&&count($data1[$j]['features']['internal'])>0){
+                      
+                      for($m=0;$m<count($data1[$j]['features']['internal']);$m++){
+                        //print_r($data1[$j]['features']['internal'][$m]['id']);exit;
+                        if($data1[$j]['features']['internal'][$m]['id']==$key){
+                          $validaCaracteristicasOpcionales = 1;
+                        }
+                      }
+                  
+                    }
+                    if((isset($data1[$j]['features']['external'])&&count($data1[$j]['features']['external'])>0)&&$value!=''){
+                      //print_r($data1[$j]['features']);exit;
+                      for($m=0;$m<count($data1[$j]['features']['external']);$m++){
+                        if($data1[$j]['features']['external'][$m]['id']==$key){
+                          $validaCaracteristicasOpcionales = 1;
+                        }
+                      }
+                    }
+
+                  }
+                  else{
+                    $validaCaracteristicasOpcionales = 1;
+                  }
+                  
+                }
+              }
+            }
+            else{
+              $validaCaracteristicasOpcionales = 1;
+            }              
+
+            $validaHabitaciones = 0;     
+
+            if(isset($datosInmueble->habitaciones)&&$datosInmueble->habitaciones!=''){
+              if($datosInmueble->habitaciones==$data1[$j]['bedrooms']){
+                $validaHabitaciones = 1;
+              }
+              else{
+                $validaHabitaciones = 0;
+              }
+            }
+            else{
+              $validaHabitaciones = 1;
+            } 
+   
+            $validaBanos = 0;     
+
+            if(isset($datosInmueble->banos)&&$datosInmueble->banos!=''){
+              if($datosInmueble->banos==$data1[$j]['bathrooms']){
+                $validaBanos = 1;
+              }
+              else{
+                $validaBanos = 0;
+              }
+            }
+            else{
+              $validaBanos = 1;
+            } 
+            
+            $validaParqueadero = 0;     
+
+            if(isset($datosInmueble->parqueadero)&&$datosInmueble->parqueadero!=''){
+              if($datosInmueble->parqueadero==$data1[$j]['garages']){
+                $validaParqueadero = 1;
+              }
+              else{
+                $validaParqueadero = 0;
+              }
+            }
+            else{
+              $validaParqueadero = 1;
+            } 
+
+            $validaPiso = 0;     
+
+            if(isset($datosInmueble->piso)&&$datosInmueble->piso!=''){
+              if($datosInmueble->piso==$data1[$j]['floor']){
+                $validaPiso = 1;
+              }
+              else{
+                $validaPiso = 0;
+              }
+            }
+            else{
+              $validaPiso = 1;
+            } 
+
+            $validaEstado = 0;     
+
+            if(isset($datosInmueble->estado)&&$datosInmueble->estado!=''){              
+              if($datosInmueble->estado->id_estado==$data1[$j]['id_status_on_page']){
+                $validaEstado = 1;
+              }
+              else{
+                $validaEstado = 0;
+              }
+            }
+            else{
+              $validaEstado = 1;
+            }
+
+            if($validaPais==1 && $validaDepto==1 && $validaCiudad==1 && $validaSector==1 && $validaInmueble==1 && $validaEstrato==1 && $validaCondicion==1 && $validaArea==1 && $validaMoneda==1 && $validaPrecios==1 && $validaFechas==1 && $validaCaracteristicas==1 && $validaCaracteristicasOpcionales==1 && $validaHabitaciones==1 && $validaBanos==1 && $validaParqueadero==1 && $validaPiso==1 && $validaEstado == 1){
+              $inmueblesRespuesta[$index] = $data1[$j];
+              $index++;
+            }
+            
+          }
+        }        
+
+        /*$data1 = array();
+
+        for($i=0;$i<count($data);$i++){
+
+          if(isset($data[$i]['id_property_type'])){
+
+            $data1[$i]=new stdClass();
+            $data1[$i]->id_tipo_inmueble=$data[$i]['id_property_type'];
+            $data1[$i]->name=$data[$i]['name'];
+
+          }    
+
+        }
+
+        $data = json_encode($data1);*/
+        $data1 = array();
+        if($index>0){
+          $data1['cant']=$index;
+          $data1['inmueblesResp']=$inmueblesRespuesta;
+        }
+        else{
+          $data1['cant']=0;
+        }
+        $data = json_encode($data1);
+
+        echo $data;exit; 
+
+    }
+
 		function listaTiposInmuebles(){
 
         $autAPI   = new AutenticaAPI();
@@ -37,6 +425,18 @@
   			echo $data;			  
 
 		}
+
+    //Obtiene la lista de formas de pago de los negocios inmobiliarios
+    function getListaFormasPago(){
+        $output = $this->objInmuebles->getListaFormasPago();
+        echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+    }
+
+    //Obtiene la lista de tipos de prioridad o urgencia de venta o compra del inmueble por parte del cliente
+    function getListaPrioridades(){          
+        $output = $this->objInmuebles->getListaPrioridades();
+        echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+    }
 
     function listaTiposCaracteristicasInmuebles(){          
         $output = $this->objInmuebles->getTiposCaracteristicasInmuebles();

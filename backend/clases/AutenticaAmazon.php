@@ -30,7 +30,7 @@
       ]);  
 
       //$pathToFile = realpath($output);    
-      $fotos = $foto->fileName;		
+      $fotos = $foto->fileName;	
 
       if(!isset($_SESSION)){
       	session_start();
@@ -49,7 +49,9 @@
         		'Baz' => '123'
     		)
 	    ));	
-	    unlink($output);
+
+	    if($fotos != 'hombregenerico.jpg' && $fotos != 'mujergenerico.jpg')
+	      unlink($output);
 
         $iterator = $s3->getIterator('ListObjects', array(
     		'Bucket' => $this->config['s3']['bucket']

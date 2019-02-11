@@ -105,8 +105,26 @@
 
       $row['id_inmobiliaria'] = $id_inmobiliaria;
       $row['respuesta'] = '1';
+      $row['fotografia'] = $this->consultarFoto($id_inmobiliaria);
 
       return $row;
+
+    }
+
+    function consultarFoto($id_inmobiliaria){
+
+        $query = "SELECT
+                    COALESCE(imagen_logo,'0') AS foto
+                  FROM 
+                    rrhh.tb_inmobiliaria
+                  WHERE 
+                    id_inmobiliaria=$id_inmobiliaria  
+                 ";
+         
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+        $row = pg_fetch_array($result, null);
+
+        return $row['foto'];
 
     }
 

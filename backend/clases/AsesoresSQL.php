@@ -139,6 +139,7 @@
                     a.id_personal AS id_asesor,
                     a.porcentaje_ganancia AS porcentaje_ganancia,
                     a.photo AS foto,
+                    a.sexo AS sexo,
                     a.estado AS empleado_activo,
                     COALESCE(c.estado,1) AS usuario_activo,
                     COALESCE(UPPER(c.userlogin),'') AS usuario_aplicativo
@@ -168,6 +169,7 @@
         $output['datosAsesor']['codigoDepartamento']=$row['id_departamento'];
         $output['datosAsesor']['codigoPais']=$row['id_pais'];
         $output['datosAsesor']['id_asesor']=$row['id_asesor'];
+        $output['datosAsesor']['sexo']=$row['sexo'];
         $output['datosAsesor']['porcentaje_comision']=$row['porcentaje_ganancia'];
         $output['datosAsesor']['foto_asesor']=$row['foto'];
         $output['datosAsesor']['empleado_activo']=$row['empleado_activo'];
@@ -215,6 +217,23 @@
 
     }
 
+    function consultarFoto($id_asesor){
+
+        $query = "SELECT
+                    COALESCE(photo,'0') AS foto
+                  FROM 
+                    rrhh.tb_personal 
+                  WHERE 
+                    id_personal=$id_asesor  
+                 ";
+         
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+        $row = pg_fetch_array($result, null);
+
+        return $row['foto'];
+
+    }
+
     function retornarIdAsesoresPorDoc($numero_identificacion){
 
         $query = "SELECT
@@ -234,6 +253,39 @@
 
     function consultarAsesores($datosAsesor){
 
+      if(!isset($_SESSION)){
+        session_start();
+      }
+
+      $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+
+      $tipo_asesor = "";
+
+      if($datosAsesor->tipo_asesor!='')
+        $tipo_asesor = " AND a.id_tipo_asesor=".$datosAsesor->tipo_asesor->id_tipo_asesor;
+
+      
+
+      $estado_usuario = "";
+
+      if($datosAsesor->estado_usuario == 1){
+        if($datosAsesor->tipo_asesor!='4'){
+          $estado_usuario = " AND a.id_personal IN (SELECT aa.id_personal FROM session.tb_users_app aa WHERE aa.estado=1 AND a.id_personal=aa.id_personal)";
+        }
+        else if($datosAsesor->tipo_asesor=='4'){
+          $estado_usuario = " AND a.estado = '1'";
+        }
+      }
+
+      if($datosAsesor->estado_usuario == 0){
+        if($datosAsesor->tipo_asesor!='4'){
+          $estado_usuario = " AND a.id_personal IN (SELECT aa.id_personal FROM session.tb_users_app aa WHERE aa.estado=0 AND a.id_personal=aa.id_personal)";
+        }
+        else if($datosAsesor->tipo_asesor=='4'){
+          $estado_usuario = " AND a.estado = '0'";
+        }
+      }
+
       $query="SELECT
                 a.id_personal AS id_asesor,
                 (SELECT
@@ -250,16 +302,20 @@
                    tipos.tb_tipos_asesores aa
                  WHERE
                    aa.id_tipo_asesor=a.id_tipo_asesor      
-                ) AS tipo,
-                a.photo AS foto
+                ) AS tipo_asesor,
+                a.photo AS foto,
+                CASE WHEN '".$datosAsesor->estado_usuario."'='1' THEN 'ACTIVO' ELSE 'INACTIVO' END AS estado_usuario
               FROM  
                 rrhh.tb_personal a
               WHERE
                 CAST(a.numero_identificacion AS VARCHAR) LIKE '%".$datosAsesor->numero_identificacion."%' 
                 AND UPPER(a.nombres) LIKE UPPER('%".$datosAsesor->nombres."%')
                 AND UPPER(a.apellidos) LIKE UPPER('%".$datosAsesor->apellidos."%')
-                AND a.id_tipo_asesor <> 5                
-             ";         
+                AND a.id_tipo_asesor <> 5 
+                AND a.id_inmobiliaria = $id_inmobiliaria";  
+
+      $query .= $tipo_asesor;
+      $query .= $estado_usuario;                 
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
@@ -271,6 +327,8 @@
 	       $output['lista_asesores'][$i]['identificacion']  = $row['identificacion'];
 	       $output['lista_asesores'][$i]['asesor']  = $row['asesor'];
 	       $output['lista_asesores'][$i]['foto']  = $row['foto'];
+         $output['lista_asesores'][$i]['tipo_asesor']  = $row['tipo_asesor'];
+         $output['lista_asesores'][$i]['estado_usuario']  = $row['estado_usuario'];
 	       $i++;	    
 	  	  }	  
 
@@ -314,6 +372,43 @@
 
     }
 
+    function consultarCantidadAsesoresInmobiliariaTipo($id_inmobiliaria,$id_tipo_asesor,$id_asesor){
+
+      $query = "SELECT
+                  cantidad AS cant_usuarios_permitidos
+                FROM
+                  rrhh.tb_usuarios_inmobiliaria
+                WHERE
+                  id_inmobiliaria = $id_inmobiliaria
+                  AND id_tipo_asesor = $id_tipo_asesor
+                  AND estado = '1'    
+               ";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+      $row = pg_fetch_array($result, null); 
+
+      $query = "SELECT
+                  COUNT(a.*) AS cant_usuarios_existentes
+                FROM
+                  session.tb_users_app a                  
+                  INNER JOIN rrhh.tb_personal b ON a.id_personal = b.id_personal
+                  INNER JOIN rrhh.tb_inmobiliaria c ON b.id_inmobiliaria = c.id_inmobiliaria
+                WHERE
+                  a.id_personal <> $id_asesor                  
+                  AND a.estado = 1  
+                  AND c.id_inmobiliaria = $id_inmobiliaria  
+               ";
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+      $row1 = pg_fetch_array($result, null);   
+
+      $row['cant_usuarios_existentes'] = $row1['cant_usuarios_existentes'];
+
+      return $row;    
+
+    }
+
+    /*Guarda la información de los asesores en la base de datos*/
     function guardarAsesores($datosAsesor){  
 
       if(isset($datosAsesor->telefono_fijo))  
@@ -335,6 +430,11 @@
         $direccion=$datosAsesor->direccion;
       else
         $direccion='';  
+
+      if(isset($datosAsesor->sexo))
+        $sexo=$datosAsesor->sexo;
+      else
+        $sexo='';  
 
       if(isset($datosAsesor->codigoCiudad))
         $id_ciudad=$datosAsesor->codigoCiudad;
@@ -360,14 +460,14 @@
         $empleado_activo = $datosAsesor->empleado_activo;
       }
       else{
-        $empleado_activo = false;
+        $empleado_activo = 0;
       }
 
       if(isset($datosAsesor->usuario_activo)&&($datosAsesor->usuario_activo==true)){
         $usuario_activo = $datosAsesor->usuario_activo;
       }
       else{
-        $usuario_activo = false;
+        $usuario_activo = 0;
       }
 
       if(isset($datosAsesor->id_asesor)){           
@@ -375,7 +475,7 @@
         if($this->retornarCantAsesores($datosAsesor->id_asesor)==1){
 
           if(!isset($_SESSION))
-          	session_start();
+          	session_start();         
 
           //Actualizaciones en la tabla de tb_personal, correspondientes a los datos personales del empleado o asesor
           $query="UPDATE 
@@ -394,6 +494,7 @@
                     id_ciudad=".$id_ciudad.",
                     id_departamento=".$id_departamento.",
                     id_pais=".$id_pais.",
+                    sexo='".$sexo."',
                     porcentaje_ganancia=".$datosAsesor->porcentaje_comision.",                    
                     estado = CASE WHEN UPPER('".$empleado_activo."')='1' THEN '1' ELSE '0' END,
                     id_user_modificacion = ".$_SESSION['id_user'].",
@@ -405,239 +506,185 @@
 
           if($datosAsesor->tipoAsesor!='4'){
 
-            //Consultar la existencia en la tabla de usuarios y si se encontró, se actualiza
-            if($this->retornarCantUsuariosPorIDAsesor($datosAsesor->id_asesor)=='1'){
+            if($usuario_activo != 0){
 
-              if(isset($datosAsesor->password) && $datosAsesor->password!=''){
-                //Actualizaciones en la tabla de usuarios del aplicativo
-                $query = "UPDATE
-                            session.tb_users_app
-                          SET
-                            password = MD5('".$datosAsesor->password."'),
-                            estado = CASE WHEN UPPER('".$usuario_activo."')='1' THEN 1 ELSE 0 END,
-                            id_user_modificacion = ".$_SESSION['id_user'].",
-                            fecha_modificacion = CURRENT_TIMESTAMP
-                          WHERE
-                            id_personal = ".$datosAsesor->id_asesor;
+              $cantidadesAsesores = $this->consultarCantidadAsesoresInmobiliariaTipo($_SESSION['id_inmobiliaria'],$datosAsesor->tipoAsesor,$datosAsesor->id_asesor);
 
+              if($cantidadesAsesores['cant_usuarios_existentes']<$cantidadesAsesores['cant_usuarios_permitidos']){
+
+                //Consultar la existencia en la tabla de usuarios y si se encontró, se actualiza
+                if($this->retornarCantUsuariosPorIDAsesor($datosAsesor->id_asesor)=='1'){
+
+                  if(isset($datosAsesor->password) && $datosAsesor->password!=''){
+                    //Actualizaciones en la tabla de usuarios del aplicativo
+                    $query = "UPDATE
+                                session.tb_users_app
+                              SET
+                                password = MD5('".$datosAsesor->password."'),
+                                estado = CASE WHEN UPPER('".$usuario_activo."')='1' THEN 1 ELSE 0 END,
+                                id_user_modificacion = ".$_SESSION['id_user'].",
+                                fecha_modificacion = CURRENT_TIMESTAMP
+                              WHERE
+                                id_personal = ".$datosAsesor->id_asesor;
+    
                             //print_r($query);exit;
 
-                $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-
-              }
-              else{
-                //Actualizaciones en la tabla de usuarios del aplicativo (estado)
-                $query = "UPDATE
-                            session.tb_users_app
-                          SET                        
-                            estado = CASE WHEN UPPER('".$usuario_activo."')='1' THEN 1 ELSE 0 END,
-                            id_user_modificacion = ".$_SESSION['id_user'].",
-                            fecha_modificacion = CURRENT_TIMESTAMP
-                          WHERE
-                            id_personal = ".$datosAsesor->id_asesor."  
-                        ";
-
-                $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-
-              }
-
-              if(isset($datosAsesor->motivo)){
-
-                if(!isset($empleado_activo) || $empleado_activo==false){
-
-                  if(isset($usuario_activo) || $usuario_activo==true){
-
-                    $query = "INSERT INTO
-                                rrhh.tb_motivos_inactivacion
-                                (
-                                  id_user,
-                                  motivo_modificacion,
-                                  estado,
-                                  id_user_creacion
-                                )  
-                              VALUES
-                                (
-                                  (
-                                    SELECT
-                                      id_user
-                                    FROM
-                                      session.tb_users_app
-                                    WHERE
-                                      id_personal = ".$datosAsesor->id_asesor."
-                                  ),
-                                  UPPER('".$datosAsesor->motivo."'),
-                                  '1',
-                                  ".$_SESSION['id_user']."
-                                )  
-                             ";
-
-                    $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());        
+                    $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
                   }
                   else{
-
-                    $query = "INSERT INTO
-                                rrhh.tb_motivos_inactivacion
-                                (
-                                  id_personal,
-                                  id_user,
-                                  motivo_modificacion,
-                                  estado,
-                                  id_user_creacion
-                                )  
-                              VALUES
-                                (
-                                  ".$datosAsesor->id_asesor.",
-                                  (
-                                    SELECT
-                                      id_user
-                                    FROM
-                                      session.tb_users_app
-                                    WHERE
-                                      id_personal = ".$datosAsesor->id_asesor."
-                                  ),
-                                  UPPER('".$datosAsesor->motivo."'),
-                                  '0',
-                                  ".$_SESSION['id_user']."
-                                )  
+                    //Actualizaciones en la tabla de usuarios del aplicativo (estado)
+                    $query = "UPDATE
+                                session.tb_users_app
+                              SET                        
+                                estado = CASE WHEN UPPER('".$usuario_activo."')='1' THEN 1 ELSE 0 END,
+                                id_user_modificacion = ".$_SESSION['id_user'].",
+                                fecha_modificacion = CURRENT_TIMESTAMP
+                              WHERE
+                                id_personal = ".$datosAsesor->id_asesor."  
                              ";
 
                     $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
-                  }                  
+                  }
 
                 }
-
                 else{
 
+                  //Se inserta en la tabla de usuarios si no existe
                   $query = "INSERT INTO
-                              rrhh.tb_motivos_inactivacion
+                              session.tb_users_app
                               (
-                                id_user,
-                                motivo_modificacion,
+                                userlogin,
+                                password,
                                 estado,
+                                id_personal,
                                 id_user_creacion
-                              )  
+                              )
                             VALUES
                               (
-                                ".$datosAsesor->id_asesor.",                                
-                                UPPER('".$datosAsesor->motivo."'),
-                                '1',
-                                ".$_SESSION['id_user']."
-                              )  
+                                UPPER('".$datosAsesor->usuario_aplicativo."'),
+                                MD5('".$datosAsesor->password."'),
+                                1,
+                                ".$datosAsesor->id_asesor.",
+                                ".$_SESSION['id_user']." 
+                              )
                            ";
+
+                  $usuario_activo = true;
 
                   $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
-                  if(isset($datosAsesor->usuario_activo) || $datosAsesor->usuario_activo==true){
+                }  
 
-                    $query = "INSERT INTO
-                                rrhh.tb_motivos_inactivacion
-                                (
-                                  id_user,
-                                  motivo_modificacion,
-                                  estado,
-                                  id_user_creacion
-                                )  
-                              VALUES
-                                (
-                                  (
-                                    SELECT
-                                      id_user
-                                    FROM
-                                      session.tb_users_app
-                                    WHERE
-                                      id_personal = ".$datosAsesor->id_asesor."
-                                  ),
-                                  UPPER('".$datosAsesor->motivo."'),
-                                  '1',
-                                  ".$_SESSION['id_user']."
-                                )  
-                             ";
+                $respuesta['respuesta']='3';
+                /*if(isset($datosAsesor->empleado_activo)&&$datosAsesor->empleado_activo==true){
+                  $respuesta['empleado_activo']=true;
+                }
+                else{
+                  $respuesta['empleado_activo']=false;
+                }*/
+                $respuesta['empleado_activo']=$empleado_activo;
+                $respuesta['usuario_activo']=$usuario_activo;
+                $respuesta['fotografia']=$this->consultarFoto($datosAsesor->id_asesor);
+                $respuesta['id_asesor']=$datosAsesor->id_asesor;
 
-                    $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());        
+                return $respuesta; 
 
-                  }
-                  else{
-
-                    $query = "INSERT INTO
-                                rrhh.tb_motivos_inactivacion
-                                (
-                                  id_personal,
-                                  id_user,
-                                  motivo_modificacion,
-                                  estado,
-                                  id_user_creacion
-                                )  
-                              VALUES
-                                (
-                                  ".$datosAsesor->id_asesor.",
-                                  (
-                                    SELECT
-                                      id_user
-                                    FROM
-                                      session.tb_users_app
-                                    WHERE
-                                      id_personal = ".$datosAsesor->id_asesor."
-                                  ),
-                                  UPPER('".$datosAsesor->motivo."'),
-                                  '0',
-                                  ".$_SESSION['id_user']."
-                                )  
-                             ";
-
-                    $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
-
-                  }
-
-                }                
-
+              }
+              else{
+                $respuesta['respuesta']='6';
+                $respuesta['empleado_activo']=$empleado_activo;
+                $respuesta['usuario_activo']=$usuario_activo;
+                $respuesta['fotografia']=$this->consultarFoto($datosAsesor->id_asesor);
+                $respuesta['id_asesor']=$datosAsesor->id_asesor;
+                return $respuesta;
               }
 
             }
             else{
 
-              //Se inserta en la tabla de usuarios si no existe
-              $query = "INSERT INTO
-                          session.tb_users_app
-                          (
-                            userlogin,
-                            password,
-                            estado,
-                            id_personal,
-                            id_user_creacion
-                          )
-                        VALUES
-                          (
-                            UPPER('".$datosAsesor->usuario_aplicativo."'),
-                            MD5('".$datosAsesor->password."'),
-                            1,
-                            ".$datosAsesor->id_asesor.",
-                            ".$_SESSION['id_user']." 
-                          )
-                       ";
+              //Consultar la existencia en la tabla de usuarios y si se encontró, se actualiza
+              if($this->retornarCantUsuariosPorIDAsesor($datosAsesor->id_asesor)=='1'){
 
-              $usuario_activo = true;
+                if(isset($datosAsesor->password) && $datosAsesor->password!=''){
+                  //Actualizaciones en la tabla de usuarios del aplicativo
+                  $query = "UPDATE
+                              session.tb_users_app
+                            SET
+                              password = MD5('".$datosAsesor->password."'),
+                              estado = CASE WHEN UPPER('".$usuario_activo."')='1' THEN 1 ELSE 0 END,
+                              id_user_modificacion = ".$_SESSION['id_user'].",
+                              fecha_modificacion = CURRENT_TIMESTAMP
+                            WHERE
+                              id_personal = ".$datosAsesor->id_asesor;
 
-              $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+                            //print_r($query);exit;
 
-            }            
+                  $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+                }
+                else{
+                  //Actualizaciones en la tabla de usuarios del aplicativo (estado)
+                  $query = "UPDATE
+                              session.tb_users_app
+                            SET                        
+                              estado = CASE WHEN UPPER('".$usuario_activo."')='1' THEN 1 ELSE 0 END,
+                              id_user_modificacion = ".$_SESSION['id_user'].",
+                              fecha_modificacion = CURRENT_TIMESTAMP
+                            WHERE
+                              id_personal = ".$datosAsesor->id_asesor."  
+                           ";
+
+                  $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+                }              
+
+              }
+              else{
+
+                //Se inserta en la tabla de usuarios si no existe
+                $query = "INSERT INTO
+                            session.tb_users_app
+                            (
+                              userlogin,
+                              password,
+                              estado,
+                              id_personal,
+                              id_user_creacion
+                            )
+                          VALUES
+                            (
+                              UPPER('".$datosAsesor->usuario_aplicativo."'),
+                              MD5('".$datosAsesor->password."'),
+                              1,
+                              ".$datosAsesor->id_asesor.",
+                              ".$_SESSION['id_user']." 
+                            )
+                         ";
+
+                $usuario_activo = true;
+                $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+              }
+
+              $respuesta['respuesta']='3';
+              /*if(isset($datosAsesor->empleado_activo)&&$datosAsesor->empleado_activo==true){
+                $respuesta['empleado_activo']=true;
+              }
+              else{
+                $respuesta['empleado_activo']=false;
+              }*/
+              $respuesta['fotografia']=$this->consultarFoto($datosAsesor->id_asesor);
+              $respuesta['empleado_activo']=$empleado_activo;
+              $respuesta['usuario_activo']=$usuario_activo;
+              $respuesta['id_asesor']=$datosAsesor->id_asesor;
+
+              return $respuesta;
+
+            }                        
 
           }
-
-          
-          $respuesta['respuesta']='3';
-          /*if(isset($datosAsesor->empleado_activo)&&$datosAsesor->empleado_activo==true){
-            $respuesta['empleado_activo']=true;
-          }
-          else{
-            $respuesta['empleado_activo']=false;
-          }*/
-          $respuesta['empleado_activo']=$empleado_activo;
-          $respuesta['usuario_activo']=$usuario_activo;
-          $respuesta['id_asesor']=$datosAsesor->id_asesor;
-
-          return $respuesta;
 
         }
         else{
@@ -673,7 +720,8 @@
                       id_user_creacion,
                       porcentaje_ganancia,
                       estado,
-                      id_inmobiliaria
+                      sexo,
+                      id_inmobiliaria                      
                     ) 
                   VALUES
                     (
@@ -693,7 +741,8 @@
                      ".$_SESSION['id_user'].",
                      ".$datosAsesor->porcentaje_comision.",
                      '1',
-                     ".$_SESSION['id_inmobiliaria']."
+                     '".$sexo."',
+                     ".$_SESSION['id_inmobiliaria'].")
                   RETURNING id_personal"; 
 
                   //print_r($query);exit;
@@ -717,44 +766,51 @@
 
             if($this->consultarUsuariosCreados($datosAsesor->usuario_aplicativo)==0){
 
-              $query = "INSERT INTO
-                          session.tb_users_app
-                          (
-                            userlogin,
-                            password,
-                            estado,
-                            id_personal,
-                            id_user_creacion
-                          )
-                        VALUES  
-                          (
-                            UPPER('".$datosAsesor->usuario_aplicativo."'),
-                            MD5('$password'),
-                            1,
-                            ".$id_asesor.",
-                            ".$_SESSION['id_user']."
-                          )";
 
-              $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+              $cantidadesAsesores = $this->consultarCantidadAsesoresInmobiliariaTipo($_SESSION['id_inmobiliaria'],$datosAsesor->tipoAsesor,$id_asesor);
 
-              $usuario_activo = true;
+              if($cantidadesAsesores['cant_usuarios_existentes']<$cantidadesAsesores['cant_usuarios_permitidos']){
 
-              $respuesta['respuesta']='1';
+                $query = "INSERT INTO
+                            session.tb_users_app
+                            (
+                              userlogin,
+                              password,
+                              estado,
+                              id_personal,
+                              id_user_creacion
+                            )
+                          VALUES  
+                            (
+                              UPPER('".$datosAsesor->usuario_aplicativo."'),
+                              MD5('$password'),
+                              1,
+                              ".$id_asesor.",
+                              ".$_SESSION['id_user']."
+                            )";
 
-            }
+                $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+                $usuario_activo = true;
+                $respuesta['respuesta']='1';
+
+              }
+              else{
+                $respuesta['respuesta']='6';
+                $respuesta['id_asesor']=$id_asesor;
+                //return $respuesta;
+              }
+
+            }  
             else{
 
               $usuario_activo = false;
-
               $respuesta['respuesta']='5';
 
             }            
-            
           
           }
           else{
             $usuario_activo = false;
-
             $respuesta['respuesta']='1';
           }
           
@@ -762,6 +818,8 @@
           $respuesta['empleado_activo']=$empleado_activo;
           $respuesta['usuario_activo']=$usuario_activo;
           $respuesta['id_asesor']=$id_asesor;
+
+          $respuesta['fotografia']=$this->consultarFoto($id_asesor);
 
           return $respuesta;           
 

@@ -39,17 +39,31 @@
       $obj->getTiposAsesores();
     }
 
+    //Listar las formas de pago de los negocios inmobiliarios
+    if($request->accion=='listaFormasPago'){      
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles(); 
+      $obj->getListaFormasPago();
+    }
+
+    //Listar las prioridades o urgencias que tienen los clientes
+    if($request->accion=='listaPrioridades'){      
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles(); 
+      $obj->getListaPrioridades();
+    }
+
     if($request->accion=='consultarClientes'){
       require_once('services/Clientes.php');        
       $obj = new Clientes(); 
       $obj->consultarClientes($request->clienteBusq);
     }
 
-    if($request->accion=='consultarInmuebles'){
-      print_r($request);exit;
-      require_once('services/Clientes.php');        
-      $obj = new Clientes(); 
-      $obj->consultarClientes($request->clienteBusq);
+    if($request->accion=='consultarInmuebles'){   
+      //print_r($request);exit;   
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles(); 
+      $obj->consultarInmuebles($request->datosInmueble,$request->caracteristicas,$request->caracteristicas_opcionales);
     }
 
     if($request->accion=='datosClientePorID'){
