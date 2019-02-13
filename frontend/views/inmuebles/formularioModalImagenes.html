@@ -1,0 +1,15 @@
+<div class="overlay"/>
+<div class="modal">
+	<button class="cotizaciones" style="color: white;font-weight: bold;float: right;" ng-click="cerrarModal()">Cerrar
+	</button>	
+	<center>	
+	<div style="position: absolute;top: 5%;left: 0;right: 0;bottom: 0;margin: auto;">
+	<code>{{position_active}}</code>
+	</div>
+	<img id="imagen_inmueble_show" src="{{imagen_inmueble_mostrar}}" style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;margin: auto;" name="imagen_inmueble_show" width="55%" height="80%">
+	<br />
+	<div style="position: absolute;top: 95%;left: 0;right: 0;bottom: 0;margin: auto;">
+	<code style="line-height: 1.4em;" ng-repeat='gall in gallery_index'><a href="#" ng-click="seleccionarImagenInmueble(gall.position)">{{gall.position}}</a> &nbsp;&nbsp;&nbsp;&nbsp;</code>
+    </div>
+	</center>
+</div>

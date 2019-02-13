@@ -351,7 +351,7 @@
             $validaEstado = 0;     
 
             if(isset($datosInmueble->estado)&&$datosInmueble->estado!=''){              
-              if($datosInmueble->estado->id_estado==$data1[$j]['id_status_on_page']){
+              if($datosInmueble->estado->id_estado==$data1[$j]['id_availability']){
                 $validaEstado = 1;
               }
               else{
@@ -395,7 +395,7 @@
         }
         $data = json_encode($data1);
 
-        echo $data;exit; 
+        echo $data; 
 
     }
 

@@ -1,8 +1,8 @@
-var app=angular.module("siniModule",[]);
+var app=angular.module("siniModule",['ngSanitize','angularModalService']);
 
 app.controller("siniController",
 
-  function ($scope,$http){     
+  function ($scope,$http,ModalService,$window){     
 
   	$scope.endpoint = "http://localhost/sonia/backend/controllers/"; 
     $scope.cliente = [];
@@ -64,27 +64,28 @@ app.controller("siniController",
     $scope.ids_prioridades = [];
     $scope.ids_formas_pago = [];
     $scope.consultarInmuebles = '0';
+    $scope.cantListaInmueble = '0';
+    $scope.listaInmueblesRespuesta = [];
+    $scope.imagen_inmueble_mostrar = "";
+    $scope.galeriaActiva = [];
+    $scope.resultadoModal = {};   
+    $scope.listaInmueblesRespuestaNueva = [];
+    $scope.listaPaginacion = [];
+    $scope.paginaActual = 1;
+    $scope.espacios = "     ";
 
     $scope.estados_inmueble = 
     [{
       'id_estado':'1',
-      'nombre':'Activo'
+      'nombre':'Disponible'
      },
      {
       'id_estado':'2',
-      'nombre':'Inactivo'
+      'nombre':'Vendido'
      },
      {
       'id_estado':'3',
-      'nombre':'Destacado'
-     }, 
-     {
-      'id_estado':'4',
-      'nombre':'Eliminado'
-     },
-     {
-      'id_estado':'5',
-      'nombre':'Activo o destacado'
+      'nombre':'Alquilado'
      }
     ];
     //$scope.seleccionarCliente = [];
@@ -99,6 +100,26 @@ app.controller("siniController",
        	 $scope.showContent = '../login/formularioLogin.html';
        }
     });
+
+
+    $scope.mostrarModal = function(galleries,mainImg) {        
+        //$scope.seleccionarImagenInmueble('1');
+        // Debes proveer un controlador y una plantilla.
+        ModalService.showModal({
+          templateUrl: '../inmuebles/formularioModalImagenes.html',
+          controller: "ContrladorModal",
+          inputs: {
+            galleries: galleries,
+            mainImage: mainImg
+          }
+        }).then(function(modal) {
+          modal.close.then(function(result) {
+            // Una vez que el modal sea cerrado, la libreria invoca esta función
+            // y en result tienes el resultado.
+            $scope.resultadoModal = result;
+          });
+        });
+    };    
 
     $scope.seleccionarCliente = function(id_cliente){      
       
@@ -448,7 +469,7 @@ app.controller("siniController",
     }
 
     $scope.showInmueblesIndex = function(){      
-      $scope.inmueble.estado = {'id_estado':'3','nombre':'Destacado'};
+      $scope.inmueble.estado = {'id_estado':'1','nombre':'Disponible'};
       $scope.consultarInmuebles = '1';
       $scope.showContent = '../inmuebles/formularioInmueble.html';       
     }
@@ -612,7 +633,7 @@ app.controller("siniController",
           $scope.redesCliente.id_redes_cliente=value.id_red_social_cliente;          
         }  
       });      
-    }
+    }    
 
     //Guarda o actualiza la información de los asesores
     $scope.saveAsesores = function(){
@@ -1735,6 +1756,32 @@ app.controller("siniController",
       
     }
 
+    $scope.seleccionarPaginaListaInmueble = function(ini){
+      
+      $window.scrollTo(0, 0);
+      $scope.paginaActual = ini;
+      var inicio = (ini - 1)*5;
+      $scope.paginarListaInmuebles(inicio);
+
+    } 
+
+
+
+    $scope.paginarListaInmuebles = function(inicio){
+
+      $scope.listaInmueblesRespuestaNueva = [];
+      //$scope.paginaActual = inicio+1;
+      var ini = inicio;
+      var fin = ini + 5;
+      var i = 0;
+      for(ini;ini<fin;ini++){
+        if(!angular.isUndefined($scope.listaInmueblesRespuesta[ini])&&$scope.listaInmueblesRespuesta[ini]!=null){
+          $scope.listaInmueblesRespuestaNueva[i] = $scope.listaInmueblesRespuesta[ini];
+          i++;
+        }        
+      }
+
+    }
 
 
     $scope.getBarriosLocCali = function(codigoLocalidad){    
@@ -1916,11 +1963,72 @@ app.controller("siniController",
       if(!angular.isUndefined(inmueble.estado)){
         inmuebleCons.estado = inmueble.estado;        
       }
-
-      console.log(inmuebleCons);
+      $scope.showContent = '../cargando/cargando.html';
+      //console.log(inmuebleCons);
       $http.post($scope.endpoint,{'accion':'consultarInmuebles','datosInmueble':inmuebleCons,'caracteristicas':caracter,'caracteristicas_opcionales':caracter_opc})
-      .then(function(response){ 
-        $scope.ids_tipo_caracteristicas_inmuebles=response.data;        
+      .then(function(response){         
+        if(response.data.cant>0){          
+          $scope.paginaActual = 1;
+          $scope.cantListaInmueble = response.data.cant; 
+          var cantPaginacion = Math.ceil($scope.cantListaInmueble/5);
+          $scope.listaPaginacion = [];
+          for(i=0;i<cantPaginacion;i++){
+            $scope.listaPaginacion[i]=i+1;
+          }
+
+          $scope.listaInmueblesRespuesta = response.data.inmueblesResp;
+          $scope.paginarListaInmuebles(0);         
+
+          $scope.listaInmueblesRespuesta.area_mostrar = "";
+          $scope.listaInmueblesRespuesta.condicion_mostrar = "";
+          $scope.listaInmueblesRespuesta.disponibilidad = "";
+          $scope.listaInmueblesRespuesta.fecha_actualizacion = "";
+          if($scope.listaInmueblesRespuesta.area!=""){
+            $scope.listaInmueblesRespuesta.area_mostrar = $scope.listaInmueblesRespuesta.area+" "+$scope.listaInmueblesRespuesta.unit_area_label;
+          }
+          else if($scope.listaInmueblesRespuesta.built_area!=""){
+            $scope.listaInmueblesRespuesta.area_mostrar = $scope.listaInmueblesRespuesta.built_area+" "+$scope.listaInmueblesRespuesta.unit_built_area_label;
+          }
+          else if($scope.listaInmueblesRespuesta.private_area!=""){
+            $scope.listaInmueblesRespuesta.area_mostrar = $scope.listaInmueblesRespuesta.private_area+" "+$scope.listaInmueblesRespuesta.unit_private_area_label;
+          }         
+
+          /*if($scope.listaInmueblesRespuesta.property_condition_label!=""){
+            console.log($scope.listaInmueblesRespuesta.property_condition_label);
+            if($scope.listaInmueblesRespuesta.property_condition_label=="Used"){
+              $scope.listaInmueblesRespuesta.condicion_mostrar = "Usado";
+            }
+            else if($scope.listaInmueblesRespuesta.property_condition_label=="New"){
+              $scope.listaInmueblesRespuesta.condicion_mostrar = "Nuevo";
+            }
+          }*/
+          /*if($scope.listaInmueblesRespuesta.availability_label!=""){            
+            if($scope.listaInmueblesRespuesta.availability_label=="Available"){
+              $scope.listaInmueblesRespuesta.disponibilidad = "Disponible";
+            }
+            else if($scope.listaInmueblesRespuesta.availability_label=="Sold"){
+              $scope.listaInmueblesRespuesta.disponibilidad = "Vendido";
+            }
+            else if($scope.listaInmueblesRespuesta.availability_label=="Rented"){
+              $scope.listaInmueblesRespuesta.disponibilidad = "Alquilado";
+            }
+          }*/
+          if($scope.listaInmueblesRespuesta.updated_at!="0000-00-00 00:00:00"){            
+            $scope.listaInmueblesRespuesta.fecha_actualizacion = $scope.listaInmueblesRespuesta.updated_at;
+          }
+          else{
+            $scope.listaInmueblesRespuesta.fecha_actualizacion = $scope.listaInmueblesRespuesta.created_at;
+          }
+          //console.log($scope.listaInmueblesRespuesta);
+          $scope.showContent = '../inmuebles/formularioInmuebleList.html';   
+        }  
+        else{
+          alert("No se encontraron datos");
+          $scope.cantListaInmueble = '0';
+          $scope.listaInmueblesRespuesta = [];
+          $scope.showInmueblesIndex();
+        }        
+        //console.log($scope.listaInmueblesRespuesta);
       });     
 
     }
@@ -2016,12 +2124,34 @@ app.controller("siniController",
       $scope.cant_caract_inm_opc = '0';
       $scope.cant_caract_inm_obl = '0';     
       $scope.inmueble.codigoPais = {id_pais:'1',name:'Colombia'}; 
-      $scope.inmueble.estado = {id_estado:'3',estado:'Destacado'}; 
+      $scope.inmueble.estado = {id_estado:'1',estado:'Disponible'}; 
       $scope.inmueble.moneda = {id_moneda:'1',denominacion:'COP - Pesos Colombianos'}; 
       $scope.getDepartamentosCliente('1');
       $scope.inmueble.codigoDepartamento = {id_departamento:'32',name:'Valle del Cauca'}; 
       $scope.getCiudadesCliente('32');
       $scope.getTiposCaracteristicasInm();
+      //$scope.getTiposCaracteristicasInm1();
+    }    
+
+    $scope.limpiarCaracteristicasTipoInmueble1 = function(){
+
+      $scope.caracteristicasInmuebles=[];
+      $scope.lista_caracteristicas_inmueble=[];
+      $scope.lista_caracteristicas_obligatorias_inmueble=[];
+      $scope.lista_caracteristicas_opcionales_inmueble=[];
+      $scope.inmueble = [];
+      $scope.cant_caract_inm = '0';
+      $scope.cambiaComunaInmueble = '1';
+      $scope.cant_caract_inm_opc = '0';
+      $scope.cant_caract_inm_obl = '0';     
+      $scope.inmueble.codigoPais = {id_pais:'1',name:'Colombia'}; 
+      $scope.inmueble.estado = {id_estado:'1',estado:'Disponible'}; 
+      $scope.inmueble.moneda = {id_moneda:'1',denominacion:'COP - Pesos Colombianos'}; 
+      $scope.getDepartamentosCliente('1');
+      $scope.inmueble.codigoDepartamento = {id_departamento:'32',name:'Valle del Cauca'}; 
+      $scope.getCiudadesCliente('32');
+      $scope.getTiposCaracteristicasInm();
+      $scope.showContent = '../inmuebles/formularioInmueble.html';
       //$scope.getTiposCaracteristicasInm1();
     }    
 
@@ -2179,7 +2309,7 @@ app.controller("siniController",
 
 app.controller("siniController1",
 
-  function ($scope,$http){   	
+  function ($scope,$http, ModalService,$window){   	
 
   	$scope.pages = [];
   	$scope.currentPage = 0;
@@ -2390,4 +2520,41 @@ app.controller("siniController1",
     start = +start;
     return input.slice(start);
   }
+});
+
+app.controller('ContrladorModal', function($scope, close, galleries, mainImage) {  
+  //$scope.galeriaActiva = []; 
+  $scope.imagen_inmueble = {};
+  $scope.imagen_inmueble_mostrar = mainImage.url_big; 
+  $scope.gallery_index = []; 
+  $scope.position_active = mainImage.position;
+
+  angular.forEach(galleries, function(value,key){      
+    angular.forEach(value, function(value1,key1){
+      $scope.gallery_index.push(value1);
+    });            
+  });
+
+  //console.log($scope.gallery_index);
+
+  $scope.seleccionarImagenInmueble = function(pos){    
+    //console.log(galleries);   
+    angular.forEach(galleries, function(value,key){
+      angular.forEach(value, function(value1,key1){
+        if(value1.position==pos){          
+          $scope.imagen_inmueble = value1;
+          $scope.imagen_inmueble_mostrar = $scope.imagen_inmueble.url_big;
+          var output1 = document.getElementById('imagen_inmueble_show');          
+          output1.src = $scope.imagen_inmueble_mostrar;          
+          $scope.position_active = pos;
+        }
+      });
+               
+    });
+  }
+
+  $scope.cerrarModal = function() {
+    close($scope.result);
+  };
+
 });
