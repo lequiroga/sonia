@@ -1,5 +1,3 @@
-<div ng-controller="siniController1">
-
   <div class="toggle">
     <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
   </div>
@@ -7,10 +5,33 @@
     <center><h2 style="font-family:Verdana;">CLIENTES</h2></center>
     <br />
     <form name="formularioBusqCliente" id="formularioBusqCliente" ng-model="cliente_busq" method="post" NOVALIDATE>
+      <label>Pa&iacute;s</label>
+      <select name="cliente_busq_codigoPais" id="codigoPais" ng-model="cliente_busq.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosCliente(cliente_busq.codigoPais.id_pais)"/>       
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>
+      </select>
+      <label>Departamento</label>
+      <select name="cliente_busq_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(cliente_busq.codigoDepartamento)" ng-model="cliente_busq.codigoDepartamento"/>
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>
+      </select>
+      <label>Ciudad</label>
+      <select name="cliente_busq_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="cliente_busq.codigoCiudad"/>        
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>
+      </select>
+      <label>Tipo cliente</label>
+      <select name="cliente_busq_tipo_cliente" ng-options="id_tipo_cliente as id_tipo_cliente.descripcion for id_tipo_cliente in ids_tipo_clientes track by id_tipo_cliente.id_tipo_cliente" ng-model="cliente_busq.tipoCliente"/> 
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
+      </select>
       <label>N&uacute;mero identificaci&oacute;n</label><input name="cliente_busq_numero_identificacion" id="cliente_busq_numero_identificacion" type="number" ng-model="cliente_busq.numero_identificacion" value="0"/>
       <label>Nombres</label><input name="cliente_busq_nombres" id="cliente_busq_nombres" ng-model="cliente_busq.nombres" type="text"/>
       <label>Apellidos</label><input name="cliente_busq_apellidos" id="cliente_busq_apellidos" ng-model="cliente_busq.apellidos" type="text"/>
       <label>N&uacute;mero telef&oacute;nico</label><input name="cliente_busq_telefono" id="cliente_busq_telefono" ng-model="cliente_busq.telefono" type="text"/>
+      <label>Rango de fechas de creaci&oacute;n</label>    
+      <label class="switch">
+        <input type="checkbox" id="cliente_busq_rango_fechas" name="cliente_busq_rango_fechas" ng-change="cambiarValorRangosFechas()" ng-model="cliente_busq.rango_fechas">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label>
+      <label ng-if="cliente_busq.rango_fechas">Fecha inicial (*)</label><input name="cliente_busq_fecha_inicial" ng-if="cliente_busq.rango_fechas" type="date" ng-model="cliente_busq.fecha_inicial"/> 
+      <label ng-if="cliente_busq.rango_fechas">Fecha final (*)</label><input name="cliente_busq_fecha_final" ng-if="cliente_busq.rango_fechas" type="date" ng-model="cliente_busq.fecha_final"/>
       <br />
       <center><button style="width:15em;" type="submit" ng-click="consultarClientes()" class="consultar">Consultar</button>
       <br />
@@ -25,7 +46,11 @@
     </form>
   </div>
   <div class="form1" ng-show="cant_clie_busq=='0'">
-    <center><h2 style="font-family:Verdana;">CLIENTES</h2></center>       
+    <center><h2 style="font-family:Verdana;">CLIENTES</h2>    
+    <h4>Cantidad resultados: {{cantListaCliente}}</h4>
+    <p>&nbsp;</p>    
+    <h4>P&aacute;gina actual: {{paginaActualCliente}}</h4>
+    </center>   
     <div class="container">    
       <div class="panel panel-default">
         <div class="panel-body">
@@ -36,35 +61,38 @@
                 <th style="width:15%;">Identificaci&oacute;n</th>
                 <th style="width:35%;">Cliente</th> 
                 <th style="width:35%;">Tel&eacute;fono(s)</th>   
-                <th style="width:15%;">Solicitudes</th>           
+                <th style="width:15%;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='1'||!cliente_busq.tipoCliente.id_tipo_cliente||cliente_busq.tipoCliente.id_tipo_cliente=='7'">Requerimiento</th>
+                <th style="width:15%;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='2'||cliente_busq.tipoCliente.id_tipo_cliente=='5'||!cliente_busq.tipoCliente.id_tipo_cliente">Inmuebles</th>            
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat='lista_cliente_busq in lista_clientes_busq | startFromGrid: currentPage * pageSize | limitTo: pageSize'>         
-                <td style="text-align: left;" ng-click='seleccionarCliente(lista_cliente_busq.id_cliente)'>{{lista_cliente_busq.identificacion}}</td>
-                <td style="text-align: left;" ng-click='seleccionarCliente(lista_cliente_busq.id_cliente)'>{{lista_cliente_busq.cliente}}</td>  
-                <td style="text-align: left;" ng-click='seleccionarCliente(lista_cliente_busq.id_cliente)'>{{lista_cliente_busq.telefonos}}</td>   
-                <td style="text-align: center;"><a href="#" ng-click="verSolicitudesCliente(lista_cliente_busq.id_cliente)">Solicitudes</a></td>         
+              <tr ng-repeat='lista_cliente_busq in lista_clientes_busq_mostrar'>         
+                <td style="text-align: left;">{{lista_cliente_busq.identification}}</td>
+                <td style="text-align: left;">{{lista_cliente_busq.first_name}} {{lista_cliente_busq.last_name}}</td>  
+                <td style="text-align: left;" ng-if="lista_cliente_busq.phone&&lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}, {{lista_cliente_busq.cell_phone}}</td>   
+                <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && lista_cliente_busq.cell_phone">{{lista_cliente_busq.cell_phone}}</td> 
+                <td style="text-align: left;" ng-if="lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}</td>
+                <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">&nbsp;</td>
+                <td style="text-align: center;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='1'||!cliente_busq.tipoCliente.id_tipo_cliente||cliente_busq.tipoCliente.id_tipo_cliente=='7'"><a href="#" ng-click="verSolicitudesCliente(lista_cliente_busq.query, lista_cliente_busq.comment, lista_cliente_busq.reference)">Requerimiento</a></td>  
+                <td style="text-align: center;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='2'||cliente_busq.tipoCliente.id_tipo_cliente=='5'||!cliente_busq.tipoCliente.id_tipo_cliente"><a href="#" ng-click="verInmueblesCliente(lista_cliente_busq.id_client)">Inmuebles</a></td>       
               </tr>
             </tbody>
           </table>
-          <center>
-          <div class='btn-group'>
-            <button type='button' class='butt' ng-disabled='currentPage == 0' ng-click='currentPage = currentPage - 1'>&laquo;</button>
-            <button type='button' class='butt' ng-disabled='currentPage == page.no - 1' ng-click='setPage(page.no)' ng-repeat='page in pages'>{{page.no}}</button>
-            <button type='button' class='butt' ng-disabled='currentPage >= usuarios.length/pageSize - 1' , ng-click='currentPage = currentPage + 1'>&raquo;</button>
-          </div>
+          <center>          
         </center>
         </div>
       </div>
+      <div>
+        <center>          
+          <code style="line-height: 1.4" ng-repeat='ini in listaPaginacionCliente'><a href="#" ng-click="seleccionarPaginaListaCliente(ini)">{{ini}}</a> &nbsp;&nbsp;&nbsp;&nbsp;</code>          
+        </center>
+      </div>
       <br />
       <br />
-      <br />
+      <br />      
       <center><button style="width:15em;" class="volver" ng-click="volverBusqClientes()">Volver</button></center>
     </div>
   </div>  
   <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
   <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
   </div>
-
-</div>
