@@ -81,6 +81,11 @@ app.controller("siniController",
     $scope.lista_clientes_busq = [];       
     $scope.cant_clie_busq = '1';  
     $scope.lista_clientes_busq_mostrar = [];
+    $scope.lista_asesores_wasi = [];
+    $scope.listaInmueblesClienteRespuesta = [];
+    $scope.tipoListaInmuebles = '';
+    $scope.nombre_cliente_inmueble = "";
+    $scope.cliente_relacion_inmueble = "";
 
     $scope.estados_inmueble = 
     [{
@@ -204,6 +209,14 @@ app.controller("siniController",
       
     } 
 
+    //Lista de asesores registrados en Wasi
+    $scope.listaAsesoresWasi = function(){      
+      $http.post($scope.endpoint,{'accion':'consultarAsesoresWasi'})
+      .then(function(response){         
+        $scope.lista_asesores_wasi=response.data.listaAsesores;       
+      });       
+    } 
+
     $scope.showAsesoresCreateUpd = function(asesor){      
 
       $scope.asesor.password = undefined;
@@ -300,10 +313,15 @@ app.controller("siniController",
       $scope.cliente_busq = [];
       $scope.getPaises();
       $scope.getTiposClientes();
+      $scope.listaAsesoresWasi();
       $scope.cliente_busq.codigoPais = {id_pais:'1',name:'Colombia'}; 
       $scope.getDepartamentosCliente($scope.cliente_busq.codigoPais.id_pais);
       $scope.showContent = '../clientes/formularioCliente.html'; 	
     }
+
+    $scope.volverListaClientes = function(){
+      $scope.showContent = '../clientes/formularioCliente.html'; 
+    }    
 
     $scope.showSolicitudesIndex = function(){
       alert("Módulo en construcción");
@@ -527,6 +545,7 @@ app.controller("siniController",
     $scope.showInmueblesIndex = function(){      
       $scope.inmueble.estado = {'id_estado':'1','nombre':'Disponible'};
       $scope.consultarInmuebles = '1';
+      $scope.listaAsesoresWasi();
       $scope.showContent = '../inmuebles/formularioInmueble.html';       
     }
 
@@ -1963,6 +1982,10 @@ app.controller("siniController",
         inmuebleCons.moneda = inmueble.moneda;        
       }
 
+      if(!angular.isUndefined(inmueble.usuario_creador)){
+        inmuebleCons.id_asesor = inmueble.usuario_creador.id_asesor;        
+      }
+
       if(!angular.isUndefined(inmueble.titulo)){
         inmuebleCons.titulo = inmueble.titulo;        
       }
@@ -2115,6 +2138,7 @@ app.controller("siniController",
           else{
             $scope.listaInmueblesRespuesta.fecha_actualizacion = $scope.listaInmueblesRespuesta.created_at;
           }
+          $scope.tipoListaInmuebles = 'inmueblesTodos';
           //console.log($scope.listaInmueblesRespuesta);
           $scope.showContent = '../inmuebles/formularioInmuebleList.html';   
         }  
@@ -2127,6 +2151,45 @@ app.controller("siniController",
         //console.log($scope.listaInmueblesRespuesta);
       });     
 
+    }
+
+    $scope.verInmueblesCliente = function(id_cliente,first_name,last_name){
+      $http.post($scope.endpoint,{'accion':'consultarPropiedadesCliente','id_cliente':id_cliente})
+      .then(function(response){ 
+
+        if(!angular.isUndefined(response.data.propiedades)){
+
+          $scope.listaInmueblesClienteRespuesta = response.data.propiedades;
+
+          if($scope.listaInmueblesClienteRespuesta.area!=""){
+            $scope.listaInmueblesClienteRespuesta.area_mostrar = $scope.listaInmueblesClienteRespuesta.area+" "+$scope.listaInmueblesClienteRespuesta.unit_area_label;
+          }
+          else if($scope.listaInmueblesClienteRespuesta.built_area!=""){
+            $scope.listaInmueblesClienteRespuesta.area_mostrar = $scope.listaInmueblesClienteRespuesta.built_area+" "+$scope.listaInmueblesClienteRespuesta.unit_built_area_label;
+          }
+          else if($scope.listaInmueblesClienteRespuesta.private_area!=""){
+            $scope.listaInmueblesClienteRespuesta.area_mostrar = $scope.listaInmueblesClienteRespuesta.private_area+" "+$scope.listaInmueblesClienteRespuesta.unit_private_area_label;
+          }  
+          if($scope.listaInmueblesClienteRespuesta.updated_at!="0000-00-00 00:00:00"){            
+            $scope.listaInmueblesClienteRespuesta.fecha_actualizacion = $scope.listaInmueblesClienteRespuesta.updated_at;
+          }
+          else{
+            $scope.listaInmueblesClienteRespuesta.fecha_actualizacion = $scope.listaInmueblesClienteRespuesta.created_at;
+          }
+
+          $scope.nombre_cliente_inmueble = first_name+' '+last_name;
+          //$scope.cliente_relacion_inmueble = response.data.tipo_cliente;
+
+          $scope.tipoListaInmuebles = 'inmueblesClientes';
+            //console.log($scope.listaInmueblesRespuesta);
+          $scope.showContent = '../inmuebles/formularioInmuebleList.html';
+
+        }  
+        else{
+          alert("No se encontraron inmuebles asociados");
+        }           
+
+      });
     }
 
     $scope.mostrarCaracteristicasAdicionales = function(caract_adic){   
@@ -2243,6 +2306,7 @@ app.controller("siniController",
       $scope.inmueble.codigoDepartamento = {id_departamento:'32',name:'Valle del Cauca'}; 
       $scope.getCiudadesCliente('32');
       $scope.getTiposCaracteristicasInm();
+      $scope.listaAsesoresWasi();
       $scope.showContent = '../inmuebles/formularioInmueble.html';
       //$scope.getTiposCaracteristicasInm1();
     }    
@@ -2407,6 +2471,7 @@ app.controller("siniController",
       var id_tipo_cliente='';
       var fecha_inicial ='';
       var fecha_final='';
+      var id_asesor='';
 
       if(!angular.isUndefined($scope.cliente_busq)){
         if((!angular.isUndefined($scope.cliente_busq.numero_identificacion)) && $scope.cliente_busq.numero_identificacion!=null)
@@ -2425,6 +2490,8 @@ app.controller("siniController",
           id_departamento=$scope.cliente_busq.codigoDepartamento.id_departamento;
         if((!angular.isUndefined($scope.cliente_busq.codigoCiudad)) && $scope.cliente_busq.codigoCiudad!=null)
           id_ciudad=$scope.cliente_busq.codigoCiudad.id_ciudad;
+        if((!angular.isUndefined($scope.cliente_busq.usuario_creador)) && $scope.cliente_busq.usuario_creador!=null)
+          id_asesor=$scope.cliente_busq.usuario_creador.id_asesor;
         if(!angular.isUndefined($scope.cliente_busq.rango_fechas)&&$scope.cliente_busq.rango_fechas==true){
           if((angular.isUndefined($scope.cliente_busq.fecha_final)||$scope.cliente_busq.fecha_final==''||$scope.cliente_busq.fecha_final==null)&&
             (angular.isUndefined($scope.cliente_busq.fecha_inicial)||$scope.cliente_busq.fecha_inicial==''||$scope.cliente_busq.fecha_inicial==null) 
@@ -2455,7 +2522,7 @@ app.controller("siniController",
         $scope.showContent = '../cargando/cargando.html';
       } 
 
-      $http.post($scope.endpoint,{'accion':'consultarClientes','clienteBusq':{'numero_identificacion':numero_identificacion,'nombres':nombres,'apellidos':apellidos,'telefono':telefono,'id_tipo_cliente':id_tipo_cliente,'id_pais':id_pais,'id_departamento':id_departamento,'id_ciudad':id_ciudad,'fecha_inicial':fecha_inicial,'fecha_final':fecha_final}})
+      $http.post($scope.endpoint,{'accion':'consultarClientes','clienteBusq':{'numero_identificacion':numero_identificacion,'nombres':nombres,'apellidos':apellidos,'telefono':telefono,'id_tipo_cliente':id_tipo_cliente,'id_pais':id_pais,'id_departamento':id_departamento,'id_ciudad':id_ciudad,'fecha_inicial':fecha_inicial,'fecha_final':fecha_final,'id_asesor':id_asesor}})
       .then(function(response){          
         
         if(response.data.cant>0){

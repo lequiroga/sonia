@@ -152,6 +152,20 @@
               $validaArea = 1;
             }
 
+            $validaAsesor = 0;
+
+            if(isset($datosInmueble->id_asesor)&&$datosInmueble->id_asesor!=null&&$datosInmueble->id_asesor!=""){
+              if($data1[$j]['id_user']==$datosInmueble->id_asesor){
+                $validaAsesor=1;
+              }
+              else{
+                $validaAsesor=0;
+              }
+            }
+            else{
+              $validaAsesor=1;  
+            }
+
             $validaMoneda = 0;
 
             if(isset($datosInmueble->moneda)){
@@ -362,7 +376,7 @@
               $validaEstado = 1;
             }
 
-            if($validaPais==1 && $validaDepto==1 && $validaCiudad==1 && $validaSector==1 && $validaInmueble==1 && $validaEstrato==1 && $validaCondicion==1 && $validaArea==1 && $validaMoneda==1 && $validaPrecios==1 && $validaFechas==1 && $validaCaracteristicas==1 && $validaCaracteristicasOpcionales==1 && $validaHabitaciones==1 && $validaBanos==1 && $validaParqueadero==1 && $validaPiso==1 && $validaEstado == 1){
+            if($validaPais==1 && $validaDepto==1 && $validaCiudad==1 && $validaSector==1 && $validaInmueble==1 && $validaEstrato==1 && $validaCondicion==1 && $validaArea==1 && $validaMoneda==1 && $validaPrecios==1 && $validaFechas==1 && $validaCaracteristicas==1 && $validaCaracteristicasOpcionales==1 && $validaHabitaciones==1 && $validaBanos==1 && $validaParqueadero==1 && $validaPiso==1 && $validaEstado == 1 && $validaAsesor == 1){
               $inmueblesRespuesta[$index] = $data1[$j];
               $index++;
             }

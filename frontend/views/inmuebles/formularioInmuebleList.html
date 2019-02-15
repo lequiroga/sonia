@@ -1,7 +1,7 @@
 <div class="toggle">
     <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
 </div>
-<div class="form1">
+<div class="form1" ng-if="tipoListaInmuebles=='inmueblesTodos'">
     <center><h2 style="font-family:Verdana;">INMUEBLES</h2>    
     <h4>Cantidad resultados: {{cantListaInmueble}}</h4>
     <p>&nbsp;</p>
@@ -70,6 +70,73 @@
       <center><button style="width:15em;" class="volver" ng-click="limpiarCaracteristicasTipoInmueble1()">Volver</button></center>
     </div>
   </div>  
+
+  <div class="form1" ng-if="tipoListaInmuebles=='inmueblesClientes'">
+    <center><h2 style="font-family:Verdana;">INMUEBLES</h2>    
+    </center>   
+    <div class="container">    
+      <div class="panel panel-default">
+        <div ng-repeat='inmuebleRespuesta in listaInmueblesClienteRespuesta' class="panel-body">
+          <br />          
+          <div style="text-align: center;">
+            <p>Cliente: {{nombre_cliente_inmueble}}</p> 
+          </div>
+          <table ng-init='configPagesInm()' style="width:80%;">            
+            <tbody>  
+              <tr style="width:100%;">                
+                <td style="font-weight: bolder;text-align: center;"></td>            
+              </tr>            
+              <tr>         
+                <td style="text-align: center;width: 40%; vertical-align: top;">
+                  <p>&nbsp;</p>   
+                  <img width="200em" height="170em" ng-if="inmuebleRespuesta.main_image.url_big" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="{{inmuebleRespuesta.main_image.url_big}}"><br /> <br />  
+                  <!--img width="60em" height="60em" ng-if="inmuebleRespuesta.galleries.length>0" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="../../form-images/photos.png"-->                       
+                </td>
+                <td style="text-align: left;width: 60%; vertical-align: top;"> 
+                  <p>&nbsp;</p> 
+                  <p style="font-weight: bold;">{{inmuebleRespuesta.title}}</p>    
+                  <p style="font-weight: bold;">{{inmuebleRespuesta.iso_currency}} {{inmuebleRespuesta.sale_price_label}}</p>                  
+                  <p>Relaci&oacute;n del cliente con el inmueble: {{inmuebleRespuesta.tipo_cliente}}</p>              
+                  <p ng-if="inmuebleRespuesta.country_label!=''"><br />Pa&iacute;s: {{inmuebleRespuesta.country_label}}</p>      
+                  <p ng-if="inmuebleRespuesta.city_label!=''">Ciudad: {{inmuebleRespuesta.city_label}}, {{inmuebleRespuesta.region_label}}</p>                  
+                  <p ng-if="inmuebleRespuesta.zone_label!=''">Zona: {{inmuebleRespuesta.zone_label}}</p>           
+                  <p ng-if="inmuebleRespuesta.area!=''">&Aacute;rea: {{inmuebleRespuesta.area}} {{inmuebleRespuesta.unit_area_label}}</p>
+                  <p ng-if="inmuebleRespuesta.built_area!=''">&Aacute;rea constru&iacute;da: {{inmuebleRespuesta.built_area}} {{inmuebleRespuesta.unit_built_area_label}}</p>
+                  <p ng-if="inmuebleRespuesta.private_area!=''">&Aacute;rea privada: {{inmuebleRespuesta.built_area}} {{inmuebleRespuesta.unit_private_area_label}}</p>
+                  <p ng-if="inmuebleRespuesta.property_condition_label=='Used'">Condici&oacute;n: usado</p> 
+                  <p ng-if="inmuebleRespuesta.property_condition_label=='New'">Condici&oacute;n: nuevo</p>                 
+                  <p ng-if="inmuebleRespuesta.availability_label=='Available'">Estado: disponible</p>
+                  <p ng-if="inmuebleRespuesta.availability_label=='Sold'">Estado: vendido</p>
+                  <p ng-if="inmuebleRespuesta.availability_label=='Rented'">Estado: alquilado</p>
+                  <p ng-if="inmuebleRespuesta.updated_at!='0000-00-00 00:00:00'">&Uacute;ltima actualizaci&oacute;n:  {{inmuebleRespuesta.updated_at}}</p>     
+                  <p ng-if="inmuebleRespuesta.updated_at=='0000-00-00 00:00:00'">&Uacute;ltima actualizaci&oacute;n:  {{inmuebleRespuesta.created_at}}</p>
+                  <br />     
+                  <code ng-bind-html="inmuebleRespuesta.observations" data-html="true" ng-if="inmuebleRespuesta.observations!=''"></code><br />    
+                  <h4 style="font-weight: bold;">Caracter&iacute;sticas Externas</h4>
+                  <code ng-repeat='externa in inmuebleRespuesta.features.external'>{{externa.nombre}},&nbsp;</code>         
+                  <h4 style="font-weight: bold;">Caracter&iacute;sticas Internas</h4>                                   
+                  <code ng-repeat='interna in inmuebleRespuesta.features.internal'>{{interna.nombre}},&nbsp;</code>                  
+                  <p ng-if="inmuebleRespuesta.bedrooms!=''&&inmuebleRespuesta.bedrooms!='0'">Habitaciones: {{inmuebleRespuesta.bedrooms}}</p>  
+                  <p ng-if="inmuebleRespuesta.bathrooms!=''&&inmuebleRespuesta.bathrooms!='0'">Ba&ntilde;os: {{inmuebleRespuesta.bathrooms}}</p>  
+                  <p ng-if="inmuebleRespuesta.garages!=''&&inmuebleRespuesta.garages!='0'">Garajes o parqueaderos: {{inmuebleRespuesta.garages}}</p>
+                  <p ng-if="inmuebleRespuesta.floor!=''&&inmuebleRespuesta.floor!='0'">Piso o cantidad de pisos: {{inmuebleRespuesta.floor}}</p>
+                  <p ng-if="inmuebleRespuesta.maintenance_fee!=''&&inmuebleRespuesta.maintenance_fee!='0'">Valor administraci&oacute;n: $ {{inmuebleRespuesta.maintenance_fee}}</p>
+                  <p ng-if="inmuebleRespuesta.link!=''">URL anuncio: <a href="{{inmuebleRespuesta.link}}" target="_blank">{{inmuebleRespuesta.link}}</a></p>
+                  <p ng-if="inmuebleRespuesta.visitas!=''">Visitas: {{inmuebleRespuesta.visitas}}</p>
+                  <p>&nbsp;</p>                                     
+                </td>         
+              </tr>
+            </tbody>
+          </table>          
+        </div>               
+      </div>     
+      <br />
+      <br />
+      <br />
+      <center><button style="width:15em;" class="volver" ng-click="volverListaClientes()">Volver</button></center>
+    </div>
+  </div>  
+
   <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
   <a href="mailto:lequiroga@gmail.com" target="_top">lequiroga@gmail.com</a>
   </div>  

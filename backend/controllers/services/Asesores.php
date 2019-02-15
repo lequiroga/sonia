@@ -95,6 +95,37 @@
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 		}
 
+		//Asesores registrados en la API de Wasi
+		function getListaAsesoresWasi(){        
+
+            $autAPI   = new AutenticaAPI();
+			$datosAPI = $autAPI->retornarDatosAPI('wasi','lista_usuarios');
+
+			$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+
+			unset($data['status']);	
+
+  			$data1 = array();  			
+
+            $j=0;
+  			for($i=0;$i<count($data);$i++){    		  
+
+      		  $data1[$j]=new stdClass();
+      		  $data1[$j]->id_asesor=$data[$i]['id_user'];
+      		  $data1[$j]->asesor=$data[$i]['first_name'].' '.$data[$i]['last_name'];
+
+      		  $j++;    		     
+
+  			}
+  			
+  			$output['listaAsesores'] = $data1;  			
+
+  			//echo $output;			   
+
+        	
+	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+		}
+
 	}
 	
 

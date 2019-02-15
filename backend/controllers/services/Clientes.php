@@ -58,6 +58,44 @@
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);*/
 		}
 
+		//Consultar los inmuebles asociados a un cliente
+		function getPropiedadesClientes($id_cliente){
+
+			$autAPI   = new AutenticaAPI();
+			$datosAPI = $autAPI->retornarDatosAPI('wasi','propiedades_clientes');
+
+			$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_cliente.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+
+			$total = $data['total'];
+			unset($data['total']);
+  			$data1 = array();
+
+            $j=0;
+            $data_property = array();
+
+  			for($i=0;$i<$total;$i++){
+
+  			  $id_property = $data[$i]['id_property'];
+  			  $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_por_id');  			  
+			  $data_property['propiedades'][$j] = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+			  
+			  $data_property['propiedades'][$j]['tipo_cliente']=$data[$i]['client_type_label'];
+
+			  $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_visitas');  			  
+			  $data_visitas = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true ); 			 
+
+			  $data_property['propiedades'][$j]['visitas']=$data_visitas['visits'];
+
+			  $j++;   		  
+
+  			} 
+
+  			$data = json_encode($data_property);
+
+  			echo $data;
+
+		}
+
 		function consultarClientes($clienteBusq){    			   
 
             $autAPI   = new AutenticaAPI();
@@ -147,6 +185,20 @@
             	}
             	else{
             	  $validaCiudad=1;	
+            	}
+
+            	$validaAsesor = 0;
+
+            	if(isset($clienteBusq->id_asesor)&&$clienteBusq->id_asesor!=null&&$clienteBusq->id_asesor!=""){
+            	  if($data1[$j]['id_user']==$clienteBusq->id_asesor){
+            	  	$validaAsesor=1;
+            	  }
+            	  else{
+            	  	$validaAsesor=0;
+            	  }
+            	}
+            	else{
+            	  $validaAsesor=1;	
             	}
 
             	$validaTelefono = 0;
@@ -240,7 +292,7 @@
             	  $validaNumeroIdentificacion=1;	
             	}
 
-            	if($validaTipoCliente==1 && $validaPais==1 && $validaDepartamento==1 && $validaCiudad==1 && $validaTelefono==1 && $validaNombres==1 && $validaApellidos==1 && $validaNumeroIdentificacion==1 && $validaFechas==1){
+            	if($validaTipoCliente==1 && $validaPais==1 && $validaDepartamento==1 && $validaCiudad==1 && $validaTelefono==1 && $validaNombres==1 && $validaApellidos==1 && $validaNumeroIdentificacion==1 && $validaFechas==1 && $validaAsesor==1){
             	  $clientesRespuesta[$index]=$data1[$j];
             	  $index++;	
             	}

@@ -102,6 +102,18 @@
       $obj->getListaAsesores($request->asesorBusq);
     }
 
+    if($request->accion=='consultarPropiedadesCliente'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->getPropiedadesClientes($request->id_cliente);
+    }
+
+    if($request->accion=='consultarAsesoresWasi'){
+      require_once('services/Asesores.php');        
+      $obj = new Asesores(); 
+      $obj->getListaAsesoresWasi();
+    }  
+
     if($request->accion=='informacionInmobiliaria'){
       require_once('services/Inmobiliaria.php');        
       $obj = new Inmobiliaria(); 

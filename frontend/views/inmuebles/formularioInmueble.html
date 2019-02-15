@@ -130,6 +130,10 @@
       <select ng-if="consultarInmuebles=='1'" ng-options="id_estado as id_estado.nombre for id_estado in estados_inmueble track by id_estado.id_estado" name="inmueble_estado" id="inmueble_estado" ng-model="inmueble.estado" />          
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>  
       </select>
+      <label>Creador(a)</label>
+      <select name="inmueble_usuario_creador" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="inmueble.usuario_creador"/> 
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
+      </select>
       <label ng-if="consultarInmuebles=='0'">Observaciones o descripci&oacute;n</label>
       <textarea name="inmueble_observaciones" ng-if="consultarInmuebles=='0'" ng-model="inmueble.observaciones"></textarea>   
       <label ng-if="consultarInmuebles=='0'">Comentario adicional</label>
