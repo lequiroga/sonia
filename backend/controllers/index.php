@@ -25,6 +25,13 @@
       $obj->getTiposClientes();
     }
 
+    //Obtiene la información adicional del inmueble
+    if($request->accion=='consultarInfoAdicionalPropiedad'){
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles();       
+      $obj->consultarInfoAdicionalPropiedad($request->id_property);
+    }
+
     //Obtiene la zona a la cual pertenece un barrio
     if($request->accion=='getZonaBarrioCali'){
       require_once('services/Zonas.php');        

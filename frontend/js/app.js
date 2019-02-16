@@ -159,6 +159,28 @@ app.controller("siniController",
         });
     }
 
+    //Ventana emergente que muestra la información adicional del inmueble
+    $scope.verInformacionAdicionalInmueble = function(lista_clientes_propiedad,visitas,link,title,sale_price_label,id_property){
+          ModalService.showModal({
+          templateUrl: '../inmuebles/formularioModalInfoAdicInmueble.html',
+          controller: "ContrladorModalInfoAdicInmueble",
+          inputs: {
+            lista_clientes_propiedad: lista_clientes_propiedad,
+            visitas: visitas,
+            link: link,
+            title: title,
+            sale_price_label: sale_price_label,
+            id_property: id_property
+          }
+        }).then(function(modal) {
+          modal.close.then(function(result) {
+            // Una vez que el modal sea cerrado, la libreria invoca esta función
+            // y en result tienes el resultado.
+            $scope.resultadoModal = result;
+          });
+        });
+    }
+
     $scope.seleccionarCliente = function(id_cliente){      
       
       $http.post($scope.endpoint,{'accion':'datosClientePorID','id_cliente':id_cliente})
@@ -1120,6 +1142,19 @@ app.controller("siniController",
       $scope.inmueble.fecha_final = undefined;
     }
 
+    $scope.inactivarCamposInmuebles = function(){
+      if(angular.isUndefined($scope.inmueble.ID)||$scope.inmueble.ID==''||$scope.inmueble.ID==null){
+        $scope.inmueble.camposInactivos='0';
+        $scope.limpiarCaracteristicasTipoInmueble();
+      }        
+      else{
+        var ID = $scope.inmueble.ID;
+        $scope.inmueble = [];
+        $scope.inmueble.ID = ID;
+        $scope.inmueble.camposInactivos='1';
+      }
+    }
+
     //Función que reestablece los campos de búsqueda de clientes por rango de fechas
     $scope.cambiarValorRangosFechasClientesBusq = function(){
       $scope.cliente_busq.fecha_inicial = undefined;
@@ -1939,6 +1974,9 @@ app.controller("siniController",
       var inmuebleCons = {};
       var inmueble = $scope.inmueble;  
 
+      if(!angular.isUndefined(inmueble.ID)){
+        inmuebleCons.ID = inmueble.ID;        
+      }
       if(!angular.isUndefined(inmueble.codigoPais)){
         inmuebleCons.codigoPais = inmueble.codigoPais;      	
       }
@@ -2151,6 +2189,37 @@ app.controller("siniController",
         //console.log($scope.listaInmueblesRespuesta);
       });     
 
+    }
+
+    //Función que invoca la ventana emergente que muestra información adicional del inmueble
+    $scope.informacionAdicionalInmueble = function(id_property){
+      $http.post($scope.endpoint,{'accion':'consultarInfoAdicionalPropiedad','id_property':id_property})
+      .then(function(response){
+        var lista_clientes_propiedad=[];
+        var visitas='';
+        var link='';
+        var title='';
+
+        if(!angular.isUndefined(response.data.datosClientes)&&response.data.datosClientes.length>0){
+          lista_clientes_propiedad = response.data.datosClientes;                 
+        }
+        if(!angular.isUndefined(response.data.visitas)){
+          visitas = response.data.visitas;          
+        }
+        if(!angular.isUndefined(response.data.link)){
+          link = response.data.link;
+        }
+        if(!angular.isUndefined(response.data.title)){
+          title = response.data.title;
+        }    
+        if(!angular.isUndefined(response.data.sale_price_label)){
+          sale_price_label = response.data.sale_price_label;
+        }    
+        if(!angular.isUndefined(response.data.id_property)){
+          id_property = response.data.id_property;
+        }
+        $scope.verInformacionAdicionalInmueble(lista_clientes_propiedad,visitas,link,title,sale_price_label,id_property);
+      }); 
     }
 
     $scope.verInmueblesCliente = function(id_cliente,first_name,last_name){
@@ -2778,6 +2847,24 @@ app.controller('ContrladorModalRequerimientoCliente', function($scope, close, re
   $scope.requerimiento_cliente.requerimiento=requerimiento;
   $scope.requerimiento_cliente.comentarios_adicionales=comentarios_adicionales;
   $scope.requerimiento_cliente.reference=referencia;
+
+  $scope.cerrarModal = function() {
+    close($scope.result);
+  };
+
+});
+
+app.controller('ContrladorModalInfoAdicInmueble', function($scope, close, lista_clientes_propiedad, visitas, link, title, sale_price_label, id_property) {  
+  //$scope.galeriaActiva = []; 
+  $scope.informacion_adicional_inmueble = []; 
+  $scope.informacion_adicional_inmueble.lista_clientes_propiedad=lista_clientes_propiedad;
+  $scope.informacion_adicional_inmueble.id_property=id_property;
+  $scope.informacion_adicional_inmueble.visitas=visitas;
+  $scope.informacion_adicional_inmueble.link=link;
+  $scope.informacion_adicional_inmueble.title=title;
+  $scope.informacion_adicional_inmueble.sale_price_label=sale_price_label;
+  $scope.informacion_adicional_inmueble.cantidad_clientes = lista_clientes_propiedad.length;
+  console.log($scope.informacion_adicional_inmueble);
 
   $scope.cerrarModal = function() {
     close($scope.result);

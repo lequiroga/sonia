@@ -36,6 +36,19 @@
           unset($data1['status']);
           for($j=0;$j<count($data1);$j++){
 
+            $validaID = 0;            
+            if(isset($datosInmueble->ID)){
+              if($datosInmueble->ID==$data1[$j]['id_property']){
+                $validaID = 1;
+              }
+              else{
+                $validaID = 0;
+              }
+            }
+            else{
+              $validaID = 1;
+            } 
+
             $validaPais = 0;
 
             if(isset($datosInmueble->codigoPais)&&$datosInmueble->codigoPais!=''){
@@ -376,7 +389,7 @@
               $validaEstado = 1;
             }
 
-            if($validaPais==1 && $validaDepto==1 && $validaCiudad==1 && $validaSector==1 && $validaInmueble==1 && $validaEstrato==1 && $validaCondicion==1 && $validaArea==1 && $validaMoneda==1 && $validaPrecios==1 && $validaFechas==1 && $validaCaracteristicas==1 && $validaCaracteristicasOpcionales==1 && $validaHabitaciones==1 && $validaBanos==1 && $validaParqueadero==1 && $validaPiso==1 && $validaEstado == 1 && $validaAsesor == 1){
+            if($validaID==1 && $validaPais==1 && $validaDepto==1 && $validaCiudad==1 && $validaSector==1 && $validaInmueble==1 && $validaEstrato==1 && $validaCondicion==1 && $validaArea==1 && $validaMoneda==1 && $validaPrecios==1 && $validaFechas==1 && $validaCaracteristicas==1 && $validaCaracteristicasOpcionales==1 && $validaHabitaciones==1 && $validaBanos==1 && $validaParqueadero==1 && $validaPiso==1 && $validaEstado == 1 && $validaAsesor == 1){
               $inmueblesRespuesta[$index] = $data1[$j];
               $index++;
             }
@@ -410,6 +423,41 @@
         $data = json_encode($data1);
 
         echo $data; 
+
+    }
+
+    function consultarInfoAdicionalPropiedad($id_property){
+
+        $autAPI   = new AutenticaAPI();
+        $datosAPI = $autAPI->retornarDatosAPI('wasi','clientes_propiedades');
+
+        $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+
+        unset($data['total']);
+        unset($data['status']);
+
+        $data_clientes = array();
+
+        for($i=0;$i<count($data);$i++){
+
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','clientes_por_id');
+          $data_clientes[$i] = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data[$i]['id_client'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );         
+
+        }
+
+        $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_por_id');         
+        $data_property = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+
+        $output['datosClientes'] = $data_clientes;
+        $output['visitas'] = $data_property['visits'];
+        $output['link'] = $data_property['link'];
+        $output['title'] = $data_property['title'];
+        $output['sale_price_label'] = $data_property['sale_price_label'];
+        $output['id_property'] = $data_property['id_property'];
+        
+        $data = json_encode($output);
+
+        echo $data;
 
     }
 

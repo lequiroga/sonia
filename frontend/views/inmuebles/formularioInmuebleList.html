@@ -12,15 +12,19 @@
       <div class="panel panel-default">
         <div ng-repeat='inmuebleRespuesta in listaInmueblesRespuestaNueva' class="panel-body">
           <br />
-          <table ng-init='configPagesInm()' style="width:80%;">            
-            <tbody>  
+          <table ng-init='configPagesInm()' style="width:80%;">  
+            <thead>
               <tr style="width:100%;">                
-                <td style="font-weight: bolder;text-align: center;"></td>            
-              </tr>            
+                <th style="font-weight: bolder;text-align: center;">ID Inmueble</th>    
+                <th style="font-weight: bolder;text-align: left;">{{inmuebleRespuesta.id_property}}</th>     
+              </tr> 
+            </thead>         
+            <tbody>                     
               <tr>         
                 <td style="text-align: center;width: 40%; vertical-align: top;">
                   <p>&nbsp;</p>   
-                  <img width="200em" height="170em" ng-if="inmuebleRespuesta.main_image.url_big" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="{{inmuebleRespuesta.main_image.url_big}}"><br /> <br />  
+                  <img width="200em" height="170em" ng-if="inmuebleRespuesta.main_image.url_big" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="{{inmuebleRespuesta.main_image.url_big}}"><br ng-if="inmuebleRespuesta.main_image.url_big" /> <br ng-if="inmuebleRespuesta.main_image.url_big" /> 
+                  <a href="#" ng-click="informacionAdicionalInmueble(inmuebleRespuesta.id_property)">M&aacute;s informaci&oacute;n</a> 
                   <!--img width="60em" height="60em" ng-if="inmuebleRespuesta.galleries.length>0" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="../../form-images/photos.png"-->                       
                 </td>
                 <td style="text-align: left;width: 60%; vertical-align: top;"> 
@@ -52,7 +56,9 @@
                   <p ng-if="inmuebleRespuesta.garages!=''&&inmuebleRespuesta.garages!='0'">Garajes o parqueaderos: {{inmuebleRespuesta.garages}}</p>
                   <p ng-if="inmuebleRespuesta.floor!=''&&inmuebleRespuesta.floor!='0'">Piso o cantidad de pisos: {{inmuebleRespuesta.floor}}</p>
                   <p ng-if="inmuebleRespuesta.maintenance_fee!=''&&inmuebleRespuesta.maintenance_fee!='0'">Valor administraci&oacute;n: $ {{inmuebleRespuesta.maintenance_fee}}</p>
-                  <p>&nbsp;</p>                                     
+                  <p>&nbsp;</p>    
+                  <p><a href="#">Cambiar informaci&oacute;n inmueble</a></p>
+                  <p>&nbsp;</p>                                 
                 </td>         
               </tr>
             </tbody>
@@ -81,15 +87,18 @@
           <div style="text-align: center;">
             <p>Cliente: {{nombre_cliente_inmueble}}</p> 
           </div>
-          <table ng-init='configPagesInm()' style="width:80%;">            
-            <tbody>  
+          <table ng-init='configPagesInm()' style="width:80%;">  
+            <thead>
               <tr style="width:100%;">                
-                <td style="font-weight: bolder;text-align: center;"></td>            
-              </tr>            
+                <th style="font-weight: bolder;text-align: center;">ID Inmueble</th>    
+                <th style="font-weight: bolder;text-align: left;">{{inmuebleRespuesta.id_property}}</th>     
+              </tr> 
+            </thead>     
+            <tbody>                          
               <tr>         
                 <td style="text-align: center;width: 40%; vertical-align: top;">
                   <p>&nbsp;</p>   
-                  <img width="200em" height="170em" ng-if="inmuebleRespuesta.main_image.url_big" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="{{inmuebleRespuesta.main_image.url_big}}"><br /> <br />  
+                  <img width="200em" height="170em" ng-if="inmuebleRespuesta.main_image.url_big" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="{{inmuebleRespuesta.main_image.url_big}}"><br ng-if="inmuebleRespuesta.main_image.url_big" /> <br ng-if="inmuebleRespuesta.main_image.url_big" />  
                   <!--img width="60em" height="60em" ng-if="inmuebleRespuesta.galleries.length>0" ng-click="mostrarModal(inmuebleRespuesta.galleries,inmuebleRespuesta.main_image)" src="../../form-images/photos.png"-->                       
                 </td>
                 <td style="text-align: left;width: 60%; vertical-align: top;"> 

@@ -5,16 +5,17 @@
     <center><h2 style="font-family:Verdana;">INMUEBLES</h2></center>
     <br />
     <form name="formularioInmueble" id="formularioInmueble" ng-model="formularioInmueble" method="post" NOVALIDATE>
+      <label>ID</label><input name="inmueble_ID" id="inmueble_ID" ng-model="inmueble.ID" ng-keyup="inactivarCamposInmuebles()" type="text"/>
       <label>Pa&iacute;s</label>
-      <select name="inmueble_codigoPais" id="codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmueble.codigoPais" ng-change="getDepartamentos(inmueble.codigoPais)" ng-init="getPaises()"/>  
+      <select name="inmueble_codigoPais" id="codigoPais" ng-disabled="inmueble.camposInactivos=='1'" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmueble.codigoPais" ng-change="getDepartamentos(inmueble.codigoPais)" ng-init="getPaises()"/>  
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>      
       </select>
       <label>Departamento</label>
-      <select name="inmueble_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmueble.codigoDepartamento)" ng-model="inmueble.codigoDepartamento"/>
+      <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmueble.codigoDepartamento)" ng-model="inmueble.codigoDepartamento"/>
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>
       </select>
       <label>Ciudad</label>
-      <select name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/> 
+      <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/> 
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>       
       </select>      
       <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Sector&nbsp;/&nbsp;Zona</label>
@@ -37,17 +38,17 @@
         <!--option value="" label="Seleccione">Sin&nbsp;informaci&oacute;n</option-->        
       </select>   
       <label>Tipo inmueble</label>
-      <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>  
+      <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>  
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option> 
       </select> 
       <label ng-if="consultarInmuebles=='0'">T&iacute;tulo publicaci&oacute;n</label><input ng-if="consultarInmuebles=='0'" name="inmueble_titulo" id="inmueble_titulo" ng-model="inmueble.titulo" type="text"/>
       <label>Condición</label>
-      <select name="inmueble_condicion" ng-model="inmueble.condicion" />    
+      <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_condicion" ng-model="inmueble.condicion" />    
         <option value="" label="Seleccione">Sin&nbsp;informaci&oacute;n</option>     
         <option value="1" label="Nuevo">Nuevo</option>  
         <option value="2" label="Usado">Usado</option>  
       </select>  
-      <label>&Aacute;reas o hect&aacute;reas</label><input name="inmueble_area" type="number" ng-model="inmueble.area"/> 
+      <label>&Aacute;reas o hect&aacute;reas</label><input ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_area" type="number" ng-model="inmueble.area"/> 
       <label ng-if="1==0">Prioridad o urgencia de negocio</label>
       <select ng-if="1==0" name="inmueble_prioridad" ng-options="id_prioridad as id_prioridad.descripcion for id_prioridad in ids_prioridades track by id_prioridad.id_prioridad" ng-model="inmueble.prioridad" ng-init="getPrioridades()"/>     
       </select>
@@ -55,21 +56,21 @@
       <select name="inmueble_forma_pago" ng-if="1==0" ng-options="id_forma_pago as id_forma_pago.descripcion for id_forma_pago in ids_formas_pago track by id_forma_pago.id_forma_pago" ng-model="inmueble.forma_pago" ng-init="getFormasPago()"/>     
       </select>     
       <label>Moneda</label>
-      <select name="inmueble_moneda" ng-options="id_moneda as id_moneda.denominacion for id_moneda in ids_monedas track by id_moneda.id_moneda" ng-model="inmueble.moneda" ng-init="getMonedas()" ng-change="getConversionPesos(inmueble.moneda.id_moneda)"/>  
+      <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_moneda" ng-options="id_moneda as id_moneda.denominacion for id_moneda in ids_monedas track by id_moneda.id_moneda" ng-model="inmueble.moneda" ng-init="getMonedas()" ng-change="getConversionPesos(inmueble.moneda.id_moneda)"/>  
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>    
       </select>
       <label ng-if="inmueble.moneda">{{conversion_pesos}}</label>  
       <label ng-if="consultarInmuebles=='0'">Precio inmueble</label><input name="inmueble_precio" ng-if="consultarInmuebles=='0'" type="number" ng-model="inmueble.precio"/>
       <label ng-if="consultarInmuebles=='1'">Rango de precios</label>    
       <label class="switch" ng-if="consultarInmuebles=='1'">
-        <input type="checkbox" id="inmueble_rango_precios" name="inmueble_rango_precios" ng-change="cambiarValorRangosPrecios()" ng-model="inmueble.rango_precios">
+        <input type="checkbox" id="inmueble_rango_precios" name="inmueble_rango_precios" ng-change="cambiarValorRangosPrecios()" ng-disabled="inmueble.camposInactivos=='1'" ng-model="inmueble.rango_precios">
         <span style="width: 4.5em;" class="slider round"></span>
       </label>  
       <label ng-if="inmueble.rango_precios">Precio inicial (*)</label><input name="inmueble_precio_inicial" ng-if="inmueble.rango_precios" type="number" ng-model="inmueble.precio_inicial"/> 
       <label ng-if="inmueble.rango_precios">Precio final (*)</label><input name="inmueble_precio_final" ng-if="inmueble.rango_precios" type="number" ng-model="inmueble.precio_final"/> 
       <label ng-if="consultarInmuebles=='1'">Rango de fechas de publicaci&oacute;n</label>    
       <label class="switch" ng-if="consultarInmuebles=='1'">
-        <input type="checkbox" id="inmueble_rango_fechas" name="inmueble_rango_fechas" ng-change="cambiarValorRangosFechas()" ng-model="inmueble.rango_fechas">
+        <input type="checkbox" id="inmueble_rango_fechas" ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_rango_fechas" ng-change="cambiarValorRangosFechas()" ng-model="inmueble.rango_fechas">
         <span style="width: 4.5em;" class="slider round"></span>
       </label>
       <label ng-if="inmueble.rango_fechas">Fecha inicial (*)</label><input name="inmueble_fecha_inicial" ng-if="inmueble.rango_fechas" type="date" ng-model="inmueble.fecha_inicial"/> 
@@ -127,11 +128,11 @@
       <label ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'">Parqueaderos o garajes</label><input ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'" name="inmueble_parqueadero" id="inmueble_parqueadero" ng-model="inmueble.parqueadero" type="number"/> 
       <label ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'">Piso o cantidad de pisos</label><input ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'" name="inmueble_piso" id="inmueble_piso" ng-model="inmueble.piso" type="number"/>
       <label ng-if="consultarInmuebles=='1'">Estado</label>
-      <select ng-if="consultarInmuebles=='1'" ng-options="id_estado as id_estado.nombre for id_estado in estados_inmueble track by id_estado.id_estado" name="inmueble_estado" id="inmueble_estado" ng-model="inmueble.estado" />          
+      <select ng-if="consultarInmuebles=='1'" ng-options="id_estado as id_estado.nombre for id_estado in estados_inmueble track by id_estado.id_estado" ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_estado" id="inmueble_estado" ng-model="inmueble.estado" />          
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>  
       </select>
       <label>Creador(a)</label>
-      <select name="inmueble_usuario_creador" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="inmueble.usuario_creador"/> 
+      <select name="inmueble_usuario_creador" ng-disabled="inmueble.camposInactivos=='1'" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="inmueble.usuario_creador"/> 
         <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
       </select>
       <label ng-if="consultarInmuebles=='0'">Observaciones o descripci&oacute;n</label>
