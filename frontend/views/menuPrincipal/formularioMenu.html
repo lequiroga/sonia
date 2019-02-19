@@ -10,80 +10,82 @@
             window.history.forward();
         }
   </script>
-  <script> 
+  <script>
 
     // muestra vista previa de la imagen cargada
-    function openFile(event) {            
-      var input = event.target;      
+    function openFile(event) {
+      var input = event.target;
       var reader = new FileReader();
       reader.onload = function(){
-        var dataURL = reader.result; 
-        var extension = input.files[0].name.substring(input.files[0].name.length-3,input.files[0].name.length); 
+        var dataURL = reader.result;
+        var extension = input.files[0].name.substring(input.files[0].name.length-3,input.files[0].name.length);
         if(!(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG')){
           alert("La foto debe ser de uno de los formatos permitidos (jpg, bmp o png)");
           document.formularioAsesor.file.value = '';
           var output = document.getElementById('output');
           output.src = undefined;
-          output.style.display = "none"; 
+          output.style.display = "none";
           return false;
-        } 
+        }
         else{
           var output = document.getElementById('output');
           document.formularioAsesor.foto = dataURL;
           output.src = dataURL;
-          output.style.display = "block";  
-        }            
+          output.style.display = "block";
+        }
         //$scope.imgAsesorTemp = dataURL;
       };
       reader.readAsDataURL(input.files[0]);
     };
 
-    function openFile1(event) {            
-      var input = event.target;      
+    function openFile1(event) {
+      var input = event.target;
       var reader = new FileReader();
       reader.onload = function(){
-        var dataURL = reader.result; 
-        var extension = input.files[0].name.substring(input.files[0].name.length-3,input.files[0].name.length); 
+        var dataURL = reader.result;
+        var extension = input.files[0].name.substring(input.files[0].name.length-3,input.files[0].name.length);
         if(!(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG')){
           alert("La imagen o logo debe ser de uno de los formatos permitidos (jpg, bmp o png)");
           document.formularioInmobiliaria.file.value = '';
           var outputInm = document.getElementById('outputInm');
           outputInm.src = undefined;
-          outputInm.style.display = "none"; 
+          outputInm.style.display = "none";
           return false;
-        } 
+        }
         else{
           var outputInm = document.getElementById('outputInm');
           //document.formularioInmobiliaria.foto = dataURL;
           outputInm.src = dataURL;
-          outputInm.style.display = "block";  
-        }            
+          outputInm.style.display = "block";
+        }
         //$scope.imgAsesorTemp = dataURL;
       };
       reader.readAsDataURL(input.files[0]);
-    };  
+    };
 
   </script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
   <script type="text/javascript" src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script>
-  <script src="../../js/app.js"></script>  
+  <script src="../../js/app.js"></script>
   <!--script src="../../js/appImages.js"></script-->
   <script type="text/javascript" src="../../js/ajax.js"></script>
   <script type="text/javascript" src="../../js/ajax-dynamic-content.js"></script>
   <script type="text/javascript" src="../../js/jquery-3.3.1.js"></script>
-  <script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>  
+  <script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="../../js/bootstrap/bootstrap.min.js" crossorigin="anonymous"></script>
-  <!--link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css" crossorigin="anonymous"-->
+
+  <script type="text/javascript" src="../../js/bootstrap/bootstrap.bundle.min.js"></script>
   <!-- <link rel="stylesheet" href="../../css/bootstrap-theme.min.css" crossorigin="anonymous"> -->
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
-  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+  <!-- <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'> -->
   <link rel="stylesheet" href="../../css/style.css">
   <link rel="stylesheet" href="../../css/select.css">
-
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css">
 </head>
 
 <body ng-controller="siniController" onLoad="noBack();" onpageshow="if (event.persisted) noBack();" onUnload="">
@@ -118,9 +120,9 @@
 <!-- Button Mixin-->
 <!-- Pen Title-->
 <div class="pen-title" style="background-color:#1137AD;height:9em;">
-  <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="logo_empresa" src="{{logo_empresa}}">  
+  <!-- <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="logo_empresa" src="{{logo_empresa}}"> -->
   <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="!logo_empresa&&showContent!='../login/formularioLogin.html'" src="../../form-images/inmobiliaria/97805.png">
-  <img class="responsive" style="width:41em;height:7em;margin-top:1em;" src="../../form-images/montes_avila_banner.png">  
+  <img class="responsive" style="width:41em;height:7em;margin-top:1em;" src="../../form-images/montes_avila_banner.png">
 </div>
 <!-- Form Module-->
 <div class="module form-module" ng-controller="setContentDiv" id="formulario" ng-include="showContent">
