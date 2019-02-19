@@ -11,7 +11,7 @@
   	function ClientesSQL(){
       $conn   = new ConectaBD();
 	    $dbConn = $conn->conectarBD();   
-	    unset($this->conn);
+	    //unset($this->conn);
   	}
 
     function getTiposIdentificacion(){                      			
@@ -134,14 +134,17 @@
 
     }
 
-    function retornarCantClientes($id_cliente){
+    function retornarCantClientes($id_client){
+
+      $this->conn   = new ConectaBD();
+      $this->dbConn = $this->conn->conectarBD(); 
 
         $query = "SELECT
-      	            COUNT(id_cliente) AS cant_clientes
+      	            COUNT(id_client) AS cant_clientes
                   FROM 
                     clientes.tb_clientes 
                   WHERE 
-                    id_cliente='$id_cliente'  
+                    id_client='$id_client'  
       	         ";
          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -212,14 +215,14 @@
 
     }
 
-    function retornarCantClientesPorDoc($numero_identificacion){
+    function retornarCantClientesPorDoc($identification){
 
         $query = "SELECT
-      	            COUNT(numero_identificacion) AS cant_clientes
+      	            COUNT(identification) AS cant_clientes
                   FROM 
                     clientes.tb_clientes 
                   WHERE 
-                    numero_identificacion='$numero_identificacion'  
+                    identification='$identification'  
       	         ";
          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
@@ -232,17 +235,17 @@
     function retornarIdClientesPorDoc($numero_identificacion){
 
         $query = "SELECT
-      	            id_cliente AS id_cliente
+      	            id_client AS id_client
                   FROM 
                     clientes.tb_clientes 
                   WHERE 
-                    numero_identificacion='$numero_identificacion'  
+                    identification='$numero_identificacion'  
       	         ";
          
         $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
         $row = pg_fetch_array($result, null);
 
-        return $row['id_cliente'];
+        return $row['id_client'];
 
     }
 
@@ -574,44 +577,48 @@
 
     function guardarClientes($datosCliente){  
 
-      if(isset($datosCliente->telefono_fijo))  
-        $telefono_fijo=$datosCliente->telefono_fijo;
+      $data_cliente = $datosCliente;
+      //$datosCliente = json
+      $datosCliente = (object)$datosCliente;
+
+      if(isset($datosCliente->phone))  
+        $phone=$datosCliente->phone;
       else
-        $telefono_fijo='';
+        $phone='';
 
-      if(isset($datosCliente->telefono_movil))
-        $telefono_movil=$datosCliente->telefono_movil;
+      if(isset($datosCliente->cell_phone))
+        $cell_phone=$datosCliente->cell_phone;
       else
-        $telefono_movil='';
+        $cell_phone='';
 
-      if(isset($datosCliente->correo_electronico))
-        $correo_electronico=$datosCliente->correo_electronico;
+      if(isset($datosCliente->email))
+        $email=$datosCliente->email;
       else
-        $correo_electronico='';  
+        $email='';  
 
-      if(isset($datosCliente->direccion))
-        $direccion=$datosCliente->direccion;
+      if(isset($datosCliente->address))
+        $address=$datosCliente->address;
       else
-        $direccion='';  
+        $address='';  
 
-      if(isset($datosCliente->id_ciudad))
-        $id_ciudad=$datosCliente->id_ciudad;
+      if(isset($datosCliente->id_city))
+        $id_city=$datosCliente->id_city;
       else
-        $id_ciudad='null';   
+        $id_city='null';   
 
-      if(isset($datosCliente->id_departamento))
-        $id_departamento=$datosCliente->id_departamento;
+      if(isset($datosCliente->id_region))
+        $id_region=$datosCliente->id_region;
       else
-        $id_departamento='null';     
+        $id_region='null';     
 
-      if(isset($datosCliente->id_pais))
-        $id_pais=$datosCliente->id_pais;
+      if(isset($datosCliente->id_country))
+        $id_country=$datosCliente->id_country;
       else
-        $id_pais='null';       	
+        $id_country='null';       	
 
-      if(isset($datosCliente->id_cliente)){     
+      if(isset($datosCliente->id_client)){     
 
-        if($this->retornarCantClientes($datosCliente->id_cliente)==1){
+        if($this->retornarCantClientes($datosCliente->id_client)==1){
 
           if(!isset($_SESSION))
           	session_start();
@@ -619,42 +626,89 @@
           $query="UPDATE 
                     clientes.tb_clientes
                   SET 
-                    id_tipo_cliente=".$datosCliente->tipoCliente.",
-                    nombres=UPPER('".$datosCliente->nombres."'),
-                    apellidos=UPPER('".$datosCliente->apellidos."'),
+                    id_client_type=".$datosCliente->id_client_type.",
+                    first_name=UPPER('".$datosCliente->first_name."'),
+                    last_name=UPPER('".$datosCliente->last_name."'),
                     id_tipo_identificacion=".$datosCliente->tipoIdentificacion.",
-                    numero_identificacion='".$datosCliente->numeroIdentificacion."',
+                    identification='".$datosCliente->identification."',
                     id_tipo_notificacion=".$datosCliente->tipoNotificacion.",                    
-                    numero_telefono='".$telefono_fijo."',
-                    numero_celular='".$telefono_movil."',
-                    correo_electronico=UPPER('".$correo_electronico."'),
-                    direccion=UPPER('".$direccion."'),
-                    id_ciudad=".$id_ciudad.",
-                    id_departamento=".$id_departamento.",
-                    id_pais=".$id_pais.",
-                    id_user_mod=".$_SESSION['id_user'].",
+                    phone='".$phone."',
+                    cell_phone='".$cell_phone."',
+                    email=UPPER('".$email."'),
+                    address=UPPER('".$address."'),
+                    id_city=".$id_city.",
+                    id_region=".$id_region.",
+                    id_country=".$id_pais.",
+                    id_user_mod=".$datosCliente->id_user.",
                     fecha_modificacion=CURRENT_TIMESTAMP
                   WHERE
-                    id_cliente=".$datosCliente->id_cliente.""; 
+                    id_client=".$datosCliente->id_client.""; 
 
           $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
           
           $respuesta['respuesta']='3';
-          $respuesta['id_cliente']=$datosCliente->id_cliente;
+          $respuesta['id_client']=$datosClient->id_client;
 
           return $respuesta;
 
         }
         else{
-          $respuesta['respuesta']='4';
-          return $respuesta;
+          /*$respuesta['respuesta']='4';
+          return $respuesta;*/
+          $query="INSERT INTO 
+                    clientes.tb_clientes
+                    (
+                      id_client_type,
+                      first_name,
+                      last_name,
+                      
+                      identification,
+                      
+                      phone,
+                      cell_phone,
+                      email,
+                      address,
+                      id_city,
+                      id_region,
+                      id_country,
+                      id_user,
+                      id_client
+                    ) 
+                    VALUES
+                    (
+                     ".$datosCliente->id_client_type.",
+                     UPPER('".$datosCliente->first_name."'),
+                     UPPER('".$datosCliente->last_name."'),
+                     
+                     '".$datosCliente->identification."',
+                                         
+                     '".$phone."',
+                     '".$cell_phone."',
+                     UPPER('".$email."'),
+                     UPPER('".$address."'),
+                     ".$id_city.",
+                     ".$id_region.",
+                     ".$id_country.",
+                     ".$datosCliente->id_user.",
+                     ".$datosCliente->id_client."
+                   )";          
+//print_r($query);exit;
+          $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+          $id_client=$this->retornarIdClientesPorDoc($datosCliente->identification);
+          
+          $respuesta['respuesta']='1';
+          $respuesta['id_client']=$id_client;
+
+          return $respuesta;           
+
         }			
 
       }
 
       else{
 
-        if($this->retornarCantClientesPorDoc($datosCliente->numeroIdentificacion)==0){
+        if($this->retornarCantClientesPorDoc($datosCliente->identification)==0){
 
           if(!isset($_SESSION))
           	session_start();
@@ -662,44 +716,44 @@
           $query="INSERT INTO 
                     clientes.tb_clientes
                     (
-                      id_tipo_cliente,
-                      nombres,
-                      apellidos,
+                      id_client_type,
+                      first_name,
+                      last_name,
                       id_tipo_identificacion,
-                      numero_identificacion,
+                      identification,
                       id_tipo_notificacion,
-                      numero_telefono,
-                      numero_celular,
-                      correo_electronico,
-                      direccion,
-                      id_ciudad,
-                      id_departamento,
-                      id_pais,
+                      phone,
+                      cell_phone,
+                      email,
+                      address,
+                      id_city,
+                      id_region,
+                      id_country,
                       id_user
                     ) 
                     VALUES
                     (
-                     ".$datosCliente->tipoCliente.",
-                     UPPER('".$datosCliente->nombres."'),
-                     UPPER('".$datosCliente->apellidos."'),
+                     ".$datosCliente->id_cliente_type.",
+                     UPPER('".$datosCliente->first_name."'),
+                     UPPER('".$datosCliente->last_name."'),
                      ".$datosCliente->tipoIdentificacion.",
-                     '".$datosCliente->numeroIdentificacion."',
+                     '".$datosCliente->identification."',
                      ".$datosCliente->tipoNotificacion.",                    
-                     '".$telefono_fijo."',
-                     '".$telefono_movil."',
-                     UPPER('".$correo_electronico."'),
-                     UPPER('".$direccion."'),
-                     ".$id_ciudad.",
-                     ".$id_departamento.",
-                     ".$id_pais.",
-                     ".$_SESSION['id_user'].")";          
+                     '".$phone."',
+                     '".$cell_phone."',
+                     UPPER('".$email."'),
+                     UPPER('".$address."'),
+                     ".$id_city.",
+                     ".$id_region.",
+                     ".$id_country.",
+                     ".$datosCliente->id_user.")";          
 //print_r($query);exit;
           $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
-          $id_cliente=$this->retornarIdClientesPorDoc($datosCliente->numeroIdentificacion);
+          $id_client=$this->retornarIdClientesPorDoc($datosCliente->identification);
           
           $respuesta['respuesta']='1';
-          $respuesta['id_cliente']=$id_cliente;
+          $respuesta['id_client']=$id_client;
 
           return $respuesta;           
 

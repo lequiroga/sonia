@@ -38,7 +38,7 @@ app.controller("siniController",
     $scope.lista_estratos_cali_ini = [];
     $scope.barrios_comunas_cali = [];
     $scope.redesCliente.red_seleccionada = '';
-    $scope.redesCliente.id_cliente = '';
+    $scope.redesCliente.id_client = '';
     $scope.cant_redes_sociales_cliente = '';
     $scope.lista_redes_sociales_cliente = [];
     $scope.clasificacionBarrios = [];
@@ -134,7 +134,8 @@ app.controller("siniController",
         });
     };    
 
-    $scope.verSolicitudesCliente = function(query,comment,reference){
+    $scope.verSolicitudesCliente = function(query,comment,reference,id_user){        
+        
         var query1='', comment1=''. reference1='';
         if(!angular.isUndefined(query))
           query1=query;
@@ -148,7 +149,8 @@ app.controller("siniController",
           inputs: {
             requerimiento: query1,
             comentarios_adicionales: comment1,
-            referencia: reference1
+            referencia: reference1,
+            asesor_cliente: id_user
           }
         }).then(function(modal) {
           modal.close.then(function(result) {
@@ -160,7 +162,7 @@ app.controller("siniController",
     }
 
     //Ventana emergente que muestra la información adicional del inmueble
-    $scope.verInformacionAdicionalInmueble = function(lista_clientes_propiedad,visitas,link,title,sale_price_label,id_property){
+    $scope.verInformacionAdicionalInmueble = function(lista_clientes_propiedad,visitas,link,title,sale_price_label,id_property,usuario_inmueble,usuario_inmueble_telefono,usuario_inmueble_email){
           ModalService.showModal({
           templateUrl: '../inmuebles/formularioModalInfoAdicInmueble.html',
           controller: "ContrladorModalInfoAdicInmueble",
@@ -170,7 +172,10 @@ app.controller("siniController",
             link: link,
             title: title,
             sale_price_label: sale_price_label,
-            id_property: id_property
+            id_property: id_property,
+            usuario_inmueble: usuario_inmueble,
+            usuario_inmueble_telefono: usuario_inmueble_telefono,
+            usuario_inmueble_email: usuario_inmueble_email
           }
         }).then(function(modal) {
           modal.close.then(function(result) {
@@ -181,9 +186,9 @@ app.controller("siniController",
         });
     }
 
-    $scope.seleccionarCliente = function(id_cliente){      
+    $scope.seleccionarCliente = function(id_client){      
       
-      $http.post($scope.endpoint,{'accion':'datosClientePorID','id_cliente':id_cliente})
+      $http.post($scope.endpoint,{'accion':'datosClientePorID','id_client':id_client})
       .then(function(response){         
         $scope.cliente=response.data.datosCliente;        
         $scope.showClientsCreateUpd($scope.cliente);
@@ -704,10 +709,10 @@ app.controller("siniController",
 
     $scope.showRedesSocialesClientes = function(){  
     
-      if(!angular.isUndefined($scope.cliente.id_cliente)&&$scope.cliente.id_cliente!=''){
+      if(!angular.isUndefined($scope.cliente.id_client)&&$scope.cliente.id_client!=''){
         $scope.redesCliente.numeroIdentificacion = $scope.cliente.numeroIdentificacion;      
         $scope.redesCliente.nombre = $scope.cliente.nombres+' '+$scope.cliente.apellidos;
-        $scope.redesCliente.id_cliente = $scope.cliente.id_cliente;      
+        $scope.redesCliente.id_client = $scope.cliente.id_client;      
         $scope.getListaRedesSociales();
         $scope.limpiarRedesClientes();
         $scope.lista_redes_sociales_cliente = [];
@@ -1324,7 +1329,7 @@ app.controller("siniController",
       } 
       else{
         var datosRedesCliente = {};
-        datosRedesCliente.id_cliente = $scope.redesCliente.id_cliente;
+        datosRedesCliente.id_client = $scope.redesCliente.id_client;
         datosRedesCliente.id_red_social = $scope.redesCliente.red_social.id_red_social;
         datosRedesCliente.nombre_cuenta = $scope.redesCliente.nombre_cuenta;
         if(!angular.isUndefined($scope.redesCliente.id_redes_cliente)){
@@ -1456,8 +1461,8 @@ app.controller("siniController",
     }  	
 
     $scope.listarRedesSocialesCliente = function(){
-      var id_cliente = $scope.redesCliente.id_cliente;
-      $http.post($scope.endpoint,{'accion':'listarRedesSocialesCliente','id_cliente':id_cliente})
+      var id_client = $scope.redesCliente.id_client;
+      $http.post($scope.endpoint,{'accion':'listarRedesSocialesCliente','id_client':id_client})
       .then(function(response){         
         $scope.cant_redes_sociales_cliente=response.data.cantidad_redes_sociales_cliente;        
         $scope.lista_redes_sociales_cliente=response.data.redes_sociales_cliente;
@@ -2020,7 +2025,8 @@ app.controller("siniController",
         inmuebleCons.moneda = inmueble.moneda;        
       }
 
-      if(!angular.isUndefined(inmueble.usuario_creador)){
+      if(!angular.isUndefined(inmueble.usuario_creador)&&inmueble.usuario_creador!=null&&inmueble.usuario_creador!=''){
+        console.log(inmueble.usuario_creador);
         inmuebleCons.id_asesor = inmueble.usuario_creador.id_asesor;        
       }
 
@@ -2199,6 +2205,9 @@ app.controller("siniController",
         var visitas='';
         var link='';
         var title='';
+        var usuario_inmueble='';
+        var usuario_inmueble_telefono='';
+        var usuario_inmueble_email='';
 
         if(!angular.isUndefined(response.data.datosClientes)&&response.data.datosClientes.length>0){
           lista_clientes_propiedad = response.data.datosClientes;                 
@@ -2217,18 +2226,28 @@ app.controller("siniController",
         }    
         if(!angular.isUndefined(response.data.id_property)){
           id_property = response.data.id_property;
+        }            
+        if(!angular.isUndefined(response.data.usuario_inmueble)){
+          usuario_inmueble = response.data.usuario_inmueble;
         }
-        $scope.verInformacionAdicionalInmueble(lista_clientes_propiedad,visitas,link,title,sale_price_label,id_property);
+        if(!angular.isUndefined(response.data.usuario_inmueble_telefono)){
+          usuario_inmueble_telefono = response.data.usuario_inmueble_telefono;
+        }    
+        if(!angular.isUndefined(response.data.usuario_inmueble_email)){
+          usuario_inmueble_email = response.data.usuario_inmueble_email;
+        }
+        $scope.verInformacionAdicionalInmueble(lista_clientes_propiedad,visitas,link,title,sale_price_label,id_property,usuario_inmueble,usuario_inmueble_telefono,usuario_inmueble_email);
       }); 
     }
 
-    $scope.verInmueblesCliente = function(id_cliente,first_name,last_name){
-      $http.post($scope.endpoint,{'accion':'consultarPropiedadesCliente','id_cliente':id_cliente})
+    $scope.verInmueblesCliente = function(id_client,first_name,last_name,id_user){
+      $http.post($scope.endpoint,{'accion':'consultarPropiedadesCliente','id_cliente':id_client,'id_user':id_user})
       .then(function(response){ 
 
         if(!angular.isUndefined(response.data.propiedades)){
 
           $scope.listaInmueblesClienteRespuesta = response.data.propiedades;
+          $scope.asesor_cliente = response.data.asesor_cliente;
 
           if($scope.listaInmueblesClienteRespuesta.area!=""){
             $scope.listaInmueblesClienteRespuesta.area_mostrar = $scope.listaInmueblesClienteRespuesta.area+" "+$scope.listaInmueblesClienteRespuesta.unit_area_label;
@@ -2629,7 +2648,7 @@ app.controller("siniController",
     }
 
     $scope.limpiarClientes = function(){      
-      $scope.cliente.id_cliente=undefined;
+      $scope.cliente.id_client=undefined;
       $scope.cliente.nombres=undefined;
       $scope.cliente.apellidos=undefined;
       $scope.cliente.tipoIdentificacion=undefined;
@@ -2683,11 +2702,11 @@ app.controller("siniController",
     $scope.saveClientes = function(action){   
        
       if(angular.isUndefined($scope.cliente.tipoCliente)||
-         angular.isUndefined($scope.cliente.nombres)||
-         angular.isUndefined($scope.cliente.apellidos)||
-         angular.isUndefined($scope.cliente.tipoIdentificacion)||
-         angular.isUndefined($scope.cliente.numeroIdentificacion)||
-         angular.isUndefined($scope.cliente.tipoNotificacion)
+         angular.isUndefined($scope.cliente.nombres)||         
+         angular.isUndefined($scope.cliente.tipoNotificacion)||
+         angular.isUndefined($scope.cliente.codigoPais)||
+         angular.isUndefined($scope.cliente.codigoDepartamento)||
+         angular.isUndefined($scope.cliente.codigoCiudad)
         ){
         alert("Todos los campos con (*) son requeridos");
       }     
@@ -2707,45 +2726,92 @@ app.controller("siniController",
       }      
       else{
 
-        if(angular.isUndefined($scope.cliente.codigoCiudad))
-          var id_ciudad=null;
-        else
+        if(angular.isUndefined($scope.cliente.codigoCiudad)){
+          var id_ciudad = null;
+          var nombre_ciudad = null;          
+        }
+        else{
           var id_ciudad=$scope.cliente.codigoCiudad.id_ciudad;
+          var nombre_ciudad=$scope.cliente.codigoCiudad.name;
+        }
 
-        if(angular.isUndefined($scope.cliente.codigoDepartamento))
-          var id_departamento=null;
-        else
+        if(angular.isUndefined($scope.cliente.codigoDepartamento)){
+          var id_departamento = null;
+          var nombre_departamento = null; 
+        }
+        else{
           var id_departamento=$scope.cliente.codigoDepartamento.id_departamento;
+          var nombre_departamento=$scope.cliente.codigoDepartamento.name;
+        }
 
-        if(angular.isUndefined($scope.cliente.codigoPais))
-          var id_pais=null;
-        else
+        if(angular.isUndefined($scope.cliente.codigoPais)){
+          var id_pais = null;
+          var nombre_pais = null;
+        }
+        else{
           var id_pais=$scope.cliente.codigoPais.id_pais;
+          var nombre_pais=$scope.cliente.codigoPais.name;
+        }
+
+        if(angular.isUndefined($scope.cliente.tipoIdentificacion)){
+          var id_tipo_identificacion = null;          
+        }
+        else{
+          var id_tipo_identificacion=$scope.cliente.tipoIdentificacion.id_tipo_identificacion;          
+        }
+
+        if(angular.isUndefined($scope.cliente.query)){
+          var query = null;          
+        }
+        else{
+          var query=$scope.cliente.query;          
+        }
+
+        if(angular.isUndefined($scope.cliente.comment)){
+          var comment = null;          
+        }
+        else{
+          var comment=$scope.cliente.comment;          
+        }
+
+        if(angular.isUndefined($scope.cliente.reference)){
+          var reference = null;          
+        }
+        else{
+          var reference=$scope.cliente.reference;          
+        }
 
         $http.post($scope.endpoint,
           {'accion':'guardarClientes',
            'datosCliente':
              {
-               'id_cliente':$scope.cliente.id_cliente,
-               'tipoCliente':$scope.cliente.tipoCliente.id_tipo_cliente,
-               'nombres':$scope.cliente.nombres,
-               'apellidos':$scope.cliente.apellidos,
-               'tipoIdentificacion':$scope.cliente.tipoIdentificacion.id_tipo_identificacion,
-               'numeroIdentificacion':$scope.cliente.numeroIdentificacion,
+               'id_client':$scope.cliente.id_client,
+               'id_client_type':$scope.cliente.tipoCliente.id_tipo_cliente,
+               'client_type_label':$scope.cliente.tipoCliente.descripcion,
+               'first_name':$scope.cliente.nombres,
+               'last_name':$scope.cliente.apellidos,
+               'tipoIdentificacion':id_tipo_identificacion,
+               'identification':$scope.cliente.numeroIdentificacion,
                'tipoNotificacion':$scope.cliente.tipoNotificacion.id_tipo_notificacion,
-               'telefono_movil':$scope.cliente.telefono_movil,
-               'telefono_fijo':$scope.cliente.telefono_fijo,
-                 'correo_electronico':$scope.cliente.correo_electronico,
-                 'direccion':$scope.cliente.direccion,
-                 'id_ciudad':id_ciudad,
-                 'id_departamento':id_departamento,
-                 'id_pais':id_pais
+               'cell_phone':$scope.cliente.telefono_movil,
+               'phone':$scope.cliente.telefono_fijo,
+               'email':$scope.cliente.correo_electronico,
+               'address':$scope.cliente.direccion,
+               'id_city':id_ciudad,
+               'city_label':nombre_ciudad,
+               'id_region':id_departamento,
+               'region_label':nombre_departamento,
+               'id_country':id_pais,
+               'country_label':nombre_pais,
+               'query':query,
+               'comment':comment,
+               'reference':reference
              }
             }
         )
         .then(function(response){          
           if(response.data.respuesta=='1' && action=='1'){ 
-            $scope.cliente.id_cliente=response.data.id_cliente;
+            $scope.cliente.id_client=response.data.id_client;
             alert('Cliente almacenado exitosamente');                 
             
           }
@@ -2754,22 +2820,28 @@ app.controller("siniController",
             
           }
           else if(response.data.respuesta=='3' && action=='1'){
-            $scope.cliente.id_cliente=response.data.id_cliente;
+            $scope.cliente.id_client=response.data.id_client;
             alert('Cliente actualizado exitosamente');      
             
           }
           else if(response.data.respuesta=='4' && action=='1'){
             alert('No se ha podido actualizar el cliente, por favor verifique');            
           }
+          else if(response.data.respuesta=='5' && action=='1'){
+            alert('Hubo un error al tratar de actualizar, contactar al administrador');            
+          }
+          else if(response.data.respuesta=='6' && action=='1'){
+            alert('El usuario actual no cuenta con permisos en la API externa');            
+          }
           if(action=='2'){
             if(response.data.respuesta=='1'||response.data.respuesta=='3'){
-              $scope.cliente.id_cliente=response.data.id_cliente; 
+              $scope.cliente.id_client=response.data.id_client; 
               alert('Se procede a registrar la solicitud');
             }            
           }
           else if(action=='3'){
             if(response.data.respuesta=='1'||response.data.respuesta=='3'){
-              $scope.cliente.id_cliente=response.data.id_cliente; 
+              $scope.cliente.id_client=response.data.id_client; 
               alert('Se procede a registrar el inmueble');
             }            
           }
@@ -2841,12 +2913,19 @@ app.controller('ContrladorModal', function($scope, close, galleries, mainImage) 
 });
 
 
-app.controller('ContrladorModalRequerimientoCliente', function($scope, close, requerimiento, comentarios_adicionales, referencia) {  
+app.controller('ContrladorModalRequerimientoCliente', function($scope, $http, close, requerimiento, comentarios_adicionales, referencia, asesor_cliente) {  
   //$scope.galeriaActiva = []; 
+  $scope.endpoint = "http://localhost/sonia/backend/controllers/"; 
   $scope.requerimiento_cliente = []; 
   $scope.requerimiento_cliente.requerimiento=requerimiento;
   $scope.requerimiento_cliente.comentarios_adicionales=comentarios_adicionales;
   $scope.requerimiento_cliente.reference=referencia;
+  $scope.requerimiento_cliente.asesor_cliente='';
+
+  $http.post($scope.endpoint,{'accion':'datosUsuarioCliente','id_user':asesor_cliente})
+  .then(function(response){
+    $scope.requerimiento_cliente.asesor_cliente=response.data.first_name+' '+response.data.last_name;
+  });    
 
   $scope.cerrarModal = function() {
     close($scope.result);
@@ -2854,7 +2933,7 @@ app.controller('ContrladorModalRequerimientoCliente', function($scope, close, re
 
 });
 
-app.controller('ContrladorModalInfoAdicInmueble', function($scope, close, lista_clientes_propiedad, visitas, link, title, sale_price_label, id_property) {  
+app.controller('ContrladorModalInfoAdicInmueble', function($scope, close, lista_clientes_propiedad, visitas, link, title, sale_price_label, id_property, usuario_inmueble, usuario_inmueble_telefono, usuario_inmueble_email) {  
   //$scope.galeriaActiva = []; 
   $scope.informacion_adicional_inmueble = []; 
   $scope.informacion_adicional_inmueble.lista_clientes_propiedad=lista_clientes_propiedad;
@@ -2862,6 +2941,9 @@ app.controller('ContrladorModalInfoAdicInmueble', function($scope, close, lista_
   $scope.informacion_adicional_inmueble.visitas=visitas;
   $scope.informacion_adicional_inmueble.link=link;
   $scope.informacion_adicional_inmueble.title=title;
+  $scope.informacion_adicional_inmueble.usuario_inmueble=usuario_inmueble;
+  $scope.informacion_adicional_inmueble.usuario_inmueble_telefono=usuario_inmueble_telefono;
+  $scope.informacion_adicional_inmueble.usuario_inmueble_email=usuario_inmueble_email;
   $scope.informacion_adicional_inmueble.sale_price_label=sale_price_label;
   $scope.informacion_adicional_inmueble.cantidad_clientes = lista_clientes_propiedad.length;
   console.log($scope.informacion_adicional_inmueble);

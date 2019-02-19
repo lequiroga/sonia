@@ -112,7 +112,13 @@
     if($request->accion=='consultarPropiedadesCliente'){
       require_once('services/Clientes.php');        
       $obj = new Clientes(); 
-      $obj->getPropiedadesClientes($request->id_cliente);
+      $obj->getPropiedadesClientes($request->id_cliente,$request->id_user);
+    }
+
+    if($request->accion=='datosUsuarioCliente'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->datosUsuarioCliente($request->id_user);
     }
 
     if($request->accion=='consultarAsesoresWasi'){

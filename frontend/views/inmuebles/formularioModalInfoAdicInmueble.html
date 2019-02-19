@@ -1,5 +1,5 @@
 <div class="overlay"/>
-<div class="modal">
+<div class="modal" style="overflow-y: auto; max-height:400px; max-width:600px; margin: auto;">
 	<button class="cotizaciones" style="color: white;font-weight: bold;float: right;" ng-click="cerrarModal()">Cerrar
 	</button>	 
 	<p>&nbsp;</p> 
@@ -9,7 +9,12 @@
         {{informacion_adicional_inmueble.title}} <br />
         {{informacion_adicional_inmueble.sale_price_label}}
     </p>    
-    <p style="font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;">URL anuncio: <a href="{{informacion_adicional_inmueble.link}}" target="_blank">{{informacion_adicional_inmueble.link}}</a><br />
+    <p style="font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;">
+    Asesor(a): {{informacion_adicional_inmueble.usuario_inmueble}}<br />
+    Tel&eacute;fono asesor(a): {{informacion_adicional_inmueble.usuario_inmueble_telefono}}<br />
+    Email asesor(a): {{informacion_adicional_inmueble.usuario_inmueble_email}}<br /><br />
+    URL anuncio: <a href="{{informacion_adicional_inmueble.link}}" target="_blank">    
+    {{informacion_adicional_inmueble.link}}</a><br />
     Visitas: {{informacion_adicional_inmueble.visitas}}    
     </p>    
     <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: : 1em;padding-bottom: 1em;">Clientes asociados</p>     
@@ -25,6 +30,8 @@
         Ciudad: {{lista_clientes_prop.city_label}}, {{lista_clientes_prop.region_label}}<br />
         Direcci&oacute;n: {{lista_clientes_prop.address}}<br />
         {{lista_clientes_prop.query}}<br ng-if="lista_clientes_prop.query!=''" />
+        {{lista_clientes_prop.comment}}<br ng-if="lista_clientes_prop.comment!=''" />
+        Asesor(a): {{lista_clientes_prop.usuario}}<br />
         <a href="#">Cambiar informaci&oacute;n cliente</a>
         </p>
     </div>   

@@ -51,6 +51,7 @@
   			}
 
   			$data = json_encode($data1);
+  			//print_r($data);exit;
 
   			echo $data;			   
 
@@ -59,16 +60,19 @@
 		}
 
 		//Consultar los inmuebles asociados a un cliente
-		function getPropiedadesClientes($id_cliente){
+		function getPropiedadesClientes($id_cliente,$id_user){
 
 			$autAPI   = new AutenticaAPI();
 			$datosAPI = $autAPI->retornarDatosAPI('wasi','propiedades_clientes');
 
 			$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_cliente.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
 
+			$datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+          	$data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );         	
+
 			$total = $data['total'];
 			unset($data['total']);
-  			$data1 = array();
+  			$data1 = array();  			
 
             $j=0;
             $data_property = array();
@@ -81,6 +85,13 @@
 			  
 			  $data_property['propiedades'][$j]['tipo_cliente']=$data[$i]['client_type_label'];
 
+			  $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+          	  $data_user_prop = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data_property['propiedades'][$j]['id_user'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true ); 
+
+          	  $data_property['propiedades'][$j]['asesor'] = $data_user_prop['first_name'].' '.$data_user_prop['last_name'];
+          	  $data_property['propiedades'][$j]['asesor_telefono'] = $data_user_prop['cell_phone'];
+          	  $data_property['propiedades'][$j]['asesor_email'] = $data_user_prop['email'];          	  
+
 			  $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_visitas');  			  
 			  $data_visitas = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true ); 			 
 
@@ -90,10 +101,23 @@
 
   			} 
 
-  			$data = json_encode($data_property);
+  			$data_property['asesor_cliente']=$data_user['first_name'].' '.$data_user['last_name'];  			
+
+  			$data = json_encode($data_property);  			
 
   			echo $data;
 
+		}
+
+		function datosUsuarioCliente($id_user){
+
+			$autAPI   = new AutenticaAPI();
+			$datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+          	$data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true ); 
+
+          	$data = json_encode($data_user); 
+
+          	echo $data;
 		}
 
 		function consultarClientes($clienteBusq){    			   
@@ -123,13 +147,13 @@
           	  	$data1 = $data;
           	  }
           	  else{
-          	  	$data1 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip='.$inicial.'&take=100'), true );
-          	  }
+          	  	$data1 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip='.$inicial.'&take=100'), true );          	  	
+          	  }          	  
           	  
           	  unset($data1['total']);
            	  unset($data1['status']);
 
-          	  for($j=0;$j<count($data1);$j++){
+          	  for($j=0;$j<count($data1);$j++){          	  	
 
             	$validaTipoCliente = 0;
 
@@ -326,8 +350,59 @@
 		}
 
 		function guardarClientes($datosCliente){			
-			$output = $this->objClientes->guardarClientes($datosCliente);
-	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+
+			if(!isset($_SESSION))
+			  session_start();
+
+			if(isset($_SESSION['id_user_app_externo'])&&$_SESSION['id_user_app_externo']!=''&&$_SESSION['id_user_app_externo']!=null&&$_SESSION['id_user_app_externo']!='null'&&$_SESSION['id_user_app_externo']!='NULL'&&$_SESSION['id_user_app_externo']!='Null'){
+
+				$datosCliente->id_user = $_SESSION['id_user_app_externo'];				
+				$postdata = http_build_query($datosCliente);
+
+				$autAPI   = new AutenticaAPI();
+
+				if(!isset($datosCliente->id_client)){
+
+					$datosAPI = $autAPI->retornarDatosAPI('wasi','agregar_cliente');
+					$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&'.$postdata), true );
+
+				}
+				else{
+
+					$datosAPI = $autAPI->retornarDatosAPI('wasi','modificar_cliente');
+					$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_client.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&'.$postdata), true );
+
+				}				
+
+				if($data['status']=='success'){
+
+					if(isset($datosCliente->id_tipo_notificacion)&&$datosCliente->id_tipo_notificacion!=null)
+						$data['id_tipo_notificacion'] = $datosCliente->id_tipo_notificacion;
+
+					if(isset($datosCliente->id_tipo_identificacion)&&$datosCliente->id_tipo_identificacion!=null)
+						$data['id_tipo_identificacion'] = $datosCliente->id_tipo_identificacion;
+
+					$output = $this->objClientes->guardarClientes($data);
+	  				echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+
+				}
+				else{
+
+					//No se pudo actualizar en la API
+					$output['respuesta'] = '5';
+
+				}
+
+			}
+			else{
+
+				//El usuario no está registrado en WASI
+				$output['respuesta'] = '6';
+
+
+			}			
+
+			
 		}
 
 		function guardarRedesSocialesCliente($datosRedesCliente){			

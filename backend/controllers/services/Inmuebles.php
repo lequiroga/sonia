@@ -441,14 +441,25 @@
         for($i=0;$i<count($data);$i++){
 
           $datosAPI = $autAPI->retornarDatosAPI('wasi','clientes_por_id');
-          $data_clientes[$i] = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data[$i]['id_client'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );         
+          $data_clientes[$i] = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data[$i]['id_client'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+          $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data_clientes[$i]['id_user'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );              
+
+          $data_clientes[$i]['usuario'] = $data_user['first_name'].' '.$data_user['last_name'];            
 
         }
 
         $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_por_id');         
         $data_property = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
 
+        $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+        $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data_property['id_user'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
         $output['datosClientes'] = $data_clientes;
+        $output['usuario_inmueble'] = $data_user['first_name'].' '.$data_user['last_name']; 
+        $output['usuario_inmueble_telefono'] = $data_user['cell_phone'];
+        $output['usuario_inmueble_email'] = $data_user['email'];
         $output['visitas'] = $data_property['visits'];
         $output['link'] = $data_property['link'];
         $output['title'] = $data_property['title'];

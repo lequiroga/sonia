@@ -77,8 +77,8 @@
                 <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && lista_cliente_busq.cell_phone">{{lista_cliente_busq.cell_phone}}</td> 
                 <td style="text-align: left;" ng-if="lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}</td>
                 <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">&nbsp;</td>
-                <td style="text-align: center;"><a href="#" ng-if="lista_cliente_busq.id_client_type=='7'||lista_cliente_busq.id_client_type=='1'||lista_cliente_busq.id_client_type=='4521'" ng-click="verSolicitudesCliente(lista_cliente_busq.query, lista_cliente_busq.comment, lista_cliente_busq.reference)">Requerimiento</a></td>  
-                <td style="text-align: center;"><a ng-click="verInmueblesCliente(lista_cliente_busq.id_client,lista_cliente_busq.first_name,lista_cliente_busq.last_name)" href="#">Inmuebles</a></td>       
+                <td style="text-align: center;"><a href="#" ng-if="lista_cliente_busq.id_client_type=='7'||lista_cliente_busq.id_client_type=='1'||lista_cliente_busq.id_client_type=='4521'" ng-click="verSolicitudesCliente(lista_cliente_busq.query, lista_cliente_busq.comment, lista_cliente_busq.reference, lista_cliente_busq.id_user)">Requerimiento</a></td>  
+                <td style="text-align: center;"><a ng-click="verInmueblesCliente(lista_cliente_busq.id_client,lista_cliente_busq.first_name,lista_cliente_busq.last_name,lista_cliente_busq.id_user)" href="#">Inmuebles</a></td>       
               </tr>
             </tbody>
           </table>

@@ -1,10 +1,16 @@
-<div class="overlay"/>
-<div class="modal">
-	
+<html>
+<head></head>
+<body>  
+  <div class="overlay"/>  
+  <div class="modal" style="overflow-y: auto; max-height:400px; max-width:600px; margin: auto;">	
 	<button class="cotizaciones" style="color: white;font-weight: bold;float: right;" ng-click="cerrarModal()">Cerrar
 	</button>	 
 	<p>&nbsp;</p> 
 	<p>&nbsp;</p>    
+
+    <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: : 1em;padding-bottom: 1em;" ng-if="requerimiento_cliente.asesor_cliente">Asesor inmobiliaria</p>        
+    <p ng-bind-html="requerimiento_cliente.asesor_cliente" data-html="true" style="font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;" ng-if="requerimiento_cliente.asesor_cliente"></p> 
+
     <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: : 1em;padding-bottom: 1em;" ng-if="requerimiento_cliente.requerimiento">Requerimiento</p>        
     <p ng-bind-html="requerimiento_cliente.requerimiento" data-html="true" style="font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;" ng-if="requerimiento_cliente.requerimiento"></p> 
     <p ng-if="requerimiento_cliente.requerimiento">&nbsp;</p> 
@@ -16,5 +22,7 @@
     <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: : 1em;padding-bottom: 1em;" ng-if="requerimiento_cliente.referencia">Referencia</p>    
     <p ng-bind-html="requerimiento_cliente.referencia" data-html="true" style="font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;" ng-if="requerimiento_cliente.referencia"></p>  
     <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: : 1em;padding-bottom: 1em; text-align: center; vertical-align: middle;" ng-if="!requerimiento_cliente.requerimiento&&!requerimiento_cliente.comentarios_adicionales&&!requerimiento_cliente.referencia">No se encontr&oacute; informaci&oacute;n</p> 
-</div>
-</div>
+  </div>
+  </div>
+</body>  
+</html>

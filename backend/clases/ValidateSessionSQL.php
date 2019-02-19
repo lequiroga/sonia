@@ -25,7 +25,8 @@
         $query = "SELECT                     
                     a.id_user AS id_user,
                     aa.id_inmobiliaria AS id_inmobiliaria,
-                    b.imagen_logo AS logo_empresa
+                    b.imagen_logo AS logo_empresa,
+                    a.id_user_app_externo AS id_user_app_externo
                   FROM 
                     session.tb_users_app a
                     INNER JOIN rrhh.tb_personal aa ON aa.id_personal = a.id_personal
@@ -46,6 +47,7 @@
           $_SESSION['id_user']=$row['id_user'];
           $_SESSION['id_inmobiliaria']=$row['id_inmobiliaria'];
           $_SESSION['logo_empresa']=$row['logo_empresa'];
+          $_SESSION['id_user_app_externo']=$row['id_user_app_externo'];          
           //echo '1'; 
         }
         else{
@@ -53,6 +55,7 @@
           unset($_SESSION['userlogin']);
           unset($_SESSION['id_user']);
           unset($_SESSION['id_inmobiliaria']);
+          unset($_SESSION['id_user_app_externo']);
           //echo '0'; 
         }
 
