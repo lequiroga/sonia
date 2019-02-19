@@ -1,0 +1,41 @@
+<div class="overlay"/>
+<div class="modal" style="overflow-y: auto; max-height:400px; max-width:600px; margin: auto;">
+	<button class="cotizaciones" style="color: white;font-weight: bold;float: right;" ng-click="cerrarModal()">Cerrar
+	</button>	 
+	<p>&nbsp;</p> 
+	<p>&nbsp;</p>  
+    <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;">
+        ID publicaci&oacute;n inmueble: {{informacion_adicional_inmueble.id_property}} <br />
+        {{informacion_adicional_inmueble.title}} <br />
+        {{informacion_adicional_inmueble.sale_price_label}}
+    </p>    
+    <p style="font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;">
+    Asesor(a): {{informacion_adicional_inmueble.usuario_inmueble}}<br />
+    Tel&eacute;fono asesor(a): {{informacion_adicional_inmueble.usuario_inmueble_telefono}}<br />
+    Email asesor(a): {{informacion_adicional_inmueble.usuario_inmueble_email}}<br /><br />
+    URL anuncio: <a href="{{informacion_adicional_inmueble.link}}" target="_blank">    
+    {{informacion_adicional_inmueble.link}}</a><br />
+    Visitas: {{informacion_adicional_inmueble.visitas}}    
+    </p>    
+    <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: : 1em;padding-bottom: 1em;">Clientes asociados</p>     
+    <div ng-if="informacion_adicional_inmueble.cantidad_clientes!=0" ng-repeat="lista_clientes_prop in informacion_adicional_inmueble.lista_clientes_propiedad">  
+        <p style="font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em;">
+        Nombre: {{lista_clientes_prop.first_name}} {{lista_clientes_prop.last_name}}<br />
+        Tipo de cliente: {{lista_clientes_prop.client_type_label}}<br />
+        Identificaci&oacute;n: {{lista_clientes_prop.identification}}<br />
+        Tel&eacute;fono: {{lista_clientes_prop.phone}}<br />
+        Celular: {{lista_clientes_prop.cell_phone}}<br />
+        Correo electr&oacute;nico: {{lista_clientes_prop.email}}<br />
+        Pa&iacute;s: {{lista_clientes_prop.country_label}}<br />
+        Ciudad: {{lista_clientes_prop.city_label}}, {{lista_clientes_prop.region_label}}<br />
+        Direcci&oacute;n: {{lista_clientes_prop.address}}<br />
+        {{lista_clientes_prop.query}}<br ng-if="lista_clientes_prop.query!=''" />
+        {{lista_clientes_prop.comment}}<br ng-if="lista_clientes_prop.comment!=''" />
+        Asesor(a): {{lista_clientes_prop.usuario}}<br />
+        <a href="#">Cambiar informaci&oacute;n cliente</a>
+        </p>
+    </div>   
+    
+    <p style="font-weight: bold;font-size: 1em;padding-top: 1em;padding-left: 1em;padding-right: 1em;padding-bottom: 1em; text-align: center; vertical-align: middle;" ng-if="informacion_adicional_inmueble.cantidad_clientes==0&&!informacion_adicional_inmueble.link&&!informacion_adicional_inmueble.visitas">No se encontr&oacute; informaci&oacute;n</p> 
+</div>
+</div>

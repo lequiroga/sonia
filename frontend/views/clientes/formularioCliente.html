@@ -32,6 +32,10 @@
       </label>
       <label ng-if="cliente_busq.rango_fechas">Fecha inicial (*)</label><input name="cliente_busq_fecha_inicial" ng-if="cliente_busq.rango_fechas" type="date" ng-model="cliente_busq.fecha_inicial"/> 
       <label ng-if="cliente_busq.rango_fechas">Fecha final (*)</label><input name="cliente_busq_fecha_final" ng-if="cliente_busq.rango_fechas" type="date" ng-model="cliente_busq.fecha_final"/>
+      <label>Creador(a)</label>
+      <select name="cliente_busq_usuario_creador" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="cliente_busq.usuario_creador"/> 
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
+      </select>
       <br />
       <center><button style="width:15em;" type="submit" ng-click="consultarClientes()" class="consultar">Consultar</button>
       <br />
@@ -61,8 +65,8 @@
                 <th style="width:15%;">Identificaci&oacute;n</th>
                 <th style="width:35%;">Cliente</th> 
                 <th style="width:35%;">Tel&eacute;fono(s)</th>   
-                <th style="width:15%;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='1'||!cliente_busq.tipoCliente.id_tipo_cliente||cliente_busq.tipoCliente.id_tipo_cliente=='7'">Requerimiento</th>
-                <th style="width:15%;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='2'||cliente_busq.tipoCliente.id_tipo_cliente=='5'||!cliente_busq.tipoCliente.id_tipo_cliente">Inmuebles</th>            
+                <th style="width:15%;">Requerimiento</th>
+                <th style="width:15%;">Inmuebles</th>            
               </tr>
             </thead>
             <tbody>
@@ -73,8 +77,8 @@
                 <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && lista_cliente_busq.cell_phone">{{lista_cliente_busq.cell_phone}}</td> 
                 <td style="text-align: left;" ng-if="lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}</td>
                 <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">&nbsp;</td>
-                <td style="text-align: center;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='1'||!cliente_busq.tipoCliente.id_tipo_cliente||cliente_busq.tipoCliente.id_tipo_cliente=='7'"><a href="#" ng-click="verSolicitudesCliente(lista_cliente_busq.query, lista_cliente_busq.comment, lista_cliente_busq.reference)">Requerimiento</a></td>  
-                <td style="text-align: center;" ng-if="cliente_busq.tipoCliente.id_tipo_cliente=='2'||cliente_busq.tipoCliente.id_tipo_cliente=='5'||!cliente_busq.tipoCliente.id_tipo_cliente"><a href="#" ng-click="verInmueblesCliente(lista_cliente_busq.id_client)">Inmuebles</a></td>       
+                <td style="text-align: center;"><a href="#" ng-if="lista_cliente_busq.id_client_type=='7'||lista_cliente_busq.id_client_type=='1'||lista_cliente_busq.id_client_type=='4521'" ng-click="verSolicitudesCliente(lista_cliente_busq.query, lista_cliente_busq.comment, lista_cliente_busq.reference, lista_cliente_busq.id_user)">Requerimiento</a></td>  
+                <td style="text-align: center;"><a ng-click="verInmueblesCliente(lista_cliente_busq.id_client,lista_cliente_busq.first_name,lista_cliente_busq.last_name,lista_cliente_busq.id_user)" href="#">Inmuebles</a></td>       
               </tr>
             </tbody>
           </table>

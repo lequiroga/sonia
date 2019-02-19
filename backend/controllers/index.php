@@ -25,6 +25,13 @@
       $obj->getTiposClientes();
     }
 
+    //Obtiene la información adicional del inmueble
+    if($request->accion=='consultarInfoAdicionalPropiedad'){
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles();       
+      $obj->consultarInfoAdicionalPropiedad($request->id_property);
+    }
+
     //Obtiene la zona a la cual pertenece un barrio
     if($request->accion=='getZonaBarrioCali'){
       require_once('services/Zonas.php');        
@@ -101,6 +108,24 @@
       $obj = new Asesores(); 
       $obj->getListaAsesores($request->asesorBusq);
     }
+
+    if($request->accion=='consultarPropiedadesCliente'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->getPropiedadesClientes($request->id_cliente,$request->id_user);
+    }
+
+    if($request->accion=='datosUsuarioCliente'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->datosUsuarioCliente($request->id_user);
+    }
+
+    if($request->accion=='consultarAsesoresWasi'){
+      require_once('services/Asesores.php');        
+      $obj = new Asesores(); 
+      $obj->getListaAsesoresWasi();
+    }  
 
     if($request->accion=='informacionInmobiliaria'){
       require_once('services/Inmobiliaria.php');        
