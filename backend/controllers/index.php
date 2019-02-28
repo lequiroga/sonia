@@ -25,6 +25,21 @@
       $obj->getTiposClientes();
     }
 
+    //Guardar imágenes de los inmuebles
+    if($request->accion=='saveImagenInmueble'){     
+    print_r($request->foto);exit; 
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles();       
+      $obj->guardarImagenInmueble($request->id_property,$request->foto);
+    }
+
+    //Guarda los datos del inmueble en la API y en la base de datos
+    if($request->accion=='guardarInmueble'){      
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles(); 
+      $obj->guardarInmueble($request->datosInmueble);
+    }
+
     //Obtiene la información adicional del inmueble
     if($request->accion=='consultarInfoAdicionalPropiedad'){
       require_once('services/Inmuebles.php');        
@@ -51,6 +66,13 @@
       require_once('services/Inmuebles.php');        
       $obj = new Inmuebles(); 
       $obj->getListaFormasPago();
+    }
+
+    //Consulta otros datos que no entrega la API de WASI
+    if($request->accion=='consultarOtrosDatosCliente'){      
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->consultarOtrosDatosCliente($request->id_client);
     }
 
     //Listar las prioridades o urgencias que tienen los clientes
@@ -113,6 +135,18 @@
       require_once('services/Clientes.php');        
       $obj = new Clientes(); 
       $obj->getPropiedadesClientes($request->id_cliente,$request->id_user);
+    }
+
+    if($request->accion=='consultarClientesID'){
+      require_once('services/Clientes.php');        
+      $obj = new Clientes(); 
+      $obj->getClientePorID($request->id_client);
+    }
+
+    if($request->accion=='consultarInmueblesID'){
+      require_once('services/Inmuebles.php');        
+      $obj = new Inmuebles(); 
+      $obj->getInmueblePorID($request->id_property);
     }
 
     if($request->accion=='datosUsuarioCliente'){

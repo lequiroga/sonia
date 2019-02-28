@@ -57,7 +57,7 @@
                   <p ng-if="inmuebleRespuesta.floor!=''&&inmuebleRespuesta.floor!='0'">Piso o cantidad de pisos: {{inmuebleRespuesta.floor}}</p>
                   <p ng-if="inmuebleRespuesta.maintenance_fee!=''&&inmuebleRespuesta.maintenance_fee!='0'">Valor administraci&oacute;n: $ {{inmuebleRespuesta.maintenance_fee}}</p>
                   <p>&nbsp;</p>    
-                  <p><a href="#">Cambiar informaci&oacute;n inmueble</a></p>
+                  <p><a href="#" ng-click="cambiarInformacionInmueble(inmuebleRespuesta)">Cambiar informaci&oacute;n inmueble</a></p>
                   <p>&nbsp;</p>                                 
                 </td>         
               </tr>

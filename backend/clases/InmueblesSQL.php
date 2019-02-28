@@ -44,6 +44,304 @@
 
     }
 
+    //Obtiene los ID de las características de los tipos de inmuebles
+    function getListaCaracteristicas($caracteristica,$id_tipo_inmueble){    
+
+      $lista_caracteristicas="(";
+      $lista_valores=array();      
+      $i=0;
+      foreach ($caracteristica as $key => $value) {
+        $caracteristica_act = (array)$value;
+        foreach ($caracteristica_act as $key1 => $value1) {
+          $lista_caracteristicas.=$key1; 
+          $lista_caracteristicas.=',';
+          $lista_valores[$i]=$value1;
+          $i++;
+        }        
+      }
+      
+      $lista_caracteristicas=substr($lista_caracteristicas, 0, (strlen($lista_caracteristicas)-1) );
+      $lista_caracteristicas.=')';
+
+      $query = "SELECT
+                  id_caracteristica AS id_caracteristica
+                FROM
+                  inmuebles.tb_caracteristicas_tipo_inmueble
+                WHERE
+                  id_caracteristicas_tipo_inmueble IN ".$lista_caracteristicas;
+
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());     
+      $output = array();
+
+      if(pg_num_rows($result)>0){
+
+          $i = 0; 
+          while($row = pg_fetch_array($result, null)){      
+            $output[$i]['id_caracteristica'] = $row['id_caracteristica']; 
+            $output[$i]['caracteristica'] = $lista_valores[$i];            
+            $i++;     
+          } 
+
+                // Liberando el conjunto de resultados
+          pg_free_result($result);          
+
+      }
+      
+      return $output;
+
+    }
+
+    //Guarda los datos del inmueble en la base de datos
+    function guardarInmueble($datosInmueble,$datosCaracteristicas){ 
+
+      /*
+        [0] => Array
+        (
+            [id_caracteristica] => 6
+            [caracteristica] => 1
+        )
+
+        [1] => Array
+        (
+            [id_caracteristica] => 8
+            [caracteristica] => 1
+        )
+      */     
+
+      $id_property              =   $datosInmueble['id_property'];                  
+      $id_user                  =   $datosInmueble['id_user'];                  
+      $for_sale                 =   $datosInmueble['for_sale'];                 
+      $for_rent                 =   $datosInmueble['for_rent'];                 
+      $for_transfer             =   $datosInmueble['for_transfer'];             
+      $id_property_type         =   $datosInmueble['id_property_type'];         
+      $id_country               =   $datosInmueble['id_country'];               
+      $country_label            =   $datosInmueble['country_label'];            
+      $id_region                =   $datosInmueble['id_region'];                
+      $region_label             =   $datosInmueble['region_label'];             
+      $id_city                  =   $datosInmueble['id_city'];                  
+      $city_label               =   $datosInmueble['city_label'];               
+      $id_location              =   $datosInmueble['id_location'];              
+      $location_label           =   $datosInmueble['location_label'];           
+      $id_zone                  =   $datosInmueble['id_zone'];                  
+      $zone_label               =   $datosInmueble['zone_label'];               
+      $id_currency              =   $datosInmueble['id_currency'];              
+      $iso_currency             =   $datosInmueble['iso_currency'];             
+      $name_currency            =   $datosInmueble['name_currency'];            
+      $title                    =   $datosInmueble['title'];                    
+      $address                  =   $datosInmueble['address'];                  
+      $area                     =   $datosInmueble['area'];                     
+      $id_unit_area             =   $datosInmueble['id_unit_area'];             
+      $unit_area_label          =   $datosInmueble['unit_area_label'];          
+      $built_area               =   $datosInmueble['built_area'];               
+      $id_unit_built_area       =   $datosInmueble['id_unit_built_area'];       
+      $unit_built_area_label    =   $datosInmueble['unit_built_area_label'];    
+      $private_area             =   $datosInmueble['private_area'];             
+      $id_unit_private_area     =   $datosInmueble['id_unit_private_area'];     
+      $unit_private_area_label  =   $datosInmueble['unit_private_area_label'];  
+      $maintenance_fee          =   $datosInmueble['maintenance_fee'];          
+      $sale_price               =   $datosInmueble['sale_price'];               
+      $sale_price_label         =   $datosInmueble['sale_price_label'];         
+      $rent_price               =   $datosInmueble['rent_price'];               
+      $rent_price_label         =   $datosInmueble['rent_price_label'];         
+      $bedrooms                 =   $datosInmueble['bedrooms'];                 
+      $bathrooms                =   $datosInmueble['bathrooms'];                
+      $garages                  =   $datosInmueble['garages'];                  
+      $floor                    =   $datosInmueble['floor'];                    
+      $stratum                  =   $datosInmueble['stratum'];                  
+      $observations             =   $datosInmueble['observations'];             
+      $video                    =   $datosInmueble['video'];                    
+      $id_property_condition    =   $datosInmueble['id_property_condition'];    
+      $property_condition_label =   $datosInmueble['property_condition_label']; 
+      $id_status_on_page        =   $datosInmueble['id_status_on_page'];        
+      $status_on_page_label     =   $datosInmueble['status_on_page_label'];     
+      $map                      =   $datosInmueble['map'];                      
+      $latitude                 =   $datosInmueble['latitude'];                 
+      $longitude                =   $datosInmueble['longitude'];                
+      $building_date            =   $datosInmueble['building_date'];            
+      $network_share            =   $datosInmueble['network_share'];            
+      $visits                   =   $datosInmueble['visits'];                   
+      $created_at               =   $datosInmueble['created_at'];               
+      $updated_at               =   $datosInmueble['updated_at'];               
+      $reference                =   $datosInmueble['reference'];                
+      $comment                  =   $datosInmueble['comment'];                  
+      $id_rents_type            =   $datosInmueble['id_rents_type'];            
+      $rents_type_label         =   $datosInmueble['rents_type_label'];         
+      $zip_code                 =   $datosInmueble['zip_code'];                 
+      $id_availability          =   $datosInmueble['id_availability'];          
+      $availability_label       =   $datosInmueble['availability_label'];       
+      $id_publish_on_map        =   $datosInmueble['id_publish_on_map'];        
+      $publish_on_map_label     =   $datosInmueble['publish_on_map_label'];     
+      $label                    =   $datosInmueble['label'];                    
+      $label_color              =   $datosInmueble['label_color'];              
+      $owner                    =   $datosInmueble['owner'];                    
+
+      $query = "INSERT INTO
+                  inmuebles.tb_inmuebles_registrados
+                  (
+                    id_property,              
+                    id_user,                  
+                    for_sale,                 
+                    for_rent,                 
+                    for_transfer,             
+                    id_property_type,         
+                    id_country,               
+                    country_label,           
+                    id_region,                
+                    region_label,             
+                    id_city,                  
+                    city_label,               
+                    id_location,              
+                    location_label,           
+                    id_zone,                  
+                    zone_label,               
+                    id_currency,              
+                    iso_currency,             
+                    name_currency,            
+                    title,                    
+                    address,                  
+                    area,                     
+                    id_unit_area,             
+                    unit_area_label,          
+                    built_area,               
+                    id_unit_built_area,       
+                    unit_built_area_label,    
+                    private_area,             
+                    id_unit_private_area,     
+                    unit_private_area_label,  
+                    maitenance_fee,          
+                    sale_price,               
+                    sale_price_label,         
+                    rent_price,               
+                    rent_price_label,         
+                    bedrooms,                 
+                    bathrooms,                
+                    garages,                  
+                    floor,                    
+                    stratum,                  
+                    observations,             
+                    video,                    
+                    id_property_condition,    
+                    property_condition_label, 
+                    id_status_on_page,        
+                    status_on_page_label,     
+                    map,                      
+                    latitude,                 
+                    longitude,                
+                    building_date,            
+                    network_share,            
+                    visits,                   
+                    created_at,               
+                    updated_at,               
+                    reference,                
+                    comment,                  
+                    id_rents_type,            
+                    rents_type_label,         
+                    zip_code,                 
+                    id_availability,          
+                    availability_label,       
+                    id_publish_on_map,        
+                    publish_on_map_label,     
+                    label,                    
+                    label_color,              
+                    owner                    
+                  )
+                VALUES
+                  (
+                    $id_property,              
+                    $id_user,                  
+                    $for_sale,                 
+                    $for_rent,                 
+                    $for_transfer,             
+                    $id_property_type,         
+                    $id_country,               
+                    '$country_label',            
+                    $id_region,                
+                    '$region_label',             
+                    $id_city,                  
+                    '$city_label',               
+                    $id_location,              
+                    '$location_label',           
+                    $id_zone,                  
+                    '$zone_label',               
+                    $id_currency,              
+                    '$iso_currency',             
+                    '$name_currency',            
+                    '$title',                    
+                    '$address',                  
+                    '$area',                     
+                    $id_unit_area,             
+                    '$unit_area_label',          
+                    '$built_area',               
+                    $id_unit_built_area,       
+                    '$unit_built_area_label',    
+                    '$private_area',             
+                    $id_unit_private_area,     
+                    '$unit_private_area_label',  
+                    $maintenance_fee,          
+                    $sale_price,               
+                    '$sale_price_label',         
+                    $rent_price,               
+                    '$rent_price_label',         
+                    '$bedrooms',                 
+                    '$bathrooms',                
+                    '$garages',                  
+                    '$floor',                    
+                    '$stratum',                  
+                    '$observations',             
+                    '$video',                    
+                    $id_property_condition,    
+                    '$property_condition_label', 
+                    $id_status_on_page,        
+                    '$status_on_page_label',     
+                    '$map',                      
+                    '$latitude',                 
+                    '$longitude',                
+                    '$building_date',            
+                    $network_share,            
+                    $visits,                   
+                    '$created_at',               
+                    '$updated_at',               
+                    '$reference',                
+                    '$comment',                  
+                    $id_rents_type,            
+                    '$rents_type_label',         
+                    '$zip_code',                 
+                    $id_availability,          
+                    '$availability_label',       
+                    $id_publish_on_map,        
+                    '$publish_on_map_label',     
+                    '$label',                    
+                    '$label_color',              
+                    '$owner'                    
+                  )  
+               ";
+      //print_r($query);exit;
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+
+      for($i=0;$i<count($datosCaracteristicas);$i++){
+
+        $query = "INSERT INTO
+                    inmuebles.tb_caracteristicas_inmuebles
+                    (
+                      id_caracteristica,
+                      id_property,
+                      valor_caracteristica
+                    )  
+                  VALUES
+                    (
+                      ".$datosCaracteristicas[$i]['id_caracteristica'].",
+                      $id_property,
+                      '".$datosCaracteristicas[$i]['caracteristica']."'
+                    )  
+                 ";  
+
+        $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+                  
+      }      
+      //print_r('hola');exit;
+
+    }
+
     //Obtiene las formas de pago posibles de los negocios inmobiliarios
     function getListaFormasPago(){
 

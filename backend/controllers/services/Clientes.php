@@ -26,6 +26,13 @@
 	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 		}
 
+		function consultarOtrosDatosCliente($id_client){
+
+			$output = $this->objClientes->consultarOtrosDatosCliente($id_client);
+	  		echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+
+		}
+
 		function getTiposClientes(){        
 
             $autAPI   = new AutenticaAPI();
@@ -118,6 +125,29 @@
           	$data = json_encode($data_user); 
 
           	echo $data;
+		}
+
+		function getClientePorID($id_client){
+			$autAPI   = new AutenticaAPI();
+			$datosAPI = $autAPI->retornarDatosAPI('wasi','clientes_por_id');
+
+			$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_client.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );			
+
+			if($data['status']!='error'){
+
+				unset($data['status']);
+				$data1=array();
+				$data1['cant']=1;	
+				$data1['lista_clientes'][0]=$data;
+				$data = json_encode($data1);
+
+			}
+			else{
+				$data1['cant']=0;
+			}			  			
+
+  			echo $data;	
+
 		}
 
 		function consultarClientes($clienteBusq){    			   
@@ -357,30 +387,46 @@
 			if(isset($_SESSION['id_user_app_externo'])&&$_SESSION['id_user_app_externo']!=''&&$_SESSION['id_user_app_externo']!=null&&$_SESSION['id_user_app_externo']!='null'&&$_SESSION['id_user_app_externo']!='NULL'&&$_SESSION['id_user_app_externo']!='Null'){
 
 				$datosCliente->id_user = $_SESSION['id_user_app_externo'];				
-				$postdata = http_build_query($datosCliente);
 
 				$autAPI   = new AutenticaAPI();
 
 				if(!isset($datosCliente->id_client)){
 
+					$postdata = http_build_query($datosCliente);
+
 					$datosAPI = $autAPI->retornarDatosAPI('wasi','agregar_cliente');
 					$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&'.$postdata), true );
-
+					//print_r($data);exit;
 				}
 				else{
 
-					$datosAPI = $autAPI->retornarDatosAPI('wasi','modificar_cliente');
+					if(isset($datosCliente->email)){
+						$email_noti = $datosCliente->email;
+					    unset($datosCliente->email);
+					}					
+					
+					$postdata = http_build_query($datosCliente);
+
+					$datosAPI = $autAPI->retornarDatosAPI('wasi','actualizar_cliente');
 					$data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_client.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&'.$postdata), true );
+					
+					if(isset($email_noti))
+						$data['email_noti'] = $email_noti;
 
 				}				
 
 				if($data['status']=='success'){
 
-					if(isset($datosCliente->id_tipo_notificacion)&&$datosCliente->id_tipo_notificacion!=null)
-						$data['id_tipo_notificacion'] = $datosCliente->id_tipo_notificacion;
 
-					if(isset($datosCliente->id_tipo_identificacion)&&$datosCliente->id_tipo_identificacion!=null)
-						$data['id_tipo_identificacion'] = $datosCliente->id_tipo_identificacion;
+					if(isset($datosCliente->tipoNotificacion)&&$datosCliente->tipoNotificacion!=null)
+						$data['id_tipo_notificacion'] = $datosCliente->tipoNotificacion;
+					else
+						$data['id_tipo_notificacion'] = 'null';
+
+					if(isset($datosCliente->tipoIdentificacion)&&$datosCliente->tipoIdentificacion!=null)
+						$data['id_tipo_identificacion'] = $datosCliente->tipoIdentificacion;
+					else
+						$data['id_tipo_identificacion'] = 'null';
 
 					$output = $this->objClientes->guardarClientes($data);
 	  				echo json_encode($output, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);

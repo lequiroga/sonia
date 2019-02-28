@@ -6,55 +6,55 @@
     <br />
     <form name="formularioGestionInmueble" id="formularioGestionInmueble" ng-model="formularioGestionInmueble" method="post" NOVALIDATE>     
       <label>Tipo inmueble (*)</label>
-      <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>        
+      <select name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmuebleGestion.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmuebleGestion.tipoinmuebleGestion.id_tipo_inmueble,inmuebleGestion.tipoinmuebleGestion.name)" ng-init="getTiposInmuebles()"/>        
       </select> 
       <label>Pa&iacute;s (*)</label>
-      <select name="inmueble_codigoPais" id="codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmueble.codigoPais" ng-change="getDepartamentos(inmueble.codigoPais)" ng-init="getPaises()"/>        
+      <select name="inmueble_codigoPais" id="codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmuebleGestion.codigoPais" ng-change="getDepartamentos(inmuebleGestion.codigoPais)" ng-init="getPaises()"/>        
       </select>
       <label>Departamento (*)</label>
-      <select name="inmueble_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmueble.codigoDepartamento)" ng-model="inmueble.codigoDepartamento"/>
+      <select name="inmueble_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmuebleGestion.codigoDepartamento)" ng-model="inmuebleGestion.codigoDepartamento"/>
       </select>
       <label>Ciudad (*)</label>
-      <select name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/>        
+      <select name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmuebleGestion.codigoCiudad" ng-change="getZonasSectores(inmuebleGestion.codigoCiudad)"/>        
       </select>
       <label ng-if="1==2">Sector</label>
-      <select ng-if="1==2" name="inmueble_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-model="inmueble.codigoSector"/>        
+      <select ng-if="1==2" name="inmueble_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-model="inmuebleGestion.codigoSector"/>        
       </select>
-      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Estrato</label>
-      <select name="inmueble_codigoEstratoCali" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(inmueble.codigoEstrato)" ng-model="inmueble.codigoEstrato"/>    
+      <label ng-if="inmuebleGestion.codigoCiudad.id_ciudad=='132'">Estrato</label>
+      <select name="inmueble_codigoEstratoCali" ng-if="inmuebleGestion.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(inmuebleGestion.codigoEstrato)" ng-model="inmuebleGestion.codigoEstrato"/>    
       </select>
-      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'||inmueble.codigoCiudad.id_ciudad=='794'">Zona / Localidad / Comuna</label>
-      <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmueble.codigoZona"/>        
+      <label ng-if="inmuebleGestion.codigoCiudad.id_ciudad=='132'||inmuebleGestion.codigoCiudad.id_ciudad=='794'">Zona / Localidad / Comuna</label>
+      <select name="inmueble_zona" ng-if="inmuebleGestion.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmuebleGestion.codigoZona"/>        
       </select> 
-      <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>       
+      <select name="inmueble_zona" ng-if="inmuebleGestion.codigoCiudad.id_ciudad=='132'" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmuebleGestion.codigoZona)" ng-model="inmuebleGestion.codigoZona"/>       
       </select>   
-      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Barrio</label>
-      <select name="inmueble_barrio" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-model="inmueble.codigoBarrio"/>        
+      <label ng-if="inmuebleGestion.codigoCiudad.id_ciudad=='132'">Barrio</label>
+      <select name="inmueble_barrio" ng-if="inmuebleGestion.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-model="inmuebleGestion.codigoBarrio"/>        
       </select>  
-      <label>Direcci&oacute;n</label><input name="inmueble_direccion" type="text" ng-model="inmueble.direccion"/>
-      <label>&Aacute;rea&nbsp;(m2)</label><input name="inmueble_area" type="number" ng-model="inmueble.area"/>
-      <label>Precio</label><input name="inmueble_precio" type="number" ng-model="inmueble.precio"/>
+      <label>Direcci&oacute;n</label><input name="inmueble_direccion" type="text" ng-model="inmuebleGestion.direccion"/>
+      <label>&Aacute;rea&nbsp;(m2)</label><input name="inmueble_area" type="number" ng-model="inmuebleGestion.area"/>
+      <label>Precio</label><input name="inmueble_precio" type="number" ng-model="inmuebleGestion.precio"/>
       <label>Moneda</label>
-      <select name="inmueble_moneda" ng-options="id_moneda as id_moneda.denominacion for id_moneda in ids_monedas track by id_moneda.id_moneda" ng-model="inmueble.moneda" ng-init="getMonedas()" ng-change="getConversionPesos(inmueble.moneda.id_moneda)"/>     
+      <select name="inmueble_moneda" ng-options="id_moneda as id_moneda.denominacion for id_moneda in ids_monedas track by id_moneda.id_moneda" ng-model="inmuebleGestion.moneda" ng-init="getMonedas()" ng-change="getConversionPesos(inmuebleGestion.moneda.id_moneda)"/>     
       </select>
-      <label ng-if="inmueble.moneda">{{conversion_pesos}}</label>   
+      <label ng-if="inmuebleGestion.moneda">{{conversion_pesos}}</label>   
       <br />
       <center ng-if="cant_caract_inm!='0'"><label style="font-weight: bolder;font-size: 16px;">Caracter&iacute;sticas</label></center>       
       <table ng-init='configPages1()' style="width: 70%;" ng-if="cant_caract_inm_obl!='0'">            
             <tbody>
               <tr ng-repeat='lista_caracteristica_inmueble in lista_caracteristicas_obligatorias_inmueble'>                      
                 <td style="width: 50%;text-align: left;vertical-align: top;padding-top: 1em;">
-                  {{lista_caracteristica_inmueble.tipo_caracteristica}}                      
+                  {{lista_caracteristica_inmuebleGestion.tipo_caracteristica}}                      
                 </td>  
-                <td ng-if="lista_caracteristica_inmueble.criterio_diligenciamiento=='Obligatorio'" style="width: 50%;vertical-align: top;padding-top: 1em;">
+                <td ng-if="lista_caracteristica_inmuebleGestion.criterio_diligenciamiento=='Obligatorio'" style="width: 50%;vertical-align: top;padding-top: 1em;">
                   <div class="tooltip">
-                   <input type="text" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Descriptivo'">
-                   <input type="number" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Numérico'">
-                   <label class="switch" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Booleano (SI/NO)'">
-                     <input type="checkbox" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]">
+                   <input type="text" id="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmuebleGestion.numero_fila][lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmuebleGestion.tipo_caracteristica_inmueble=='Descriptivo'">
+                   <input type="number" id="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmuebleGestion.numero_fila][lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmuebleGestion.tipo_caracteristica_inmueble=='Numérico'">
+                   <label class="switch" ng-if="lista_caracteristica_inmuebleGestion.tipo_caracteristica_inmueble=='Booleano (SI/NO)'">
+                     <input type="checkbox" id="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica[lista_caracteristica_inmuebleGestion.numero_fila][lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]">
                      <span style="width: 5em;" class="slider round"></span>
                    </label>
-                   <span class="tooltiptext">{{lista_caracteristica_inmueble.descripcion}}</span>
+                   <span class="tooltiptext">{{lista_caracteristica_inmuebleGestion.descripcion}}</span>
                   </div> 
                 </td>                     
               </tr>
@@ -62,24 +62,24 @@
           </table>
       <label ng-if="cant_caract_inm_opc!='0'">Caracter&iacute;sticas adicionales</label>    
       <label ng-if="cant_caract_inm_opc!='0'" class="switch">
-        <input type="checkbox" id="inmueble_caracteristicas_adicionales" name="inmueble_caracteristicas_adicionales" ng-model="inmueble.caracteristicas_adicionales" ng-change="mostrarCaracteristicasAdicionales(inmueble.caracteristicas_adicionales)">
+        <input type="checkbox" id="inmueble_caracteristicas_adicionales" name="inmueble_caracteristicas_adicionales" ng-model="inmuebleGestion.caracteristicas_adicionales" ng-change="mostrarCaracteristicasAdicionales(inmuebleGestion.caracteristicas_adicionales)">
         <span style="width: 4.5em;" class="slider round"></span>
       </label>   
       <table ng-init='configPages1()' style="width: 70%;" ng-if="cant_caract_inm_obl_show!='0'">            
             <tbody>
               <tr ng-repeat='lista_caracteristica_inmueble in lista_caracteristicas_opcionales_inmueble'>                      
                 <td style="width: 50%;text-align: left;vertical-align: top;padding-top: 1em;">
-                  {{lista_caracteristica_inmueble.tipo_caracteristica}}                      
+                  {{lista_caracteristica_inmuebleGestion.tipo_caracteristica}}                      
                 </td>  
                 <td style="width: 50%;vertical-align: top;padding-top: 1em;">
                   <div class="tooltip">
-                   <input type="text" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Descriptivo'">
-                   <input type="number" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Numérico'">
-                   <label class="switch" ng-if="lista_caracteristica_inmueble.tipo_caracteristica_inmueble=='Booleano (SI/NO)'">
-                     <input type="checkbox" id="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmueble.numero_fila][lista_caracteristica_inmueble.id_caracteristicas_tipo_inmueble]">
+                   <input type="text" id="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmuebleGestion.numero_fila][lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmuebleGestion.tipo_caracteristica_inmueble=='Descriptivo'">
+                   <input type="number" id="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmuebleGestion.numero_fila][lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-if="lista_caracteristica_inmuebleGestion.tipo_caracteristica_inmueble=='Numérico'">
+                   <label class="switch" ng-if="lista_caracteristica_inmuebleGestion.tipo_caracteristica_inmueble=='Booleano (SI/NO)'">
+                     <input type="checkbox" id="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" name="caracteristica[lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]" ng-model="caracteristicas_inmueble_busq.caracteristica_opc[lista_caracteristica_inmuebleGestion.numero_fila][lista_caracteristica_inmuebleGestion.id_caracteristicas_tipo_inmueble]">
                      <span style="width: 5em;" class="slider round"></span>
                    </label>
-                   <span class="tooltiptext">{{lista_caracteristica_inmueble.descripcion}}</span>
+                   <span class="tooltiptext">{{lista_caracteristica_inmuebleGestion.descripcion}}</span>
                   </div> 
                 </td>                     
               </tr>
@@ -96,7 +96,7 @@
       </div>         
       <br /-->  
       <label>Descripci&oacute;n</label>
-      <textarea name="inmueble_descripcion" ng-model="inmueble.descripcion"></textarea>  
+      <textarea name="inmueble_descripcion" ng-model="inmuebleGestion.descripcion"></textarea>  
       <br />
       <center>
       <button style="width:15em;" class="cotizaciones" ng-click="guardarInmuebles()">Guardar</button>      

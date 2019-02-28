@@ -33,7 +33,10 @@
                   direccion AS direccion,
                   id_pais AS id_pais,
                   id_departamento AS id_departamento,
-                  id_ciudad AS id_ciudad
+                  id_ciudad AS id_ciudad,
+                  nombre_ciudad AS nombre_ciudad,
+                  nombre_departamento AS nombre_departamento,
+                  nombre_pais AS nombre_pais
                 FROM
                   rrhh.tb_inmobiliaria
                 WHERE
@@ -52,6 +55,9 @@
       $output['datosInmobiliaria']['id_pais'] = $row['id_pais'];
       $output['datosInmobiliaria']['id_departamento']  = $row['id_departamento'];
       $output['datosInmobiliaria']['id_ciudad']  = $row['id_ciudad'];
+      $output['datosInmobiliaria']['nombre_pais'] = $row['nombre_pais'];
+      $output['datosInmobiliaria']['nombre_departamento']  = $row['nombre_departamento'];
+      $output['datosInmobiliaria']['nombre_ciudad']  = $row['nombre_ciudad'];
 
       return $output;         
 
@@ -65,6 +71,7 @@
       }
 
       $id_inmobiliaria = $_SESSION['id_inmobiliaria'];
+      $id_user = $_SESSION['id_user'];
 
       $nombre_razon_social = $datos_inmobiliaria->nombre_razon_social;       
 
@@ -77,6 +84,8 @@
       $query = "UPDATE
                   rrhh.tb_inmobiliaria
                 SET  
+                  id_user_modificacion = $id_user,
+                  fecha_modificacion = CURRENT_DATE,
                   nombre_razon_social = UPPER('$nombre_razon_social')";
 
       if(isset($datos_inmobiliaria->correo_electronico)) 
@@ -91,11 +100,20 @@
       if(isset($datos_inmobiliaria->id_ciudad)) 
         $query .=",id_ciudad = '".$datos_inmobiliaria->id_ciudad."'";
 
+      if(isset($datos_inmobiliaria->nombre_ciudad)) 
+        $query .=",nombre_ciudad = UPPER('".$datos_inmobiliaria->nombre_ciudad."')";
+
       if(isset($datos_inmobiliaria->id_departamento)) 
         $query .=",id_departamento = '".$datos_inmobiliaria->id_departamento."'";
 
+      if(isset($datos_inmobiliaria->nombre_departamento)) 
+        $query .=",nombre_departamento = UPPER('".$datos_inmobiliaria->nombre_departamento."')";
+
       if(isset($datos_inmobiliaria->id_pais)) 
         $query .=",id_pais = '".$datos_inmobiliaria->id_pais."'"; 
+
+      if(isset($datos_inmobiliaria->nombre_pais)) 
+        $query .=",nombre_pais = UPPER('".$datos_inmobiliaria->nombre_pais."')"; 
 
       $query .= " WHERE
                   id_inmobiliaria = $id_inmobiliaria";            

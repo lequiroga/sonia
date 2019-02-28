@@ -1,7 +1,7 @@
 <?php
 
 	require_once("../clases/AutenticaAPI.php");
-  require_once("../clases/InmueblesSQL.php");
+  require_once("../clases/InmueblesSQL.php");  
 
 	class Inmuebles{
 
@@ -10,6 +10,296 @@
     function Inmuebles(){
           $this->objInmuebles=new InmueblesSQL();
     }
+
+    function getInmueblePorID($id_property){
+        $autAPI   = new AutenticaAPI();
+        $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_por_id');
+        $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip=0&take=1'), true );
+
+        if($data['status']=='success'){
+          unset($data['status']);
+          $data1 = array();
+          $data1['cant']=1;
+          $data1['inmueblesResp'][0]=$data; 
+        }
+        else{
+          unset($data['status']);
+          $data1 = array();
+          $data1['cant']=0;
+        }        
+        
+        $data = json_encode($data1);
+
+        echo $data; 
+    }
+
+    function guardarInmueble($datosInmueble){
+       
+
+        if(!isset($_SESSION))
+          session_start();
+        
+        $id_user='';
+        if(isset($_SESSION['id_user_app_externo'])){
+          $id_user=$_SESSION['id_user_app_externo'];
+        }
+
+        $datosInmuebleEnvio = new \stdClass; 
+        if(isset($datosInmueble->inmueble->codigoPais)){
+          $datosInmuebleEnvio->id_country=$datosInmueble->inmueble->codigoPais->id_pais;          
+          $datosInmuebleEnvio->country_label=$datosInmueble->inmueble->codigoPais->name;          
+        }         
+        if(isset($datosInmueble->inmueble->codigoDepartamento)){
+          $datosInmuebleEnvio->id_region=$datosInmueble->inmueble->codigoDepartamento->id_departamento;
+          $datosInmuebleEnvio->region_label=$datosInmueble->inmueble->codigoDepartamento->name;          
+        }        
+        if(isset($datosInmueble->inmueble->codigoCiudad)){
+          $datosInmuebleEnvio->id_city=$datosInmueble->inmueble->codigoCiudad->id_ciudad;          
+          $datosInmuebleEnvio->city_label=$datosInmueble->inmueble->codigoCiudad->name;          
+        }        
+        if(isset($datosInmueble->inmueble->codigoSector->name)){
+          if(isset($datosInmueble->inmueble->codigoSector->id_sector)){
+            $datosInmuebleEnvio->id_zone=$datosInmueble->inmueble->codigoSector->id_sector;          
+          }
+          $datosInmuebleEnvio->zone_label=$datosInmueble->inmueble->codigoSector->name; 
+          //print_r($datosInmuebleEnvio);exit;         
+        }        
+        if(isset($datosInmueble->inmueble->codigoEstrato->codigo)){
+          $datosInmuebleEnvio->stratum=$datosInmueble->inmueble->codigoEstrato->codigo;                   
+        }        
+        if(isset($datosInmueble->inmueble->codigoZona)&&$datosInmueble->inmueble->codigoCiudad->id_ciudad=='794'){
+          $datosInmuebleEnvio->id_location=$datosInmueble->inmueble->codigoZona->id_zona;          
+          $datosInmuebleEnvio->location_name=$datosInmueble->inmueble->codigoZona->name;                    
+        }        
+        /*if(isset($datosInmueble->inmueble->codigoBarrio)){
+          print_r($datosInmueble->inmueble->codigoBarrio);exit;
+          if(isset($datosInmueble->inmueble->codigoBarrio->estrato)){
+            $datosInmuebleEnvio->stratum=$datosInmueble->inmueble->codigoBarrio->estrato;            
+          }          
+          //$datosInmuebleEnvio .= $datosInmueble->inmueble->codigoEstrato->codigo;          
+        }*/        
+        if(isset($datosInmueble->inmueble->direccion)){
+          $datosInmuebleEnvio->address=$datosInmueble->inmueble->direccion;                 
+        }        
+        if(isset($datosInmueble->coordenadas->latitud)&&isset($datosInmueble->coordenadas->longitud)){          
+          $datosInmuebleEnvio->map=$datosInmueble->coordenadas->latitud.",".$datosInmueble->coordenadas->longitud;
+          $datosInmuebleEnvio->latitude=$datosInmueble->coordenadas->latitud;
+          $datosInmuebleEnvio->longitude=$datosInmueble->coordenadas->longitud;            
+          $datosInmuebleEnvio->id_publish_on_map=3;  
+          $datosInmuebleEnvio->publish_on_map_label="Post exact point";  
+        }
+        else{
+          $datosInmuebleEnvio->id_publish_on_map=1;  
+          $datosInmuebleEnvio->publish_on_map_label="Do not post"; 
+        }        
+        if(isset($datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble)){
+          $datosInmuebleEnvio->id_property_type=$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble;        
+        }        
+        if(isset($datosInmueble->inmueble->titulo)){
+          $datosInmuebleEnvio->title=strtoupper ($datosInmueble->inmueble->titulo);                        
+        }        
+        if(isset($datosInmueble->inmueble->condicion)){
+          $datosInmuebleEnvio->id_property_condition=$datosInmueble->inmueble->condicion;          
+          
+          if($datosInmueble->inmueble->condicion=='1'){
+            $datosInmuebleEnvio->property_condition_label="New";            
+          }
+          else if($datosInmueble->inmueble->condicion=='2'){            
+            $datosInmuebleEnvio->property_condition_label="Used";
+          }
+          else if($datosInmueble->inmueble->condicion=='3'){
+            $datosInmuebleEnvio->property_condition_label="Project";            
+          }
+          else if($datosInmueble->inmueble->condicion=='4'){            
+            $datosInmuebleEnvio->property_condition_label="Under construction"; 
+          }                     
+        }        
+        if(isset($datosInmueble->inmueble->area)){
+          $datosInmuebleEnvio->area=$datosInmueble->inmueble->area;                        
+        }        
+        if(isset($datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble)&&($datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='1'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='2'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='3'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='4'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='7'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='8'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='10'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='11'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='12')){
+          $datosInmuebleEnvio->id_unit_area="1";                       
+        }        
+        if(isset($datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble)&&($datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='5'||$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble=='6')){
+          $datosInmuebleEnvio->id_unit_area="3";                        
+        }        
+        if(isset($datosInmueble->inmueble->moneda->id_moneda)){
+          $datosInmuebleEnvio->id_currency=$datosInmueble->inmueble->moneda->id_moneda;          
+          $moneda=explode(" - ",$datosInmueble->inmueble->moneda->denominacion);           
+          $datosInmuebleEnvio->iso_currency=$moneda[0];              
+          $datosInmuebleEnvio->name_currency=$moneda[1];                     
+        }        
+        if(isset($datosInmueble->inmueble->precio)){
+          $datosInmuebleEnvio->sale_price=$datosInmueble->inmueble->precio;           
+          $datosInmuebleEnvio->sale_price_label='$'.str_replace(',', '.', number_format($datosInmueble->inmueble->precio));                     
+        }        
+        if(isset($datosInmueble->inmueble->valor_administracion)){
+          $datosInmuebleEnvio->maintenance_fee=$datosInmueble->inmueble->valor_administracion;                   
+        }        
+        $datosCaracteristicas = "";
+        $postdataCaracteristicas= "";
+        //if(count($datosInmueble->caracteristicas)>0){
+          //$caracteristica = array();          
+        $caracteristica = (array)$datosInmueble->caracteristicas;  
+          
+        if(count($caracteristica)>0){
+          $output1 = $this->objInmuebles->getListaCaracteristicas($caracteristica,$datosInmueble->inmueble->tipoInmueble->id_tipo_inmueble);
+
+          foreach ($output1 as $key => $value) {            
+            $datosCaracteristicas.='&features[]='.$value['id_caracteristica'];                      
+          }     
+          $postdataCaracteristicas=$datosCaracteristicas;
+          $datosCaracteristicas=array();
+          $datosCaracteristicas=$output1;
+
+        } 
+        else{
+          $datosCaracteristicas=array();
+        }
+
+        /*}
+        else{
+          $datosCaracteristicas=array();
+        }*/               
+        //print_r($postdataCaracteristicas);exit;
+        if(isset($datosInmueble->inmueble->habitaciones)){
+          $datosInmuebleEnvio->bedrooms=$datosInmueble->inmueble->habitaciones;                      
+        }        
+        if(isset($datosInmueble->inmueble->banos)){
+          $datosInmuebleEnvio->bathrooms=$datosInmueble->inmueble->banos;                      
+        }        
+        if(isset($datosInmueble->inmueble->parqueadero)){
+          $datosInmuebleEnvio->garages=$datosInmueble->inmueble->parqueadero;                        
+        }
+        if(isset($datosInmueble->inmueble->piso)){
+          $datosInmuebleEnvio->floor=$datosInmueble->inmueble->piso;                     
+        }
+        if(isset($datosInmueble->inmueble->observaciones)){
+          $datosInmuebleEnvio->observations=$datosInmueble->inmueble->observaciones;                  
+        }
+        if(isset($datosInmueble->inmueble->comentario)){
+          $datosInmuebleEnvio->comment=$datosInmueble->inmueble->comentario;                        
+        }
+        if(isset($datosInmueble->inmueble->referencia)){
+          $datosInmuebleEnvio->reference=$datosInmueble->inmueble->referencia;                      
+        }        
+        if(isset($datosInmueble->inmueble->estado)){          
+          $datosInmuebleEnvio->id_availability=$datosInmueble->inmueble->estado->id_estado;          
+          if($datosInmueble->inmueble->estado->id_estado=='1'){
+            $datosInmuebleEnvio->availability_label="Available"; 
+          } 
+          else if($datosInmueble->inmueble->estado->id_estado=='2'){
+            $datosInmuebleEnvio->availability_label="Sold"; 
+          }       
+          else if($datosInmueble->inmueble->estado->id_estado=='3'){
+            $datosInmuebleEnvio->availability_label="Rented"; 
+          }      
+        }
+        
+        $datosInmuebleEnvio->for_sale="true";
+        $datosInmuebleEnvio->for_rent="false"; 
+        $datosInmuebleEnvio->for_transfer="false"; 
+        $datosInmuebleEnvio->id_status_on_page=1; 
+        $datosInmuebleEnvio->status_on_page_label="Active"; 
+        $datosInmuebleEnvio->id_user=$id_user;       
+        
+        $postdata=http_build_query($datosInmuebleEnvio);
+        
+        $autAPI   = new AutenticaAPI();
+        $datosAPI = $autAPI->retornarDatosAPI('wasi','guardar_propiedad');       
+        $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&'.$postdata), true );
+
+        if($postdataCaracteristicas!=""){
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','actualizar_propiedad');           
+          $data1 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data['id_property'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].$postdataCaracteristicas), true );
+        }    
+        
+        if($data['status']=='success'){
+          unset($data['status']);
+          $data1 = array();
+          $data1['respuesta']='1';
+          $data1['id_property']=$data['id_property'];
+          
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_por_id');
+          $data3 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$data1['id_property'].'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip=0&take=1'), true );
+
+          if($data3['status']=='success'){
+            unset($data3['status']);            
+            $data1['inmuebleRegistrado']=$data3; 
+            $this->objInmuebles->guardarInmueble($data1['inmuebleRegistrado'],$datosCaracteristicas);            
+          }
+
+        }
+        else{
+          unset($data['status']);
+          $data1 = array();
+          $data1['respuesta']='0';
+        }        
+        
+        $data = json_encode($data1);
+
+        echo $data; 
+    }
+
+    function guardarImagenInmueble($id_property,$foto){      
+//print_r($foto->fileType);exit;
+      if(isset($foto->fileName)){
+
+          $autAPI   = new AutenticaAPI();
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','galerias_propiedad');       
+          $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+
+          $posicion = $data['total']+1;      
+          $descripcion='Foto '.$posicion;
+
+          $output1 = '../tmp_files/'.$foto->fileName; 
+          $outputFile = $this->base64_to_jpeg($foto->base64StringFile, $output1);    
+
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','subir_imagen_propiedad');  
+         
+          $ch = curl_init();
+
+          $path = realpath($output1);
+          //print_r("@".$output1);exit;
+          $post = ['image' => "@".$output1,
+                   'position' => $posicion,
+                   'description' => $descripcion
+                  ];
+          
+          curl_setopt($ch, CURLOPT_URL, $datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]);
+          curl_setopt($ch, CURLOPT_POST,1);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $foto);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+          $result=curl_exec ($ch);
+          curl_close ($ch);
+          
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','actualizar_imagen_propiedad');       
+          $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+
+          echo "Operacion exitosa";exit;
+
+      }
+
+    }
+      
+    public function base64_to_jpeg($base64_string, $output_file) {
+        // open the output file for writing
+        $ifp = fopen( $output_file, 'wb' ); 
+
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode( ',', $base64_string );       
+
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite( $ifp, base64_decode( $data[0] ) );
+    
+        // clean up the file resource
+        fclose( $ifp ); 
+    
+        return $output_file; 
+    }
+    
 
     function consultarInmuebles($datosInmueble,$caracteristicas,$caracteristicas_opcionales){
 

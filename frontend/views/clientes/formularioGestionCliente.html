@@ -6,27 +6,33 @@
     <center><h2 style="font-family:Verdana;">DATOS CLIENTE</h2></center>
     <br />
     <form name="formularioCliente" ng-model="cliente" id="formularioCliente" method="post" NOVALIDATE>
+      <label ng-if="cliente.id_client">ID Cliente</label><input ng-if="cliente.id_client" type="text" ng-disabled="1" name="cliente_id_client" ng-model="cliente.id_client">   
       <label>Tipo cliente (*)</label>
-      <select name="cliente_tipo_cliente" ng-options="id_tipo_cliente as id_tipo_cliente.descripcion for id_tipo_cliente in ids_tipo_clientes track by id_tipo_cliente.id_tipo_cliente" ng-model="cliente.tipoCliente"/>        
+      <select ng-disabled="cliente.volverListaInmuebles=='1'" name="cliente_tipo_cliente" ng-options="id_tipo_cliente as id_tipo_cliente.descripcion for id_tipo_cliente in ids_tipo_clientes track by id_tipo_cliente.id_tipo_cliente" ng-change="resetearEnvioWA()" ng-model="cliente.tipoCliente"/> 
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>       
       </select>
       <label>Nombres (*)</label><input name="cliente_nombres" type="text" ng-model="cliente.nombres"/>      
       <label>Apellidos</label><input name="cliente_apellidos" type="text" ng-model="cliente.apellidos"/>      
       <label>Tipo identificaci&oacute;n</label>
-      <select name="cliente_tipo_identificacion" ng-change="showClientsByID()" ng-options="id_tipo_id as id_tipo_id.descripcion for id_tipo_id in ids_tipo_id track by id_tipo_id.id_tipo_identificacion" ng-model="cliente.tipoIdentificacion"/>        
+      <select name="cliente_tipo_identificacion" ng-change="showClientsByID()" ng-options="id_tipo_id as id_tipo_id.descripcion for id_tipo_id in ids_tipo_id track by id_tipo_id.id_tipo_identificacion" ng-model="cliente.tipoIdentificacion"/>   
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>     
       </select>      
       <label>N&uacute;mero identificaci&oacute;n</label><input name="cliente_numero_identificacion" type="number" string-to-number ng-model="cliente.numeroIdentificacion"/>
       <label>Tipo notificaci&oacute;n (*)</label>
-      <select name="cliente_tipo_notificacion" ng-options="id_tipo_notificacion as id_tipo_notificacion.descripcion for id_tipo_notificacion in ids_tipo_notificacion track by id_tipo_notificacion.id_tipo_notificacion" ng-model="cliente.tipoNotificacion"/>        
+      <select name="cliente_tipo_notificacion" ng-options="id_tipo_notificacion as id_tipo_notificacion.descripcion for id_tipo_notificacion in ids_tipo_notificacion track by id_tipo_notificacion.id_tipo_notificacion" ng-model="cliente.tipoNotificacion"/>       
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
       </select> 
       <label>Tel&eacute;fono m&oacute;vil</label><input name="cliente_telefono_movil" type="text" ng-model="cliente.telefono_movil"/>      
       <label>Tel&eacute;fono fijo</label><input name="cliente_telefono_fijo" type="text" ng-model="cliente.telefono_fijo"/>      
       <label>Correo electr&oacute;nico</label><input name="cliente_correo_electronico" type="email" ng-model="cliente.correo_electronico"/>
       <label>Direcci&oacute;n de residencia</label><input name="cliente_direccion" type="text" ng-model="cliente.direccion"/>
       <label>Pa&iacute;s (*)</label>
-      <select name="cliente_codigoPais" id="codigoPais" ng-model="cliente.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosCliente(cliente.codigoPais.id_pais)"/>       
+      <select name="cliente_codigoPais" id="codigoPais" ng-model="cliente.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosCliente(cliente.codigoPais.id_pais)"/>    
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>   
       </select>
       <label>Departamento (*)</label>
       <select name="cliente_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(cliente.codigoDepartamento)" ng-model="cliente.codigoDepartamento"/>
+        <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>
       </select>
       <label>Ciudad (*)</label>
       <select name="cliente_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="cliente.codigoCiudad" ng-change="getZonasSectores(cliente.codigoCiudad)"/>        
@@ -34,36 +40,60 @@
       <label>Requerimiento del cliente</label>
       <textarea name="cliente_query"  id="cliente_query" ng-model="cliente.query" />        
       </textarea>
-      <label>Comentario sobre el cliente</label>
+      <label>Comentario</label>
       <textarea name="cliente_comment"  id="cliente_comment" ng-model="cliente.comment" />        
       </textarea>
       <label>Referencia externa</label>
       <textarea name="cliente_reference"  id="cliente_reference" ng-model="cliente.reference" />        
       </textarea>
-      <input type="hidden" name="cliente_id_client" ng-model="cliente.id_client">    
+      <!--label ng-show="cliente.tipoCliente.id_tipo_cliente=='1'||cliente.tipoCliente.id_tipo_cliente=='7'"><img src="../../form-images/social/whatsapp.png"  width="30" heigth="30">&nbsp;Compartir en Whatsapp</label>   
+      <label ng-show="cliente.tipoCliente.id_tipo_cliente=='1'||cliente.tipoCliente.id_tipo_cliente=='7'" class="switch">
+        <input type="checkbox" id="cliente_compartir_aliados" name="cliente_compartir_aliados" ng-model="cliente.compartir_aliados">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label-->       
       <br />
       <label>(*) Informaci&oacute;n requerida</label>
-      <br />
-      <center>      
-      <button style="width:15em;" class="volver" ng-click="saveClientes('1')" >Guardar</button>
-      <br />
-      <br />      
-      <button style="width:15em;" class="consultar" ng-click="saveClientes('2')" ng-show="cliente.tipoCliente.id_tipo_cliente=='1'cliente.tipoCliente.id_tipo_cliente=='7'">Solicitud de Compra</button>      
-      <button style="width:15em;" class="consultar" ng-click="saveClientes('3')" ng-show="cliente.tipoCliente.id_tipo_cliente=='2'||cliente.tipoCliente.id_tipo_cliente=='5'">Registrar Inmueble</button>
-      <button style="width:15em;" class="consultar" ng-click="" ng-show="cliente.tipoCliente.id_tipo_cliente=='3'">Oferta de Arrendamiento</button>
-      <button style="width:15em;" class="consultar" ng-click="" ng-show="cliente.tipoCliente.id_tipo_cliente=='4'">Solicitud de Arrendamiento</button>
-      <br />
-      <br />
-      <button style="width:15em;" class="limpiar" ng-click="limpiarClientes()">Limpiar</button>
-      <br />
-      <br />
-      <button style="width:15em;" class="consultar" ng-click="showRedesSocialesClientes()">Redes&nbsp;Sociales</button>
-      <br />
-      <br />
-      <button style="width:15em;" ng-click="saveClientes('4')" class="crear_cliente">M&aacute;s Informaci&oacute;n</button>
-      <br />
-      <br />
-      <button style="width:15em;" class="volver" ng-click="showClientsIndex()">Volver</button></center>
+      <br />           
+      <div ng-if="cliente.volverListaInmuebles=='0'" style="margin:auto;">      
+        <!--button style="width:15em;" class="consultar" ng-click="saveClientes('2')" ng-show="cliente.tipoCliente.id_tipo_cliente=='1'||cliente.tipoCliente.id_tipo_cliente=='7'">Solicitud de Compra</button-->       
+        <center>       
+        <button style="width:15em;" class="volver" ng-click="saveClientes('1')" >Guardar</button>
+        <br />
+        <br />
+        <button style="width:15em;" class="consultar" ng-click="saveClientes('3')" ng-show="cliente.tipoCliente.id_tipo_cliente=='2'||cliente.tipoCliente.id_tipo_cliente=='5'">Registrar Inmueble</button>
+        <button style="width:15em;" class="consultar" ng-click="" ng-show="cliente.tipoCliente.id_tipo_cliente=='3'">Oferta de Arrendamiento</button>
+        <button style="width:15em;" class="consultar" ng-click="" ng-show="cliente.tipoCliente.id_tipo_cliente=='4'">Solicitud de Arrendamiento</button>
+        <br />
+        <br />
+        <button style="width:15em;" class="crear_cliente" ng-click="compartirWhatsapp()" ng-if="cliente.id_client">Compartir en Whatsapp</button>
+        <br ng-if="cliente.id_client" />
+        <br ng-if="cliente.id_client" />
+        <button style="width:15em;" class="limpiar" ng-click="limpiarClientes()">Limpiar</button>
+        <br />
+        <br />
+        <button style="width:15em;" class="consultar" ng-click="showRedesSocialesClientes()">Redes&nbsp;Sociales</button>
+        <br />
+        <br />
+        <button style="width:15em;" ng-click="saveClientes('4')" class="crear_cliente">M&aacute;s Informaci&oacute;n</button>
+        <br />
+        <br />
+        <button style="width:15em;" class="volver" ng-click="showClientsIndex()">Volver</button>
+        </center>
+      </div>
+      <div ng-if="cliente.volverListaInmuebles=='1'" style="margin:auto;">      
+        <!--button style="width:15em;" class="consultar" ng-click="saveClientes('2')" ng-show="cliente.tipoCliente.id_tipo_cliente=='1'||cliente.tipoCliente.id_tipo_cliente=='7'">Solicitud de Compra</button-->  
+        <center>
+        <button style="width:15em;" class="volver" ng-click="saveClientes('1')" >Guardar</button>
+        <br />        
+        <br />
+        <button style="width:15em;" class="consultar" ng-click="showRedesSocialesClientes()">Redes&nbsp;Sociales</button>
+        <br />
+        <br />
+        <button style="width:15em;" ng-click="saveClientes('4')" class="crear_cliente">M&aacute;s Informaci&oacute;n</button>
+        <br />
+        <br />
+        <button style="width:15em;" class="volver" ng-click="showInmueblesList()">Volver</button></center>
+      </div>
     </form>
   </div>
   <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />

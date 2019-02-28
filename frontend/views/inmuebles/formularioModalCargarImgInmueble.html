@@ -1,0 +1,29 @@
+<div class="overlay"/>
+<div class="modal" style="overflow-y: auto; margin: auto;">
+  <button class="cotizaciones" style="color: white;font-weight: bold;float: right;width:5em;" ng-click="cerrarModal()">Cerrar
+  </button> 
+  <br />
+  <br />
+  <div class="form">    
+    <center><h2 style="font-family:Verdana;">IM&Aacute;GENES INMUEBLE</h2></center>
+    <br />
+    <form name="formularioImagenesInmueble" ng-model="formularioImagenesInmueble" id="formularioImagenesInmueble" method="post" NOVALIDATE>
+      <label>Imagen inmueble (*)</label><input name="fileInmueble" id="fileInmueble" type="file" onchange="openFileInmueble(event)" ng-model="imagenesInmueble.fileInmueble"/>
+      
+      <img id="imagen_inmueble_carga_show" style="display: none;top: 0;left: 0;right: 0;bottom: 0;margin: auto;" name="imagen_inmueble_carga_show" width="55%" height="55%">       
+      <label>(*) Informaci&oacute;n requerida</label> 
+      <input name="id_property" id="id_property" ng-model="imagenesInmueble.id_property" type="hidden">
+      <br />
+      <center>      
+      <button type="submit" style="width:15em;" class="consultar" ng-click="saveImage()" >Guardar</button>
+      <br />
+      <br />     
+      <button style="width:15em;" class="limpiar" ng-click="limpiarImagenesInmueble()">Limpiar</button>      
+      <br />
+      <br />
+      </center>
+    </form>
+  </div>
+  
+</div>
+</div> 

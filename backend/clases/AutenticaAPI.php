@@ -47,7 +47,7 @@
                 // Liberando el conjunto de resultados
 				pg_free_result($result);
 
-				pg_close($dbConn);
+				//pg_close($dbConn);
 
 			}
 

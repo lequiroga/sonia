@@ -695,3 +695,75 @@ input:checked + .slider:before {
   top: 0; left: 0; bottom: 0; right: 0;
   background: rgba(0, 0, 0, 0.5);
 }
+
+input,select {
+
+  outline: none;
+  display: block;
+  width: 70%;
+  border: 1px solid #d9d9d9;
+  margin: 0 0 20px;
+  margin-left: auto;
+    margin-right: auto;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  font-weight: 400;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+}
+
+h2 {
+  outline: none;
+  display: block;
+  width: 70%;
+  margin: 0 0 20px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #00008B;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+label {
+  outline: none;
+  display: block;
+  width: 70%;
+  margin: 0 0 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button {
+
+  cursor: pointer;
+  /*background: #00008B;*/
+  width: 15%;
+  border: 0;
+  padding: 10px 15px;
+  margin-right: 3px;
+  color: #ffffff;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+}
+
+input:focus {
+  border: 1px solid #33b5e5;
+  color: #333333;
+}
+
+textarea {
+
+  outline: none;
+  display: block;
+  width: 70%;
+  border: 1px solid #d9d9d9;
+  margin: 0 0 20px;
+  margin-left: auto;
+    margin-right: auto;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  font-weight: 400;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+}

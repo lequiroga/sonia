@@ -1,7 +1,8 @@
 <?php
 
+  //Almacenamiento en bucket S3 Amazon AWS
   use Aws\S3\S3Client;
-  use Aws\S3\Exception\S3Exception;
+  use Aws\S3\Exception\S3Exception;  
 
   require '../../vendor/autoload.php'; 
   require 'AWS/configBucket.php'; 

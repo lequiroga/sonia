@@ -1,16 +1,21 @@
-<?php
+<?php 
 
   // Conexión a la base de datos
   require_once('ConectaBD.php');
+  require_once("AutenticaAPI.php");
+  require_once('NotificacionSNS.php');
+  require_once('InmobiliariaSQL.php');
+  require_once('AsesoresSQL.php');
 
   class ClientesSQL{       
 
   	private $conn;
   	private $dbConn;
+    private $sms;
 
   	function ClientesSQL(){
       $conn   = new ConectaBD();
-	    $dbConn = $conn->conectarBD();   
+	    $dbConn = $conn->conectarBD();      
 	    //unset($this->conn);
   	}
 
@@ -75,6 +80,36 @@
       }
 
       return $output;       
+
+    }
+
+    function consultarOtrosDatosCliente($id_client){
+
+      $query = "SELECT
+                  a.id_tipo_notificacion AS id_tipo_notificacion,
+                  c.descripcion AS desc_notificacion,
+                  a.id_tipo_identificacion AS id_tipo_identificacion,
+                  b.desc_tipo_id AS desc_identificacion,
+                  a.email AS email_registrado
+                FROM
+                  clientes.tb_clientes a
+                  LEFT JOIN tipos.tb_tiposidentificacion b ON a.id_tipo_identificacion=b.id_tipo_ident
+                  LEFT JOIN tipos.tb_tipos_notificacion c ON a.id_tipo_notificacion=c.id_tipo_notificacion
+                WHERE
+                  a.id_client=$id_client    
+               ";
+
+               //print_r($query);exit;
+    
+      $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
+      $row = pg_fetch_array($result, null);
+      $output['otrosDatosCliente']['id_tipo_notificacion'] = $row['id_tipo_notificacion'];
+      $output['otrosDatosCliente']['id_tipo_identificacion']  = $row['id_tipo_identificacion'];
+      $output['otrosDatosCliente']['email_registrado']  = $row['email_registrado']; 
+      $output['otrosDatosCliente']['desc_notificacion']  = $row['desc_notificacion'];
+      $output['otrosDatosCliente']['desc_identificacion']  = $row['desc_identificacion'];       
+
+      return $output;
 
     }
 
@@ -551,29 +586,29 @@
 
       $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
-	  if(pg_num_rows($result)>0){
-
-	  	$i = 0;	
-	  	while($row = pg_fetch_array($result, null)){	  	
-	      $output['lista_clientes'][$i]['id_cliente'] = $row['id_cliente'];
-	      $output['lista_clientes'][$i]['identificacion']  = $row['identificacion'];
-	      $output['lista_clientes'][$i]['cliente']  = $row['cliente'];
-	      $output['lista_clientes'][$i]['telefonos']  = $row['telefonos'];
-	      $i++;	    
-	  	}	  
-
+	    if(pg_num_rows($result)>0){
+   
+	    	$i = 0;	
+	    	while($row = pg_fetch_array($result, null)){	  	
+	        $output['lista_clientes'][$i]['id_cliente'] = $row['id_cliente'];
+	        $output['lista_clientes'][$i]['identificacion']  = $row['identificacion'];
+	        $output['lista_clientes'][$i]['cliente']  = $row['cliente'];
+	        $output['lista_clientes'][$i]['telefonos']  = $row['telefonos'];
+	        $i++;	    
+	    	}	  
+   
         $output['cant']=$i;
         // Liberando el conjunto de resultados
-		pg_free_result($result);				
+		    pg_free_result($result);				
 	  			
-	  }
+	    }
       else{
         $output['cant']='0';
       }
 
-	  return $output;
+	    return $output;
 
-    }
+    }    
 
     function guardarClientes($datosCliente){  
 
@@ -591,10 +626,15 @@
       else
         $cell_phone='';
 
-      if(isset($datosCliente->email))
+      if(isset($datosCliente->email)&&!isset($datosCliente->email_noti)){        
         $email=$datosCliente->email;
-      else
-        $email='';  
+      }
+      else if(isset($datosCliente->email_noti)){        
+        $email=$datosCliente->email_noti;  
+      }
+      else{       
+        $email=""; 
+      }      
 
       if(isset($datosCliente->address))
         $address=$datosCliente->address;
@@ -629,30 +669,302 @@
                     id_client_type=".$datosCliente->id_client_type.",
                     first_name=UPPER('".$datosCliente->first_name."'),
                     last_name=UPPER('".$datosCliente->last_name."'),
-                    id_tipo_identificacion=".$datosCliente->tipoIdentificacion.",
+                    id_tipo_identificacion=".$datosCliente->id_tipo_identificacion.",
                     identification='".$datosCliente->identification."',
-                    id_tipo_notificacion=".$datosCliente->tipoNotificacion.",                    
+                    id_tipo_notificacion= CASE WHEN '".$datosCliente->id_tipo_notificacion."' LIKE 'null' THEN id_tipo_notificacion ELSE ".$datosCliente->id_tipo_notificacion." END,                    
                     phone='".$phone."',
                     cell_phone='".$cell_phone."',
                     email=UPPER('".$email."'),
                     address=UPPER('".$address."'),
                     id_city=".$id_city.",
                     id_region=".$id_region.",
-                    id_country=".$id_pais.",
+                    id_country=".$id_country.",
                     id_user_mod=".$datosCliente->id_user.",
                     fecha_modificacion=CURRENT_TIMESTAMP
                   WHERE
-                    id_client=".$datosCliente->id_client.""; 
+                    id_client=".$datosCliente->id_client.""; //print_r($query);exit;
 
           $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
           
           $respuesta['respuesta']='3';
-          $respuesta['id_client']=$datosClient->id_client;
+          $respuesta['inmobiliaria']=$_SESSION['nombre_inmobiliaria'];
+          $respuesta['id_client']=$datosCliente->id_client;    
+
+          if(($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);   
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();           
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);
+            
+            $titulo = $inmobiliaria.' te agradece por contactarnos';            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            if($datosCliente->id_tipo_notificacion=='5'){
+
+              $cuerpo_mensaje = "<br /><br />
+                                 <table border='0' style='text-align:center;margin:auto;'>
+                                  <tr>
+                                    <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                    <td>".$inmobiliaria."</td>
+                                    <td>&nbsp;</td>
+                                  </tr>
+                                 </table>";
+
+              $cuerpo_mensaje .= "<br /><br />";                             
+
+              $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el n&uacute;mero ".$datosCliente->id_client.", ha sido actualizada.";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos.";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema:</p>";            
+              $cuerpo_mensaje .= "<br /><br />
+                                 <table border='0' style='text-align:center;margin:auto;'>
+                                  <tr>
+                                    <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                    <td style='text-align:left;'>
+                                      Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                      <br />
+                                      Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                      <br />
+                                      Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                    </td>                                  
+                                  </tr>
+                                 </table>";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "<p>";
+              $cuerpo_mensaje .= $inmobiliaria."<br />";
+              $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+              $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+              $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+              $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+              $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />"; 
+
+              $emai = new NotificacionSNS(); 
+              $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+            }
+            if($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5'){
+
+              $cuerpo_mensaje = "";                                        
+
+              $cuerpo_mensaje .= "Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).". ";               
+              $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA. ";               
+              $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el número ".$datosCliente->id_client.", ha sido actualizada. ";    
+              $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sueños te avisaremos. ";              
+              $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema: ";            
+              $cuerpo_mensaje .= $datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos'].", Teléfono celular: ".$datosAsesor['datosAsesor']['telefono_movil'].", Correo electrónico: ".$datosAsesor['datosAsesor']['correo_electronico'].".";              
+
+              $respuesta['cuerpo_mensaje'] = $cuerpo_mensaje;
+            }
+
+            
+
+          }
+
+          else if(($datosCliente->id_tipo_notificacion=='3')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);   
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();           
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);
+            
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $cuerpo_mensaje = "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td>".$inmobiliaria."</td>
+                                  <td>&nbsp;</td>
+                                </tr>
+                               </table>";
+
+            $cuerpo_mensaje .= "<br /><br />";                             
+
+            $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el n&uacute;mero ".$datosCliente->id_client.", ha sido actualizada.";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos. ";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema:</p>";            
+            $cuerpo_mensaje .= "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td style='text-align:left;'>
+                                    Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                    <br />
+                                    Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                    <br />
+                                    Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                  </td>                                  
+                                </tr>
+                               </table>";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "<p>";
+            $cuerpo_mensaje .= $inmobiliaria."<br />";
+            $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+            $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+            $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+            $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+            $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />";
+
+            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            $emai = new NotificacionSNS(); 
+            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);  
+
+          }    
+          else if(($datosCliente->id_tipo_notificacion=='2')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);            
+
+          } 
+          else if(($datosCliente->id_tipo_notificacion=='1')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();           
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);
+            
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $cuerpo_mensaje = "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td>".$inmobiliaria."</td>
+                                  <td>&nbsp;</td>
+                                </tr>
+                               </table>";
+
+            $cuerpo_mensaje .= "<br /><br />";                             
+
+            $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el n&uacute;mero ".$datosCliente->id_client.", ha sido actualizada.";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos. ";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema:</p>";           
+            $cuerpo_mensaje .= "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td style='text-align:left;'>
+                                    Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                    <br />
+                                    Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                    <br />
+                                    Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                  </td>                                  
+                                </tr>
+                               </table>";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "<p>";
+            $cuerpo_mensaje .= $inmobiliaria."<br />";
+            $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+            $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+            $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+            $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+            $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />";
+
+            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            $emai = new NotificacionSNS(); 
+            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);     
+
+          }         
 
           return $respuesta;
 
         }
         else{
+
+          if(!isset($_SESSION))
+            session_start();
           /*$respuesta['respuesta']='4';
           return $respuesta;*/
           $query="INSERT INTO 
@@ -661,9 +973,9 @@
                       id_client_type,
                       first_name,
                       last_name,
-                      
+                      id_tipo_identificacion,
                       identification,
-                      
+                      id_tipo_notificacion,
                       phone,
                       cell_phone,
                       email,
@@ -679,9 +991,9 @@
                      ".$datosCliente->id_client_type.",
                      UPPER('".$datosCliente->first_name."'),
                      UPPER('".$datosCliente->last_name."'),
-                     
+                     ".$datosCliente->id_tipo_identificacion.",
                      '".$datosCliente->identification."',
-                                         
+                     ".$datosCliente->id_tipo_notificacion.",                    
                      '".$phone."',
                      '".$cell_phone."',
                      UPPER('".$email."'),
@@ -692,13 +1004,277 @@
                      ".$datosCliente->id_user.",
                      ".$datosCliente->id_client."
                    )";          
-//print_r($query);exit;
+
           $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
-          $id_client=$this->retornarIdClientesPorDoc($datosCliente->identification);
+          $id_client=$datosCliente->id_client;          
           
           $respuesta['respuesta']='1';
+          $respuesta['inmobiliaria']=$_SESSION['nombre_inmobiliaria'];
           $respuesta['id_client']=$id_client;
+
+          if(($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);   
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();           
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);
+            
+            $titulo = $inmobiliaria.' te agradece por contactarnos';            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            if($datosCliente->id_tipo_notificacion=='5'){
+
+              $cuerpo_mensaje = "<br /><br />
+                                 <table border='0' style='text-align:center;margin:auto;'>
+                                  <tr>
+                                    <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                    <td>".$inmobiliaria."</td>
+                                    <td>&nbsp;</td>
+                                  </tr>
+                                 </table>";
+
+              $cuerpo_mensaje .= "<br /><br />";                             
+
+              $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el n&uacute;mero ".$datosCliente->id_client.", ha sido actualizada.";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos. ";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema:</p>";            
+              $cuerpo_mensaje .= "<br /><br />
+                                 <table border='0' style='text-align:center;margin:auto;'>
+                                  <tr>
+                                    <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                    <td style='text-align:left;'>
+                                      Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                      <br />
+                                      Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                      <br />
+                                      Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                    </td>                                  
+                                  </tr>
+                                 </table>";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "<p>";
+              $cuerpo_mensaje .= $inmobiliaria."<br />";
+              $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+              $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+              $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+              $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+              $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />"; 
+
+              $emai = new NotificacionSNS(); 
+              $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+            }
+            if($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5'){
+
+              $cuerpo_mensaje = "";                                        
+
+              $cuerpo_mensaje .= "Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).". ";               
+              $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA. ";               
+              $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el número ".$datosCliente->id_client.", ha sido actualizada. ";    
+              $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sueños te avisaremos. ";              
+              $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema: ";            
+              $cuerpo_mensaje .= $datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos'].", Teléfono celular: ".$datosAsesor['datosAsesor']['telefono_movil'].", Correo electrónico: ".$datosAsesor['datosAsesor']['correo_electronico'].".";              
+
+              $respuesta['cuerpo_mensaje'] = $cuerpo_mensaje;
+            }
+
+            
+
+          }
+          else if(($datosCliente->id_tipo_notificacion=='3')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);   
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();           
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);
+            
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $cuerpo_mensaje = "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td>".$inmobiliaria."</td>
+                                  <td>&nbsp;</td>
+                                </tr>
+                               </table>";
+
+            $cuerpo_mensaje .= "<br /><br />";                             
+
+            $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tu solicitud de compra de inmueble ha sido registrada con el n&uacute;mero ".$datosCliente->id_client.".";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos.";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha ingresado tus datos al sistema:</p>";            
+            $cuerpo_mensaje .= "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td style='text-align:left;'>
+                                    Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                    <br />
+                                    Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                    <br />
+                                    Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                  </td>                                  
+                                </tr>
+                               </table>";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "<p>";
+            $cuerpo_mensaje .= $inmobiliaria."<br />";
+            $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+            $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+            $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+            $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+            $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />";
+
+            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            $emai = new NotificacionSNS(); 
+            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+
+          }    
+          else if(($datosCliente->id_tipo_notificacion=='2')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cel_asesor,$message);            
+
+          } 
+          else if(($datosCliente->id_tipo_notificacion=='1')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];            
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();            
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']); 
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $cuerpo_mensaje = "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td>".$inmobiliaria."</td>
+                                  <td>&nbsp;</td>
+                                </tr>
+                               </table>";
+
+            $cuerpo_mensaje .= "<br /><br />";                             
+
+            $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";  
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tu solicitud de compra de inmueble ha sido registrada con el n&uacute;mero ".$datosCliente->id_client.".";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos.";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha ingresado tus datos al sistema:</p>";            
+            $cuerpo_mensaje .= "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td style='text-align:left;'>
+                                    Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                    <br />
+                                    Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                    <br />
+                                    Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                  </td>                                  
+                                </tr>
+                               </table>";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "<p>";
+            $cuerpo_mensaje .= $inmobiliaria."<br />";
+            $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+            $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+            $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+            $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+            $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />";
+
+            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $emai = new NotificacionSNS(); 
+            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);  
+
+          } 
 
           return $respuesta;           
 
@@ -729,16 +1305,17 @@
                       id_city,
                       id_region,
                       id_country,
-                      id_user
+                      id_user,
+                      id_client
                     ) 
                     VALUES
                     (
-                     ".$datosCliente->id_cliente_type.",
+                     ".$datosCliente->id_client_type.",
                      UPPER('".$datosCliente->first_name."'),
                      UPPER('".$datosCliente->last_name."'),
-                     ".$datosCliente->tipoIdentificacion.",
+                     ".$datosCliente->id_tipo_identificacion.",
                      '".$datosCliente->identification."',
-                     ".$datosCliente->tipoNotificacion.",                    
+                     ".$datosCliente->id_tipo_notificacion.",                    
                      '".$phone."',
                      '".$cell_phone."',
                      UPPER('".$email."'),
@@ -746,14 +1323,281 @@
                      ".$id_city.",
                      ".$id_region.",
                      ".$id_country.",
-                     ".$datosCliente->id_user.")";          
+                     ".$datosCliente->id_user.",
+                     ".$datosCliente->id_client."
+                   )";        
 //print_r($query);exit;
           $result = pg_query($query) or die('La consulta fallo: ' . pg_last_error());
 
           $id_client=$this->retornarIdClientesPorDoc($datosCliente->identification);
           
           $respuesta['respuesta']='1';
+          $respuesta['inmobiliaria']=$_SESSION['nombre_inmobiliaria'];
           $respuesta['id_client']=$id_client;
+
+          if(($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);   
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();           
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);
+            
+            $titulo = $inmobiliaria.' te agradece por contactarnos';            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            if($datosCliente->id_tipo_notificacion=='5'){
+
+              $cuerpo_mensaje = "<br /><br />
+                                 <table border='0' style='text-align:center;margin:auto;'>
+                                  <tr>
+                                    <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                    <td>".$inmobiliaria."</td>
+                                    <td>&nbsp;</td>
+                                  </tr>
+                                 </table>";
+
+              $cuerpo_mensaje .= "<br /><br />";                             
+
+              $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el n&uacute;mero ".$datosCliente->id_client.", ha sido actualizada.";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos.";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema:</p>";            
+              $cuerpo_mensaje .= "<br /><br />
+                                 <table border='0' style='text-align:center;margin:auto;'>
+                                  <tr>
+                                    <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                    <td style='text-align:left;'>
+                                      Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                      <br />
+                                      Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                      <br />
+                                      Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                    </td>                                  
+                                  </tr>
+                                 </table>";
+              $cuerpo_mensaje .= "<br /><br />";
+              $cuerpo_mensaje .= "<p>";
+              $cuerpo_mensaje .= $inmobiliaria."<br />";
+              $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+              $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+              $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+              $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+              $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />"; 
+
+              $emai = new NotificacionSNS(); 
+              $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+            }
+            if($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5'){
+
+              $cuerpo_mensaje = "";                                        
+
+              $cuerpo_mensaje .= "Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).". ";               
+              $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA. ";               
+              $cuerpo_mensaje .= "Tu solicitud de compra de inmueble registrada con el número ".$datosCliente->id_client.", ha sido actualizada. ";    
+              $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sueños te avisaremos. ";              
+              $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha actualizado tus datos al sistema: ";            
+              $cuerpo_mensaje .= $datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos'].", Teléfono celular: ".$datosAsesor['datosAsesor']['telefono_movil'].", Correo electrónico: ".$datosAsesor['datosAsesor']['correo_electronico'].".";              
+
+              $respuesta['cuerpo_mensaje'] = $cuerpo_mensaje;
+            }
+
+            
+
+          }
+          else if(($datosCliente->id_tipo_notificacion=='3')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);   
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();           
+
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);
+            
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $cuerpo_mensaje = "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td>".$inmobiliaria."</td>
+                                  <td>&nbsp;</td>
+                                </tr>
+                               </table>";
+
+            $cuerpo_mensaje .= "<br /><br />";                             
+
+            $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tu solicitud de compra de inmueble ha sido registrada con el n&uacute;mero ".$datosCliente->id_client.".";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos.";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha ingresado tus datos al sistema:</p>";            
+            $cuerpo_mensaje .= "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td style='text-align:left;'>
+                                    Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                    <br />
+                                    Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                    <br />
+                                    Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                  </td>                                  
+                                </tr>
+                               </table>";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "<p>";
+            $cuerpo_mensaje .= $inmobiliaria."<br />";
+            $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+            $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+            $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+            $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+            $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />";
+
+            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+
+            $emai = new NotificacionSNS(); 
+            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+
+          }    
+          else if(($datosCliente->id_tipo_notificacion=='2')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $message = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $sms = new NotificacionSNS(); 
+            $sms->notificaSMS($cell_phone,$message);            
+
+          } 
+          else if(($datosCliente->id_tipo_notificacion=='1')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
+
+            $autAPI   = new AutenticaAPI();
+            $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
+            $data_user = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$datosCliente->id_user.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );    
+
+            $cel_asesor = $data_user['cell_phone'];            
+
+            $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $inmobiliariaSQL = new InmobiliariaSQL();
+            $datosInmobiliaria = $inmobiliariaSQL->getInformacionInmobiliaria();
+            
+            $asesorSQL = new AsesoresSQL();
+            $datosAsesor = $asesorSQL->datosAsesorPorIDAsesor($_SESSION['id_user']);            
+
+            $titulo = $inmobiliaria.' te agradece por contactarnos';
+
+            $cuerpo_mensaje = "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img src='".$datosInmobiliaria['datosInmobiliaria']['imagen_logo']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td>".$inmobiliaria."</td>
+                                  <td>&nbsp;</td>
+                                </tr>
+                               </table>";
+
+            $cuerpo_mensaje .= "<br /><br />";                             
+
+            $cuerpo_mensaje .= "<p>Hola ".strtoupper($datosCliente->first_name)." ".strtoupper($datosCliente->last_name).".";   
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= $inmobiliaria." te da la bienvenida a a nuestro sistema SONIA."; 
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tu solicitud de compra de inmueble ha sido registrada con el n&uacute;mero ".$datosCliente->id_client.".";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Tan pronto encontremos la vivienda o inmueble de tus sue&ntilde;os te avisaremos.";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "Los siguientes son los datos del asesor de nuestra inmobiliaria que ha ingresado tus datos al sistema:</p>";            
+            $cuerpo_mensaje .= "<br /><br />
+                               <table border='0' style='text-align:center;margin:auto;'>
+                                <tr>
+                                  <td><img width='150em' height='180em' src='".$datosAsesor['datosAsesor']['foto_asesor']."' style='width:7em;height:7em;margin-top:1em;'></td>
+                                  <td style='text-align:left;'>
+                                    Nombre: ".$datosAsesor['datosAsesor']['nombres']." ".$datosAsesor['datosAsesor']['apellidos']."
+                                    <br />
+                                    Tel&eacute;fono celular: ".$datosAsesor['datosAsesor']['telefono_movil']." 
+                                    <br />
+                                    Correo electr&oacute;nico: ".$datosAsesor['datosAsesor']['correo_electronico']."
+                                  </td>                                  
+                                </tr>
+                               </table>";
+            $cuerpo_mensaje .= "<br /><br />";
+            $cuerpo_mensaje .= "<p>";
+            $cuerpo_mensaje .= $inmobiliaria."<br />";
+            $cuerpo_mensaje .= "Tel&eacute;fono: ".$datosInmobiliaria['datosInmobiliaria']['telefono']."<br />";
+            $cuerpo_mensaje .= "Correo electr&oacute;nico: ".$datosInmobiliaria['datosInmobiliaria']['correo_electronico']."<br />";
+            $cuerpo_mensaje .= $datosInmobiliaria['datosInmobiliaria']['direccion'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_ciudad'].", ".$datosInmobiliaria['datosInmobiliaria']['nombre_departamento']." - ".$datosInmobiliaria['datosInmobiliaria']['nombre_pais']."</p><br /><br />";
+            $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
+            $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />";
+
+            
+
+            $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
+            $emai = new NotificacionSNS(); 
+            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+
+          }      
 
           return $respuesta;           
 

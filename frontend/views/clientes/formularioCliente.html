@@ -5,35 +5,36 @@
     <center><h2 style="font-family:Verdana;">CLIENTES</h2></center>
     <br />
     <form name="formularioBusqCliente" id="formularioBusqCliente" ng-model="cliente_busq" method="post" NOVALIDATE>
+      <label>ID</label><input name="cliente_busq_ID" id="cliente_busq_ID" ng-model="cliente_busq.ID" type="text"/>
       <label>Pa&iacute;s</label>
-      <select name="cliente_busq_codigoPais" id="codigoPais" ng-model="cliente_busq.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosCliente(cliente_busq.codigoPais.id_pais)"/>       
+      <select ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_codigoPais" id="codigoPais" ng-model="cliente_busq.codigoPais" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-change="getDepartamentosCliente(cliente_busq.codigoPais.id_pais)"/>       
         <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>
       </select>
       <label>Departamento</label>
-      <select name="cliente_busq_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(cliente_busq.codigoDepartamento)" ng-model="cliente_busq.codigoDepartamento"/>
+      <select ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(cliente_busq.codigoDepartamento)" ng-model="cliente_busq.codigoDepartamento"/>
         <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>
       </select>
       <label>Ciudad</label>
-      <select name="cliente_busq_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="cliente_busq.codigoCiudad"/>        
+      <select ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="cliente_busq.codigoCiudad"/>        
         <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option>
       </select>
       <label>Tipo cliente</label>
-      <select name="cliente_busq_tipo_cliente" ng-options="id_tipo_cliente as id_tipo_cliente.descripcion for id_tipo_cliente in ids_tipo_clientes track by id_tipo_cliente.id_tipo_cliente" ng-model="cliente_busq.tipoCliente"/> 
+      <select ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_tipo_cliente" ng-options="id_tipo_cliente as id_tipo_cliente.descripcion for id_tipo_cliente in ids_tipo_clientes track by id_tipo_cliente.id_tipo_cliente" ng-model="cliente_busq.tipoCliente"/> 
         <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
       </select>
-      <label>N&uacute;mero identificaci&oacute;n</label><input name="cliente_busq_numero_identificacion" id="cliente_busq_numero_identificacion" type="number" ng-model="cliente_busq.numero_identificacion" value="0"/>
-      <label>Nombres</label><input name="cliente_busq_nombres" id="cliente_busq_nombres" ng-model="cliente_busq.nombres" type="text"/>
-      <label>Apellidos</label><input name="cliente_busq_apellidos" id="cliente_busq_apellidos" ng-model="cliente_busq.apellidos" type="text"/>
-      <label>N&uacute;mero telef&oacute;nico</label><input name="cliente_busq_telefono" id="cliente_busq_telefono" ng-model="cliente_busq.telefono" type="text"/>
+      <label>N&uacute;mero identificaci&oacute;n</label><input ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_numero_identificacion" id="cliente_busq_numero_identificacion" type="number" ng-model="cliente_busq.numero_identificacion" value="0"/>
+      <label>Nombres</label><input ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_nombres" id="cliente_busq_nombres" ng-model="cliente_busq.nombres" type="text"/>
+      <label>Apellidos</label><input ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_apellidos" id="cliente_busq_apellidos" ng-model="cliente_busq.apellidos" type="text"/>
+      <label>N&uacute;mero telef&oacute;nico</label><input ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_telefono" id="cliente_busq_telefono" ng-model="cliente_busq.telefono" type="text"/>
       <label>Rango de fechas de creaci&oacute;n</label>    
       <label class="switch">
-        <input type="checkbox" id="cliente_busq_rango_fechas" name="cliente_busq_rango_fechas" ng-change="cambiarValorRangosFechas()" ng-model="cliente_busq.rango_fechas">
+        <input type="checkbox" ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" id="cliente_busq_rango_fechas" name="cliente_busq_rango_fechas" ng-change="cambiarValorRangosFechas()" ng-model="cliente_busq.rango_fechas">
         <span style="width: 4.5em;" class="slider round"></span>
       </label>
       <label ng-if="cliente_busq.rango_fechas">Fecha inicial (*)</label><input name="cliente_busq_fecha_inicial" ng-if="cliente_busq.rango_fechas" type="date" ng-model="cliente_busq.fecha_inicial"/> 
       <label ng-if="cliente_busq.rango_fechas">Fecha final (*)</label><input name="cliente_busq_fecha_final" ng-if="cliente_busq.rango_fechas" type="date" ng-model="cliente_busq.fecha_final"/>
       <label>Creador(a)</label>
-      <select name="cliente_busq_usuario_creador" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="cliente_busq.usuario_creador"/> 
+      <select ng-disabled="cliente_busq.ID&&cliente_busq.ID!=''" name="cliente_busq_usuario_creador" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="cliente_busq.usuario_creador"/> 
         <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
       </select>
       <br />
@@ -61,22 +62,24 @@
           <br />
           <table ng-init='configPages()' style="width:80%;">
             <thead>
-              <tr>                
+              <tr>       
+                <th style="width:10%;">Id Cliente</th>         
                 <th style="width:15%;">Identificaci&oacute;n</th>
-                <th style="width:35%;">Cliente</th> 
-                <th style="width:35%;">Tel&eacute;fono(s)</th>   
+                <th style="width:25%;">Cliente</th> 
+                <th style="width:20%;">Tel&eacute;fono(s)</th>   
                 <th style="width:15%;">Requerimiento</th>
                 <th style="width:15%;">Inmuebles</th>            
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat='lista_cliente_busq in lista_clientes_busq_mostrar'>         
-                <td style="text-align: left;">{{lista_cliente_busq.identification}}</td>
-                <td style="text-align: left;">{{lista_cliente_busq.first_name}} {{lista_cliente_busq.last_name}}</td>  
-                <td style="text-align: left;" ng-if="lista_cliente_busq.phone&&lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}, {{lista_cliente_busq.cell_phone}}</td>   
-                <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && lista_cliente_busq.cell_phone">{{lista_cliente_busq.cell_phone}}</td> 
-                <td style="text-align: left;" ng-if="lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}</td>
-                <td style="text-align: left;" ng-if="!lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">&nbsp;</td>
+              <tr ng-repeat='lista_cliente_busq in lista_clientes_busq_mostrar'>    
+                <td ng-click="verInformacionCliente(lista_cliente_busq)" style="text-align: left;">{{lista_cliente_busq.id_client}}</td>     
+                <td ng-click="verInformacionCliente(lista_cliente_busq)" style="text-align: left;">{{lista_cliente_busq.identification}}</td>
+                <td ng-click="verInformacionCliente(lista_cliente_busq)" style="text-align: left;">{{lista_cliente_busq.first_name}} {{lista_cliente_busq.last_name}}</td>  
+                <td ng-click="verInformacionCliente(lista_cliente_busq)" style="text-align: left;" ng-if="lista_cliente_busq.phone&&lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}, {{lista_cliente_busq.cell_phone}}</td>   
+                <td ng-click="verInformacionCliente(lista_cliente_busq)" style="text-align: left;" ng-if="!lista_cliente_busq.phone && lista_cliente_busq.cell_phone">{{lista_cliente_busq.cell_phone}}</td> 
+                <td ng-click="verInformacionCliente(lista_cliente_busq)" style="text-align: left;" ng-if="lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">{{lista_cliente_busq.phone}}</td>
+                <td ng-click="verInformacionCliente(lista_cliente_busq)" style="text-align: left;" ng-if="!lista_cliente_busq.phone && !lista_cliente_busq.cell_phone">&nbsp;</td>
                 <td style="text-align: center;"><a href="#" ng-if="lista_cliente_busq.id_client_type=='7'||lista_cliente_busq.id_client_type=='1'||lista_cliente_busq.id_client_type=='4521'" ng-click="verSolicitudesCliente(lista_cliente_busq.query, lista_cliente_busq.comment, lista_cliente_busq.reference, lista_cliente_busq.id_user)">Requerimiento</a></td>  
                 <td style="text-align: center;"><a ng-click="verInmueblesCliente(lista_cliente_busq.id_client,lista_cliente_busq.first_name,lista_cliente_busq.last_name,lista_cliente_busq.id_user)" href="#">Inmuebles</a></td>       
               </tr>

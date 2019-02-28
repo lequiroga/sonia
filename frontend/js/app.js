@@ -9,6 +9,7 @@ app.controller("siniController",
     $scope.asesor = [];
     $scope.redesCliente = [];
     $scope.inmueble = [];
+    $scope.inmuebleGestion = [];
     $scope.ids_tipo_id = [];
   	$scope.ids_tipo_clientes = [];
     $scope.ids_paises = [];
@@ -52,7 +53,11 @@ app.controller("siniController",
     $scope.asesor.motivo = "";
     $scope.imgAsesorTemp = "";    
     $scope.asesor.foto_asesor = undefined;    
-    $scope.logo_empresa = undefined;   
+    $scope.logo_empresa = undefined;  
+    $scope.foto_asesor = undefined;
+    $scope.nombre_asesor = undefined; 
+    $scope.nombre_inmobiliaria = undefined;
+    $scope.fecha_acceso = undefined;
     $scope.lista_asesores_busq.foto = undefined; 
     $scope.asesor_busq =[];   
     $scope.inmobiliaria = [];    
@@ -86,6 +91,7 @@ app.controller("siniController",
     $scope.tipoListaInmuebles = '';
     $scope.nombre_cliente_inmueble = "";
     $scope.cliente_relacion_inmueble = "";
+    $scope.cliente.volverListaInmuebles = '0';
 
     $scope.estados_inmueble = 
     [{
@@ -107,6 +113,10 @@ app.controller("siniController",
      .then(function(response){      	
        if(response.data.respuesta == '1'){
          $scope.logo_empresa = response.data.logo_empresa;
+         $scope.foto_asesor = response.data.foto_asesor;
+         $scope.nombre_asesor = response.data.nombre_asesor;
+         $scope.nombre_inmobiliaria = response.data.nombre_inmobiliaria;
+         $scope.fecha_acceso = response.data.fecha_acceso;
        	 $scope.showContent = '../menuPrincipal/formularioMenu1.html';
        }
        else{
@@ -181,10 +191,28 @@ app.controller("siniController",
           modal.close.then(function(result) {
             // Una vez que el modal sea cerrado, la libreria invoca esta función
             // y en result tienes el resultado.
-            $scope.resultadoModal = result;
+            if(!angular.isUndefined(result.cliente)){
+              $scope.cliente.volverListaInmuebles = '1';
+              $scope.verInformacionCliente(result.cliente);  
+            }   
+            else{
+              $scope.cliente.volverListaInmuebles = '0';
+            }         
           });
         });
-    }
+    }    
+
+    $scope.showInmueblesList = function(){
+      $scope.showContent = '../inmuebles/formularioInmuebleList.html'; 
+    }    
+
+    $scope.showInmueblesList1 = function(){
+      $scope.inmueble=[];
+      $scope.consultarInmuebles = '1';
+      $scope.consultarInmuebles1 = undefined;
+      $scope.inmueble.id_property = undefined;
+      $scope.showContent = '../inmuebles/formularioInmuebleList.html'; 
+    } 
 
     $scope.seleccionarCliente = function(id_client){      
       
@@ -328,6 +356,282 @@ app.controller("siniController",
 
     }
 
+    $scope.guardarInmueble = function(){
+      //console.log($scope.inmueble);      
+      //console.log($scope.caracteristicas_inmueble_busq.caracteristica_opc);
+
+      var datos_inmueble = {};      
+      datos_inmueble.inmueble = {};
+      datos_inmueble.caracteristicas = {};
+      datos_inmueble.coordenadas = {};
+
+      if(angular.isUndefined($scope.inmueble.codigoPais)){
+        alert("Debe seleccionar el país donde se encuentra el inmueble");
+        return false;
+      }  
+      else{
+        datos_inmueble.inmueble.codigoPais = $scope.inmueble.codigoPais;
+      }    
+      if(angular.isUndefined($scope.inmueble.codigoDepartamento)){
+        alert("Debe seleccionar el departamento o región donde se encuentra el inmueble");
+        return false;
+      }
+      else{
+        datos_inmueble.inmueble.codigoDepartamento = $scope.inmueble.codigoDepartamento;
+      }
+      if(angular.isUndefined($scope.inmueble.codigoCiudad)){
+        alert("Debe seleccionar la ciudad donde se encuentra el inmueble");
+        return false;
+      }
+      else{
+        datos_inmueble.inmueble.codigoCiudad = $scope.inmueble.codigoCiudad;
+      }
+      if(angular.isUndefined($scope.inmueble.tipoInmueble)){
+        alert("Debe seleccionar el tipo de inmueble correspondiente");
+        return false;
+      }
+      else{
+        datos_inmueble.inmueble.tipoInmueble = $scope.inmueble.tipoInmueble;
+      }
+      if(angular.isUndefined($scope.inmueble.titulo)||$scope.inmueble.titulo==''){
+        alert("Debe ingresar el título de la publicación del inmueble");
+        return false;
+      }
+      else{
+        datos_inmueble.inmueble.titulo = $scope.inmueble.titulo;
+      }
+      if(angular.isUndefined($scope.inmueble.condicion)||$scope.inmueble.condicion==''||$scope.inmueble.condicion==null){
+        alert("Debe seleccionar la condición del inmueble");
+        return false;
+      }
+      else{
+        datos_inmueble.inmueble.condicion = $scope.inmueble.condicion;
+      }
+      if(angular.isUndefined($scope.inmueble.precio)||$scope.inmueble.precio==''){
+        alert("Debe ingresar el precio del inmueble");
+        return false;
+      }
+      else{
+        if($scope.inmueble.precio<0){
+          alert("El precio no puede ser negativo");
+          return false;
+        }
+        datos_inmueble.inmueble.precio = $scope.inmueble.precio;
+      }
+      if(angular.isUndefined($scope.inmueble.observaciones)||$scope.inmueble.observaciones==''){
+        alert("Debe ingresar la descripción u observaciones del inmueble");
+        return false;
+      }
+      else{
+        datos_inmueble.inmueble.observaciones = $scope.inmueble.observaciones;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.codigoSector)&&$scope.inmueble.codigoSector!=''&&$scope.inmueble.codigoSector!=null){
+        datos_inmueble.inmueble.codigoSector = $scope.inmueble.codigoSector;        
+      }
+      else{
+        
+        if($scope.inmueble.nueva_zona!=''&&!angular.isUndefined($scope.inmueble.nueva_zona)){
+          datos_inmueble.inmueble.codigoSector = {'name':$scope.inmueble.nueva_zona};
+        }       
+        
+      }      
+
+      if(!angular.isUndefined($scope.inmueble.codigoZona)){
+        datos_inmueble.inmueble.codigoZona = $scope.inmueble.codigoZona;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.codigoEstrato)){
+        datos_inmueble.inmueble.codigoEstrato = $scope.inmueble.codigoEstrato;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.codigoBarrio)){
+        datos_inmueble.inmueble.codigoBarrio = $scope.inmueble.codigoBarrio;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.direccion)){
+        datos_inmueble.inmueble.direccion = $scope.inmueble.direccion;
+      }
+
+      /*if(!angular.isUndefined($scope.inmueble.condicion)){
+        datos_inmueble.inmueble.condicion = $scope.inmueble.condicion;
+      }*/
+
+      if(!angular.isUndefined($scope.inmueble.area)){
+        if($scope.inmueble.area<0){
+          alert("El área no puede tener valor negativo");
+          return false;
+        }
+        datos_inmueble.inmueble.area = $scope.inmueble.area;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.moneda)){
+        datos_inmueble.inmueble.moneda = $scope.inmueble.moneda;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.valor_administracion)){
+        if($scope.inmueble.valor_administracion<0){
+          alert("El valor de administración no puede ser un valor negativo");
+          return false;
+        }
+        datos_inmueble.inmueble.valor_administracion = $scope.inmueble.valor_administracion;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.habitaciones)){
+        if($scope.inmueble.habitaciones<0){
+          alert("La cantidad de habitaciones no puede ser un valor negativo");
+          return false;
+        }
+        datos_inmueble.inmueble.habitaciones = $scope.inmueble.habitaciones;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.banos)){
+        if($scope.inmueble.banos<0){
+          alert("La cantidad de baños no puede ser un valor negativo");
+          return false;
+        }
+        datos_inmueble.inmueble.banos = $scope.inmueble.banos;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.parqueadero)){        
+        if($scope.inmueble.parqueadero<0){
+          alert("La cantidad de parqueaderos o garajes no puede ser un valor negativo");
+          return false;
+        }
+        datos_inmueble.inmueble.parqueadero = $scope.inmueble.parqueadero;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.piso)){
+        if($scope.inmueble.piso<0){
+          alert("El piso o la cantidad de pisos no puede ser un valor negativo");
+          return false;
+        }
+        datos_inmueble.inmueble.piso = $scope.inmueble.piso;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.estado)){
+        datos_inmueble.inmueble.estado = $scope.inmueble.estado;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.comentario)){
+        datos_inmueble.inmueble.comentario = $scope.inmueble.comentario;
+      }
+
+      if(!angular.isUndefined($scope.inmueble.referencia)){
+        datos_inmueble.inmueble.referencia = $scope.inmueble.referencia;
+      }
+
+      var coordenadas = {};      
+      var caracteristicas = [];
+      var indice = 0;
+      
+      if($scope.inmueble.localizacion){
+        coordenadas.latitud = document.getElementById('inmueble_latitud').value;
+        coordenadas.longitud = document.getElementById('inmueble_longitud').value;
+      }
+      //console.log(coordenadas);
+      if(!angular.isUndefined(coordenadas.latitud)){
+        datos_inmueble.coordenadas = coordenadas;
+      }
+      if(!angular.isUndefined($scope.caracteristicas_inmueble_busq['caracteristica'])){
+        
+        angular.forEach($scope.caracteristicas_inmueble_busq['caracteristica'],function(value,key){
+          caracteristicas[indice]=value;
+          indice++;
+        });        
+        
+      }
+      if(!angular.isUndefined($scope.caracteristicas_inmueble_busq['caracteristica_opc'])){
+        
+        angular.forEach($scope.caracteristicas_inmueble_busq['caracteristica_opc'],function(value,key){
+          caracteristicas[indice]=value;
+          indice++;
+        });        
+        
+      }
+      if(!angular.isUndefined($scope.caracteristicas_inmueble_busq['caracteristica'])||!angular.isUndefined($scope.caracteristicas_inmueble_busq['caracteristica_opc'])){
+        datos_inmueble.caracteristicas = caracteristicas;
+      }      
+      
+      if(angular.isUndefined($scope.inmueble.ID)||$scope.inmueble.ID==null){
+        $http.post($scope.endpoint,{'accion':'guardarInmueble','datosInmueble':datos_inmueble})
+        .then(function(response){
+          if(response.data.respuesta == '1'){
+            alert("Inmueble creado con éxito");
+            $scope.inmueble.ID=response.data.inmuebleRegistrado.id_property;
+            $scope.inmueble.id_property=response.data.inmuebleRegistrado.id_property;
+            $scope.inmueble.link=response.data.inmuebleRegistrado.link;
+            //console.log(response.data.inmuebleRegistrado);
+          }
+          else{
+            alert("No se ha podido crear el inmueble");
+          }
+        });
+      }
+      else{
+        datos_inmueble.id_property=$scope.inmueble.ID;
+        $http.post($scope.endpoint,{'accion':'actualizarInmueble','datosInmueble':datos_inmueble})
+        .then(function(response){
+          if(response.data.respuesta == '1'){
+            alert("Inmueble creado con éxito");
+            $scope.inmueble.ID=response.data.inmuebleRegistrado.id_property;
+            $scope.inmueble.id_property=response.data.inmuebleRegistrado.id_property;
+            $scope.inmueble.link=response.data.inmuebleRegistrado.link;
+            //console.log(response.data.inmuebleRegistrado);
+          }
+          else{
+            alert("No se ha podido crear el inmueble");
+          }
+        });
+      }
+
+    }
+
+    //Carga los datos de la lista de los inmuebles en el formulario de edición
+    $scope.cambiarInformacionInmueble = function(inmuebleRespuesta){
+      
+      //console.log(inmuebleRespuesta);
+      $scope.inmueble=[]; 
+      $scope.consultarInmuebles = '0'; 
+      $scope.consultarInmuebles1 = '0'; 
+         
+      /*$scope.inmuebleGestion.direccion='3';
+      $scope.inmueble.id_property='3';*/
+      $scope.inmueble.ID=inmuebleRespuesta.id_property;
+      $scope.inmueble.id_property=inmuebleRespuesta.id_property;
+      $scope.inmueble.direccion=inmuebleRespuesta.address;      
+      $scope.inmueble.codigoPais={'id_pais':inmuebleRespuesta.id_country,'name':inmuebleRespuesta.country_label};
+      $scope.inmueble.codigoDepartamento={'id_departamento':inmuebleRespuesta.id_region,'name':inmuebleRespuesta.region_label};
+      $scope.inmueble.codigoCiudad={'id_ciudad':inmuebleRespuesta.id_city,'name':inmuebleRespuesta.city_label};
+      $scope.inmueble.codigoSector={'id_sector':inmuebleRespuesta.id_zone,'name':inmuebleRespuesta.zone_label};
+      $scope.inmueble.codigoZona={'id_zona':inmuebleRespuesta.id_location,'name':inmuebleRespuesta.location_label};
+      $scope.inmueble.moneda={};
+      $scope.inmueble.moneda.id_moneda=inmuebleRespuesta.id_currency;
+      $scope.inmueble.moneda.denominacion=inmuebleRespuesta.iso_currency+' - '+inmuebleRespuesta.name_currency;
+      $scope.showContent = '../inmuebles/formularioInmueble.html'; 
+      console.log($scope.inmuebleGestion);     
+    }
+
+    $scope.cargarImagenesInmueble = function(id_property){           
+
+      //$scope.seleccionarImagenInmueble('1');
+      // Debes proveer un controlador y una plantilla.
+      ModalService.showModal({
+        templateUrl: '../inmuebles/formularioModalCargarImgInmueble.html',
+        controller: "ContrladorModalCargaImagenesInmueble",
+        inputs: {
+          id_property: id_property            
+        }
+      }).then(function(modal) {
+        modal.close.then(function(result) {
+          // Una vez que el modal sea cerrado, la libreria invoca esta función
+          // y en result tienes el resultado.
+          $scope.resultadoModal = result;
+        });
+      });        
+        
+    };
+
     $scope.setContentDiv = function(){
       $scope.showContent = '../login/formularioLogin.html';           	
     }
@@ -338,6 +642,8 @@ app.controller("siniController",
 
     $scope.showClientsIndex = function(){
       $scope.cliente_busq = [];
+      $scope.cliente.volverListaInmuebles = '0'
+      //$scope.cant_clie_busq='1';
       $scope.getPaises();
       $scope.getTiposClientes();
       $scope.listaAsesoresWasi();
@@ -347,6 +653,7 @@ app.controller("siniController",
     }
 
     $scope.volverListaClientes = function(){
+      $scope.cliente.volverListaInmuebles = '0'
       $scope.showContent = '../clientes/formularioCliente.html'; 
     }    
 
@@ -365,22 +672,21 @@ app.controller("siniController",
       /*$scope.getPaises();
       $scope.inmobiliaria.codigoPais = {id_pais:'1',name:'Colombia'};        
       $scope.getDepartamentosInmobiliaria($scope.cliente.codigoPais.id_pais);*/
-      $scope.getPaises();
+      
       $http.post($scope.endpoint,{'accion':'informacionInmobiliaria'})
       .then(function(response){        
         //console.log(response.data.datosInmobiliaria); 
-
+        $scope.getPaises();
         $scope.inmobiliaria = response.data.datosInmobiliaria;
-
-        if(!angular.isUndefined(response.data.datosInmobiliaria.id_pais)){
+        $scope.inmobiliaria.codigoPais = {'id_pais':response.data.datosInmobiliaria.id_pais,'name':response.data.datosInmobiliaria.nombre_pais};
+        $scope.getDepartamentosCliente(response.data.datosInmobiliaria.id_pais);
+        $scope.inmobiliaria.codigoDepartamento = {'id_departamento':response.data.datosInmobiliaria.id_departamento,'name':response.data.datosInmobiliaria.nombre_departamento};
+        $scope.getCiudadesCliente(response.data.datosInmobiliaria.id_departamento);
+        $scope.inmobiliaria.codigoCiudad = {'id_ciudad':response.data.datosInmobiliaria.id_ciudad,'name':response.data.datosInmobiliaria.nombre_ciudad};
+        /*if(!angular.isUndefined(response.data.datosInmobiliaria.id_pais)){
           var length = $scope.ids_paises.length;
           var pais = "";
-          for (i = 0; i < length; i++) {
-            if($scope.ids_paises[i].id_pais == response.data.datosInmobiliaria.id_pais){
-              pais = $scope.ids_paises[i].name;
-              i = length+1;
-            }       
-          }
+          
           $scope.inmobiliaria.codigoPais = {};          
           $scope.inmobiliaria.codigoPais = {'id_pais':response.data.datosInmobiliaria.id_pais,'name':pais};
           //console.log($scope.inmobiliaria.codigoPais);
@@ -399,7 +705,7 @@ app.controller("siniController",
             $scope.getCiudadesCliente($scope.inmobiliaria.codigoDepartamento.id_departamento);
 
             if(!angular.isUndefined(response.data.datosInmobiliaria.id_ciudad)){
-              var length = $scope.ids_ciudades.length;
+              var length = $scope.ids_ciudades.length;              
               var ciudad = "";
               for (i = 0; i < length; i++) {
                 if($scope.ids_ciudades[i].id_ciudad == response.data.datosInmobiliaria.id_ciudad){
@@ -407,13 +713,15 @@ app.controller("siniController",
                   i = length+1;
                 }       
               }
-              $scope.inmobiliaria.codigoCiudad = {'id_ciudad':response.data.datosInmobiliaria.id_ciudad,'name':ciudad};            
+
+              $scope.inmobiliaria.codigoCiudad = {'id_ciudad':response.data.datosInmobiliaria.id_ciudad,'name':''};            
+              //$scope.inmobiliaria.codigoCiudad.id_ciudad = response.data.datosInmobiliaria.id_ciudad           
 
             }
 
           }
 
-        } 
+        }*/ 
 
         /*$scope.inmobiliaria.codigoPais = {};
         $scope.inmobiliaria.codigoDepartamento = {};
@@ -428,6 +736,8 @@ app.controller("siniController",
 
       $scope.showContent = '../inmobiliaria/formularioInmobiliaria.html';
     }
+
+
 
     //Para guardar o actualizar la información de la inmobiliaria
     $scope.guardarInformacionInmobiliaria = function(){
@@ -461,14 +771,37 @@ app.controller("siniController",
 
       if(!angular.isUndefined($scope.inmobiliaria.codigoPais)){
         inmobiliaria.id_pais = $scope.inmobiliaria.codigoPais.id_pais;
+        var nombre_pais = "";
+        angular.forEach($scope.ids_paises, function(value,key){
+          if($scope.inmobiliaria.codigoPais.id_pais == value.id_pais){
+            nombre_pais = value.name;
+          }
+        });
+        inmobiliaria.nombre_pais = nombre_pais;
       }
 
       if(!angular.isUndefined($scope.inmobiliaria.codigoDepartamento)){
         inmobiliaria.id_departamento = $scope.inmobiliaria.codigoDepartamento.id_departamento;
+        var nombre_departamento = "";
+        angular.forEach($scope.ids_departamentos, function(value,key){
+          if($scope.inmobiliaria.codigoDepartamento.id_departamento == value.id_departamento){
+            nombre_departamento = value.name;
+          }
+        });
+        inmobiliaria.nombre_departamento = nombre_departamento;
       }
 
       if(!angular.isUndefined($scope.inmobiliaria.codigoCiudad)){
-        inmobiliaria.id_ciudad = $scope.inmobiliaria.codigoCiudad.id_ciudad;
+        //console.log($scope.inmobiliaria.codigoCiudad.id_ciudad);
+        var nombre_ciudad = "";
+        angular.forEach($scope.ids_ciudades, function(value,key){
+          if($scope.inmobiliaria.codigoCiudad.id_ciudad == value.id_ciudad){
+            nombre_ciudad = value.name;
+          }
+        });
+        inmobiliaria.id_ciudad = $scope.inmobiliaria.codigoCiudad.id_ciudad;        
+        inmobiliaria.nombre_ciudad = nombre_ciudad;
+        //console.log(inmobiliaria.nombre_ciudad);
       }
 
       if(document.formularioInmobiliaria.file.value!=''&&document.formularioInmobiliaria.file.value!=null){
@@ -526,6 +859,18 @@ app.controller("siniController",
 
     }
 
+    //Función invocada desde el switche de inmuebles para obtener la localización
+    $scope.obtenerLocation = function(){
+      if($scope.inmueble.localizacion){        
+        getLocationInmueble();           
+      }
+      else{
+        document.getElementById("inmueble_latitud").value = "";
+        document.getElementById("inmueble_longitud").value = "";
+      }
+      
+    }
+
     //Cargar el formulario o pantalla de gestión de asesores
     $scope.showAsesoresCreate = function(){
 
@@ -569,11 +914,25 @@ app.controller("siniController",
         });
     }
 
-    $scope.showInmueblesIndex = function(){      
+    $scope.showInmueblesIndex = function(){   
+      $scope.inmueble=[];   
       $scope.inmueble.estado = {'id_estado':'1','nombre':'Disponible'};
       $scope.consultarInmuebles = '1';
       $scope.listaAsesoresWasi();
       $scope.showContent = '../inmuebles/formularioInmueble.html';       
+    }
+
+    $scope.showCrearInmueblesIndex = function(){      
+      //$scope.inmueble.estado = {'id_estado':'1','nombre':'Disponible'};
+      //console.log($scope.inmueble);
+      $scope.consultarInmuebles = '0';
+      $scope.inmueble.id_property = undefined;
+      //$scope.listaAsesoresWasi();
+      $scope.showContent = '../inmuebles/formularioInmueble.html';       
+    }    
+
+    $scope.showInmueblesAdmIndex = function(){     
+      $scope.showContent = '../inmuebles/formularioAdministracionInmueble.html';       
     }
 
     $scope.showCaracteristicasInmueblesIndex = function(){
@@ -588,7 +947,7 @@ app.controller("siniController",
       $scope.showContent = '../administracion/formularioAdministracion.html';  
     }
 
-    $scope.showInmueblesCreate = function(){
+    $scope.showInmueblesCreate = function(){      
       $scope.showContent = '../inmuebles/formularioGestionInmueble.html'	
     }
 
@@ -1160,6 +1519,19 @@ app.controller("siniController",
       }
     }
 
+    $scope.inactivarCamposClientes = function(){
+      if(angular.isUndefined($scope.cliente_busq.ID)||$scope.cliente_busq.ID==''||$scope.cliente_busq.ID==null){
+        $scope.cliente_busq.camposInactivos='0';
+        $scope.limpiarClientesBusq();
+      }        
+      else{
+        var ID = $scope.cliente_busq.ID;
+        $scope.cliente_busq = [];
+        $scope.cliente_busq.ID = ID;
+        $scope.cliente_busq.camposInactivos='1';
+      }
+    }
+
     //Función que reestablece los campos de búsqueda de clientes por rango de fechas
     $scope.cambiarValorRangosFechasClientesBusq = function(){
       $scope.cliente_busq.fecha_inicial = undefined;
@@ -1184,7 +1556,7 @@ app.controller("siniController",
         //$scope.cambiaComunaInmueble = '0';
         $scope.inmueble.codigoZona = undefined; 
         $scope.inmueble.codigoEstrato = undefined;   
-        $scope.inmueble.codigoBarrio = {}; 
+        $scope.inmueble.codigoBarrio = undefined; 
         $http.post($scope.endpoint,{'accion':'listarBarriosZona','id_sector':id_sector,'id_ciudad':id_ciudad})
         .then(function(response){     
           if(response.data.cant_barrios_zona == '0'){
@@ -1264,7 +1636,7 @@ app.controller("siniController",
         $scope.cambiaComunaInmueble = '1';
         $scope.inmueble.codigoZona = undefined; 
         $scope.inmueble.codigoEstrato = undefined;   
-        $scope.inmueble.codigoBarrio = {};           
+        $scope.inmueble.codigoBarrio = undefined;           
 
       }  
 
@@ -1286,9 +1658,9 @@ app.controller("siniController",
       $scope.getTiposIdentificacion();
       $scope.getTiposClientes();
       $scope.getPaises();
-      $scope.getTiposNotificacion();
+      $scope.getTiposNotificacion();      
       $scope.showContent = '../clientes/formularioGestionCliente.html'; 
-
+      $scope.cliente.volverListaInmuebles='0';
       $scope.cliente.codigoPais = {id_pais:'1',name:'Colombia'};      	
       $scope.getDepartamentosCliente($scope.cliente.codigoPais.id_pais);
       
@@ -1373,7 +1745,7 @@ app.controller("siniController",
       $scope.getTiposIdentificacion();
       $scope.getTiposClientes();
       $scope.getPaises();
-      $scope.getTiposNotificacion();
+      $scope.getTiposNotificacion();      
       $scope.showContent = '../clientes/formularioGestionCliente.html';         
       cliente.numeroIdentificacion = parseInt(cliente.numeroIdentificacion);
       cliente.tipoIdentificacion = {id_tipo_identificacion:cliente.tipoIdentificacion,descripcion:cliente.descIdentificacion};
@@ -1431,6 +1803,7 @@ app.controller("siniController",
       } 
 
       $scope.cliente=cliente; 
+      $scope.cliente.volverListaInmuebles='0';
 
     }
 
@@ -1446,7 +1819,12 @@ app.controller("siniController",
         $http.post($scope.endpoint,{'accion':'validateSession','user':user,'password':password})
         .then(function(response){          
           if(response.data.respuesta=='1'){   
-            $scope.logo_empresa = response.data.logo_empresa;      	
+            $scope.logo_empresa = response.data.logo_empresa;
+            $scope.foto_asesor = response.data.foto_asesor;
+            $scope.nombre_asesor = response.data.nombre_asesor; 
+            $scope.nombre_inmobiliaria = response.data.nombre_inmobiliaria;
+            $scope.fecha_acceso = response.data.fecha_acceso;     	
+            //console.log($scope.logo_empresa);
           	$scope.showContent = '../menuPrincipal/formularioMenu1.html';
           }
           else{
@@ -1551,11 +1929,11 @@ app.controller("siniController",
     $scope.getZonasSectores = function(codigoCiudad){  
       $scope.ids_zonas=null; 
       $scope.ids_sectores=null;	
-      $scope.clasificacionBarrios.codigoBarrio = [];
+      $scope.clasificacionBarrios.codigoBarrio = undefined;
       $scope.clasificacionBarrios.codigoZona = undefined;   
       $scope.clasificacionBarrios.codigoEstrato = undefined;
       $scope.inmueble.codigoSector = undefined;
-      $scope.inmueble.codigoBarrio = [];
+      $scope.inmueble.codigoBarrio = undefined;
       $scope.inmueble.codigoZona = undefined;   
       $scope.inmueble.codigoEstrato = undefined;     
       if(codigoCiudad!=null){
@@ -1669,7 +2047,8 @@ app.controller("siniController",
 
     $scope.getTiposClientes = function(){            
       $http.post($scope.endpoint,{'accion':'tiposClientes'})
-      .then(function(response){             	
+      .then(function(response){    
+        //console.log(response.data);         	
         $scope.ids_tipo_clientes=response.data;
       });
 
@@ -1779,7 +2158,7 @@ app.controller("siniController",
         var exist_zona = 0;
         
         $scope.inmueble.codigoZona = {'codigo':codigoBarrio.comuna,'nombre':comuna};
-        $scope.inmueble.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato};
+        $scope.inmueble.codigoEstrato = {'codigo':codigoBarrio.estrato,'estrato':estrato};        
         
         $http.post($scope.endpoint,{'accion':'getZonaBarrioCali','id_barrio':codigoBarrio.codigo})
         .then(function(response){       
@@ -1883,7 +2262,7 @@ app.controller("siniController",
       else{
         $scope.cambiaComunaInmueble = '1';
         $scope.inmueble.codigoZona = undefined;
-        $scope.inmueble.codigoBarrio = {};
+        $scope.inmueble.codigoBarrio = undefined;
       }     
       
     }
@@ -1979,9 +2358,78 @@ app.controller("siniController",
       var inmuebleCons = {};
       var inmueble = $scope.inmueble;  
 
-      if(!angular.isUndefined(inmueble.ID)){
-        inmuebleCons.ID = inmueble.ID;        
+      if(!angular.isUndefined(inmueble.ID)&&inmueble.ID!=''&&inmueble.ID!=null){
+        inmuebleCons.ID = inmueble.ID;  
+
+        $http.post($scope.endpoint,{'accion':'consultarInmueblesID','id_property':inmuebleCons.ID})
+        .then(function(response){         
+          if(response.data.cant>0){          
+            $scope.paginaActual = 1;
+            $scope.cantListaInmueble = response.data.cant; 
+            var cantPaginacion = Math.ceil($scope.cantListaInmueble/5);
+            $scope.listaPaginacion = [];
+            for(i=0;i<cantPaginacion;i++){
+              $scope.listaPaginacion[i]=i+1;
+            }
+
+            $scope.listaInmueblesRespuesta = response.data.inmueblesResp;
+            $scope.paginarListaInmuebles(0);         
+
+            $scope.listaInmueblesRespuesta.area_mostrar = "";
+            $scope.listaInmueblesRespuesta.condicion_mostrar = "";
+            $scope.listaInmueblesRespuesta.disponibilidad = "";
+            $scope.listaInmueblesRespuesta.fecha_actualizacion = "";
+            if($scope.listaInmueblesRespuesta.area!=""){
+              $scope.listaInmueblesRespuesta.area_mostrar = $scope.listaInmueblesRespuesta.area+" "+$scope.listaInmueblesRespuesta.unit_area_label;
+            }
+            else if($scope.listaInmueblesRespuesta.built_area!=""){
+              $scope.listaInmueblesRespuesta.area_mostrar = $scope.listaInmueblesRespuesta.built_area+" "+$scope.listaInmueblesRespuesta.unit_built_area_label;
+            }
+            else if($scope.listaInmueblesRespuesta.private_area!=""){
+              $scope.listaInmueblesRespuesta.area_mostrar = $scope.listaInmueblesRespuesta.private_area+" "+$scope.listaInmueblesRespuesta.unit_private_area_label;
+            }         
+
+            /*if($scope.listaInmueblesRespuesta.property_condition_label!=""){
+              console.log($scope.listaInmueblesRespuesta.property_condition_label);
+              if($scope.listaInmueblesRespuesta.property_condition_label=="Used"){
+                $scope.listaInmueblesRespuesta.condicion_mostrar = "Usado";
+              }
+              else if($scope.listaInmueblesRespuesta.property_condition_label=="New"){
+                $scope.listaInmueblesRespuesta.condicion_mostrar = "Nuevo";
+              }
+            }*/
+            /*if($scope.listaInmueblesRespuesta.availability_label!=""){            
+              if($scope.listaInmueblesRespuesta.availability_label=="Available"){
+                $scope.listaInmueblesRespuesta.disponibilidad = "Disponible";
+              }
+              else if($scope.listaInmueblesRespuesta.availability_label=="Sold"){
+                $scope.listaInmueblesRespuesta.disponibilidad = "Vendido";
+              }
+              else if($scope.listaInmueblesRespuesta.availability_label=="Rented"){
+                $scope.listaInmueblesRespuesta.disponibilidad = "Alquilado";
+              }
+            }*/
+            if($scope.listaInmueblesRespuesta.updated_at!="0000-00-00 00:00:00"){            
+              $scope.listaInmueblesRespuesta.fecha_actualizacion = $scope.listaInmueblesRespuesta.updated_at;
+            }
+            else{
+              $scope.listaInmueblesRespuesta.fecha_actualizacion = $scope.listaInmueblesRespuesta.created_at;
+            }
+            $scope.tipoListaInmuebles = 'inmueblesTodos';
+            //console.log($scope.listaInmueblesRespuesta);
+            $scope.showContent = '../inmuebles/formularioInmuebleList.html';   
+          }  
+          else{
+            alert("No se encontraron datos");
+            $scope.cantListaInmueble = '0';
+            $scope.listaInmueblesRespuesta = [];
+            $scope.showInmueblesIndex();
+          }        
+          //console.log($scope.listaInmueblesRespuesta);
+        });    
+
       }
+      else{
       if(!angular.isUndefined(inmueble.codigoPais)){
         inmuebleCons.codigoPais = inmueble.codigoPais;      	
       }
@@ -2193,7 +2641,9 @@ app.controller("siniController",
           $scope.showInmueblesIndex();
         }        
         //console.log($scope.listaInmueblesRespuesta);
-      });     
+      });    
+
+      } 
 
     }
 
@@ -2357,23 +2807,26 @@ app.controller("siniController",
 
     $scope.limpiarCaracteristicasTipoInmueble = function(){
 
-      $scope.caracteristicasInmuebles=[];
-      $scope.lista_caracteristicas_inmueble=[];
-      $scope.lista_caracteristicas_obligatorias_inmueble=[];
-      $scope.lista_caracteristicas_opcionales_inmueble=[];
-      $scope.inmueble = [];
-      $scope.cant_caract_inm = '0';
-      $scope.cambiaComunaInmueble = '1';
-      $scope.cant_caract_inm_opc = '0';
-      $scope.cant_caract_inm_obl = '0';     
-      $scope.inmueble.codigoPais = {id_pais:'1',name:'Colombia'}; 
-      $scope.inmueble.estado = {id_estado:'1',estado:'Disponible'}; 
-      $scope.inmueble.moneda = {id_moneda:'1',denominacion:'COP - Pesos Colombianos'}; 
-      $scope.getDepartamentosCliente('1');
-      $scope.inmueble.codigoDepartamento = {id_departamento:'32',name:'Valle del Cauca'}; 
-      $scope.getCiudadesCliente('32');
-      $scope.getTiposCaracteristicasInm();
-      //$scope.getTiposCaracteristicasInm1();
+      if(angular.isUndefined($scope.inmueble.id_property)||$scope.inmueble.id_property==null||$scope.inmueble.id_property==''){
+        $scope.caracteristicasInmuebles=[];
+        $scope.lista_caracteristicas_inmueble=[];
+        $scope.lista_caracteristicas_obligatorias_inmueble=[];
+        $scope.lista_caracteristicas_opcionales_inmueble=[];
+        $scope.inmueble = [];
+        $scope.cant_caract_inm = '0';
+        $scope.cambiaComunaInmueble = '1';
+        $scope.cant_caract_inm_opc = '0';
+        $scope.cant_caract_inm_obl = '0';     
+        $scope.inmueble.codigoPais = {id_pais:'1',name:'Colombia'}; 
+        $scope.inmueble.estado = {id_estado:'1',estado:'Disponible'}; 
+        $scope.inmueble.moneda = {id_moneda:'1',denominacion:'COP - Pesos Colombianos'}; 
+        $scope.getDepartamentosCliente('1');
+        $scope.inmueble.codigoDepartamento = {id_departamento:'32',name:'Valle del Cauca'}; 
+        $scope.getCiudadesCliente('32');
+        $scope.getTiposCaracteristicasInm();
+        //$scope.getTiposCaracteristicasInm1();
+      }
+      
     }    
 
     $scope.limpiarCaracteristicasTipoInmueble1 = function(){
@@ -2511,7 +2964,11 @@ app.controller("siniController",
       if(confirm("Desea cerrar la sesion?")){
       	$http.post($scope.endpoint,{'accion':'closeSession'})
         .then(function(response){  
-          $scope.logo_empresa = undefined;           	
+          $scope.logo_empresa = undefined;       
+          $scope.nombre_asesor = undefined;     
+          $scope.foto_asesor = undefined;     
+          $scope.nombre_inmobiliaria = undefined;
+          $scope.fecha_acceso = undefined;    	
           $scope.showContent = '../login/formularioLogin.html';
         });
       }
@@ -2561,7 +3018,38 @@ app.controller("siniController",
       var fecha_final='';
       var id_asesor='';
 
-      if(!angular.isUndefined($scope.cliente_busq)){
+      if(!(angular.isUndefined($scope.cliente_busq.ID)||$scope.cliente_busq.ID==''||$scope.cliente_busq.ID==null)){
+
+        $http.post($scope.endpoint,{'accion':'consultarClientesID','id_client':$scope.cliente_busq.ID})
+        .then(function(response){          
+        
+          if(response.data.cant>0){
+            //console.log(response.data);
+            $scope.lista_clientes_busq = response.data.lista_clientes; 
+            $scope.listaPaginacionCliente = [];
+            $scope.paginaActualCliente = 1;
+            $scope.cantListaCliente = response.data.cant; 
+            var cantPaginacionCliente = Math.ceil($scope.cantListaCliente/10);
+            for(i=0;i<cantPaginacionCliente;i++){
+              $scope.listaPaginacionCliente[i]=i+1;
+            }
+            $scope.paginarListaClientes(0);           
+            //console.log($scope.lista_clientes_busq);       
+            $scope.cant_clie_busq = '0';
+            $scope.showContent = '../clientes/formularioCliente.html';
+          }
+          else{
+            alert("No se encontraron clientes con esos datos");
+            $scope.lista_clientes_busq = [];
+            $scope.cant_clie_busq = '1';
+            $scope.showClientsIndex();
+          }     
+        
+      });
+
+      } 
+      else if(!angular.isUndefined($scope.cliente_busq)){
+
         if((!angular.isUndefined($scope.cliente_busq.numero_identificacion)) && $scope.cliente_busq.numero_identificacion!=null)
           numero_identificacion=$scope.cliente_busq.numero_identificacion;
         if((!angular.isUndefined($scope.cliente_busq.nombres)) && $scope.cliente_busq.nombres!='')
@@ -2608,7 +3096,7 @@ app.controller("siniController",
           }
         }
         $scope.showContent = '../cargando/cargando.html';
-      } 
+       
 
       $http.post($scope.endpoint,{'accion':'consultarClientes','clienteBusq':{'numero_identificacion':numero_identificacion,'nombres':nombres,'apellidos':apellidos,'telefono':telefono,'id_tipo_cliente':id_tipo_cliente,'id_pais':id_pais,'id_departamento':id_departamento,'id_ciudad':id_ciudad,'fecha_inicial':fecha_inicial,'fecha_final':fecha_final,'id_asesor':id_asesor}})
       .then(function(response){          
@@ -2635,6 +3123,8 @@ app.controller("siniController",
         }     
         
       });
+
+      }
       
     }
 
@@ -2661,6 +3151,9 @@ app.controller("siniController",
       $scope.cliente.correo_electronico=undefined;
       $scope.cliente.codigoCiudad=undefined;
       $scope.cliente.codigoDepartamento=undefined;
+      $scope.cliente.query=undefined;
+      $scope.cliente.comment=undefined;
+      $scope.cliente.reference=undefined;
       $scope.cliente.codigoPais.id_pais='1';      
       $scope.ids_ciudades = [];  
       $scope.getDepartamentosCliente('1');
@@ -2699,34 +3192,106 @@ app.controller("siniController",
     };
 
 
-    $scope.saveClientes = function(action){   
-       
+    $scope.verInformacionCliente = function(lista_cliente_busq){      
+
+      $scope.getTiposIdentificacion();
+      $scope.getTiposClientes();
+      $scope.getPaises();
+      $scope.getTiposNotificacion();
+      $scope.getDepartamentosCliente(lista_cliente_busq.id_country);
+      $scope.getCiudadesCliente(lista_cliente_busq.id_region);
+      
+      $scope.cliente.tipoCliente = {'id_tipo_cliente':lista_cliente_busq.id_client_type, 'descripcion':lista_cliente_busq.client_type_label} ;
+      $scope.cliente.nombres = lista_cliente_busq.first_name;
+      $scope.cliente.apellidos = lista_cliente_busq.last_name;
+      $scope.cliente.numeroIdentificacion = parseInt(lista_cliente_busq.identification);
+      $scope.cliente.telefono_movil = lista_cliente_busq.cell_phone;
+      $scope.cliente.telefono_fijo = lista_cliente_busq.phone;
+      $scope.cliente.correo_electronico = lista_cliente_busq.email;
+      $scope.cliente.direccion = lista_cliente_busq.address;
+      $scope.cliente.codigoPais = {'id_pais':lista_cliente_busq.id_country,'name':lista_cliente_busq.country_label};
+      $scope.cliente.codigoDepartamento = {'id_departamento':lista_cliente_busq.id_region,'name':lista_cliente_busq.region_label};
+      $scope.cliente.codigoCiudad = {'id_ciudad':lista_cliente_busq.id_city,'name':lista_cliente_busq.city_label};
+      $scope.cliente.query = lista_cliente_busq.query;
+      $scope.cliente.comment = lista_cliente_busq.comment;
+      $scope.cliente.reference = lista_cliente_busq.reference;
+      $scope.cliente.id_client = lista_cliente_busq.id_client;
+
+      $http.post($scope.endpoint,{'accion':'consultarOtrosDatosCliente','id_client':lista_cliente_busq.id_client})
+      .then(function(response){ 
+        //console.log(response.data);       
+        if(!angular.isUndefined(response.data.otrosDatosCliente)){
+          if(!angular.isUndefined(response.data.otrosDatosCliente.id_tipo_notificacion)&&response.data.otrosDatosCliente.id_tipo_notificacion!=null){
+            $scope.cliente.tipoNotificacion = {'id_tipo_notificacion':response.data.otrosDatosCliente.id_tipo_notificacion,'descripcion':response.data.otrosDatosCliente.desc_notificacion};
+          }
+          else{
+            $scope.cliente.tipoNotificacion = undefined;
+          }
+          if(!angular.isUndefined(response.data.otrosDatosCliente.id_tipo_identificacion)&&response.data.otrosDatosCliente.id_tipo_identificacion!=null){
+            $scope.cliente.tipoIdentificacion = {'id_tipo_identificacion':response.data.otrosDatosCliente.id_tipo_identificacion,'descripcion':response.data.otrosDatosCliente.desc_identificacion};
+          }
+          else{
+            $scope.cliente.tipoIdentificacion = undefined;
+          }
+          if(!angular.isUndefined(response.data.otrosDatosCliente.email_registrado)&&response.data.otrosDatosCliente.email_registrado!=''){
+            $scope.cliente.correo_electronico = response.data.otrosDatosCliente.email_registrado;
+          }
+        }
+      });   
+
+      $scope.showContent = '../clientes/formularioGestionCliente.html'; 
+
+    }
+
+
+    $scope.compartirWhatsapp = function(){
+      if(!angular.isUndefined($scope.cliente.query)&&$scope.cliente.query!=''&&$scope.cliente.query!=null){
+        var url_whatsapp='https://wa.me/?';
+        var mensaje = $scope.nombre_inmobiliaria+' '+$scope.cliente.query;
+        url_whatsapp+='text=';
+        url_whatsapp+=mensaje;
+        var win = window.open(url_whatsapp, '_blank');
+        win.focus();
+      }
+      else{
+        alert("El campo de requerimiento del cliente debe contener información para compartir por Whatsapp");
+      }
+                    
+    }
+
+
+    $scope.saveClientes = function(action){  
+
+      var compartir_aliados='';
+      var url_whatsapp='https://api.whatsapp.com/send?';
+      var telefono_movil='';
+
       if(angular.isUndefined($scope.cliente.tipoCliente)||
          angular.isUndefined($scope.cliente.nombres)||         
-         angular.isUndefined($scope.cliente.tipoNotificacion)||
+         (angular.isUndefined($scope.cliente.tipoNotificacion)||$scope.cliente.tipoNotificacion==null||$scope.cliente.tipoNotificacion=='')||
          angular.isUndefined($scope.cliente.codigoPais)||
          angular.isUndefined($scope.cliente.codigoDepartamento)||
          angular.isUndefined($scope.cliente.codigoCiudad)
         ){
         alert("Todos los campos con (*) son requeridos");
-      }     
+      }          
       else if(angular.isUndefined($scope.cliente.telefono_movil)&&
               angular.isUndefined($scope.cliente.telefono_fijo)){
         alert("Debe ingresar un número de teléfono, ya sea fijo o móvil");
-      }  
-      else if($scope.cliente.tipoNotificacion.id_tipo_notificacion=='1' && angular.isUndefined($scope.cliente.correo_electronico)){
+      }       
+      else if($scope.cliente.tipoNotificacion.id_tipo_notificacion=='1' && (angular.isUndefined($scope.cliente.correo_electronico) || $scope.cliente.correo_electronico=='' || $scope.cliente.correo_electronico==null)){
         alert("Debe ingresar un correo electrónico para este tipo de notificación");
       }
-      else if($scope.cliente.tipoNotificacion.id_tipo_notificacion=='2' && angular.isUndefined($scope.cliente.telefono_movil)){
+      else if(($scope.cliente.tipoNotificacion.id_tipo_notificacion=='2' || $scope.cliente.tipoNotificacion.id_tipo_notificacion=='4') && (angular.isUndefined($scope.cliente.telefono_movil) || $scope.cliente.telefono_movil=='' || $scope.cliente.telefono_movil==null)){
         alert("Debe ingresar un número de teléfono móvil para este tipo de notificación");
       }
-      else if($scope.cliente.tipoNotificacion.id_tipo_notificacion=='3' && 
-              (angular.isUndefined($scope.cliente.telefono_movil)||angular.isUndefined($scope.cliente.correo_electronico))){
+      else if(($scope.cliente.tipoNotificacion.id_tipo_notificacion=='3' || $scope.cliente.tipoNotificacion.id_tipo_notificacion=='5') && 
+              ((angular.isUndefined($scope.cliente.telefono_movil)||$scope.cliente.telefono_movil==''||$scope.cliente.telefono_movil==null)||(angular.isUndefined($scope.cliente.correo_electronico) || $scope.cliente.correo_electronico=='' || $scope.cliente.correo_electronico==null))){
         alert("Debe ingresar un teléfono móvil y un correo para este tipo de notificación");
       }      
       else{
 
-        if(angular.isUndefined($scope.cliente.codigoCiudad)){
+        if(angular.isUndefined($scope.cliente.codigoCiudad)||$scope.cliente.codigoCiudad==null||$scope.cliente.codigoCiudad==''){
           var id_ciudad = null;
           var nombre_ciudad = null;          
         }
@@ -2735,7 +3300,7 @@ app.controller("siniController",
           var nombre_ciudad=$scope.cliente.codigoCiudad.name;
         }
 
-        if(angular.isUndefined($scope.cliente.codigoDepartamento)){
+        if(angular.isUndefined($scope.cliente.codigoDepartamento)||$scope.cliente.codigoDepartamento==null||$scope.cliente.codigoDepartamento==''){
           var id_departamento = null;
           var nombre_departamento = null; 
         }
@@ -2744,7 +3309,7 @@ app.controller("siniController",
           var nombre_departamento=$scope.cliente.codigoDepartamento.name;
         }
 
-        if(angular.isUndefined($scope.cliente.codigoPais)){
+        if(angular.isUndefined($scope.cliente.codigoPais)||$scope.cliente.codigoPais==null||$scope.cliente.codigoPais==''){
           var id_pais = null;
           var nombre_pais = null;
         }
@@ -2753,33 +3318,81 @@ app.controller("siniController",
           var nombre_pais=$scope.cliente.codigoPais.name;
         }
 
-        if(angular.isUndefined($scope.cliente.tipoIdentificacion)){
+        if(angular.isUndefined($scope.cliente.tipoIdentificacion)||$scope.cliente.tipoIdentificacion==null||$scope.cliente.tipoIdentificacion==''){
           var id_tipo_identificacion = null;          
         }
         else{
           var id_tipo_identificacion=$scope.cliente.tipoIdentificacion.id_tipo_identificacion;          
         }
 
-        if(angular.isUndefined($scope.cliente.query)){
+        if(angular.isUndefined($scope.cliente.query)||$scope.cliente.query==null||$scope.cliente.query==''){
           var query = null;          
         }
         else{
           var query=$scope.cliente.query;          
         }
 
-        if(angular.isUndefined($scope.cliente.comment)){
+        if(angular.isUndefined($scope.cliente.comment)||$scope.cliente.comment==null||$scope.cliente.comment==''){
           var comment = null;          
         }
         else{
           var comment=$scope.cliente.comment;          
         }
 
-        if(angular.isUndefined($scope.cliente.reference)){
+        if(angular.isUndefined($scope.cliente.reference)||$scope.cliente.reference==null||$scope.cliente.reference==''){
           var reference = null;          
         }
         else{
           var reference=$scope.cliente.reference;          
         }
+
+        if(!angular.isUndefined($scope.cliente.telefono_movil)&&$scope.cliente.telefono_movil!=null&&$scope.cliente.telefono_movil!=''){
+          var tel_movil=$scope.cliente.telefono_movil.replace(' ','');        
+          if($scope.cliente.telefono_movil.length>=10){
+            telefono_movil=tel_movil.substring(tel_movil.length-10,tel_movil.length);          
+          }
+          else{
+            alert("Debe ingresar un número de teléfono móvil válido");
+            return false;            
+          }
+        }
+
+        if(!angular.isUndefined($scope.cliente.compartir_aliados)&&$scope.cliente.compartir_aliados==true){          
+          if(angular.isUndefined($scope.cliente.query)||$scope.cliente.query==null||$scope.cliente.query==''){
+            alert("Debe ingresar la información del requerimiento");
+            return false;
+          }
+          else{
+            compartir_aliados = 's';
+          }
+        }
+        var tipo_notificacion =0;
+        if(!angular.isUndefined($scope.cliente.id_client)&&$scope.cliente.id_client!=null&&$scope.cliente.id_client!=''){
+          if(confirm("Desea enviar también notificación al cliente de este cambio?")){
+            tipo_notificacion =$scope.cliente.tipoNotificacion.id_tipo_notificacion;
+          }
+          else{
+            tipo_notificacion =0;
+          }
+        }
+        else{
+          tipo_notificacion =$scope.cliente.tipoNotificacion.id_tipo_notificacion;
+        }
+        /*
+        if(!angular.isUndefined($scope.cliente.telefono_movil)&&$scope.cliente.telefono_movil!=null&&$scope.cliente.telefono_movil!=''){
+          var tel_movil=$scope.cliente.telefono_movil.replace(' ','');
+          console.log(tel_movil);
+          if($scope.cliente.telefono_movil.length>=10){
+            telefono_movil=tel_movil.substring(tel_movil.length-10,tel_movil.length);
+            console.log(telefono_movil);
+          }
+          else{
+            alert("Debe ingresar un número de teléfono móvil válido");
+            return false;            
+          }
+        }*/
+
+        //console.log(tipo_notificacion);
 
         $http.post($scope.endpoint,
           {'accion':'guardarClientes',
@@ -2792,8 +3405,8 @@ app.controller("siniController",
                'last_name':$scope.cliente.apellidos,
                'tipoIdentificacion':id_tipo_identificacion,
                'identification':$scope.cliente.numeroIdentificacion,
-               'tipoNotificacion':$scope.cliente.tipoNotificacion.id_tipo_notificacion,
-               'cell_phone':$scope.cliente.telefono_movil,
+               'tipoNotificacion':tipo_notificacion,
+               'cell_phone':telefono_movil,
                'phone':$scope.cliente.telefono_fijo,
                'email':$scope.cliente.correo_electronico,
                'address':$scope.cliente.direccion,
@@ -2812,8 +3425,17 @@ app.controller("siniController",
         .then(function(response){          
           if(response.data.respuesta=='1' && action=='1'){ 
             $scope.cliente.id_client=response.data.id_client;
-            alert('Cliente almacenado exitosamente');                 
-            
+            alert('Cliente almacenado exitosamente');                          
+            if(tipo_notificacion=='4' || tipo_notificacion=='5'){
+              var mensaje = response.data.cuerpo_mensaje;
+              url_whatsapp+='phone=+57';
+              url_whatsapp+=telefono_movil;
+              url_whatsapp+='&text=';
+              url_whatsapp+=mensaje;        
+              //console.log(url_whatsapp);       
+              var win = window.open(url_whatsapp, '_blank');
+              win.focus();              
+            }
           }
           else if(response.data.respuesta=='2' && action=='1'){
             alert('Ya existe un cliente con ese número de documento, por favor verifique');
@@ -2821,7 +3443,17 @@ app.controller("siniController",
           }
           else if(response.data.respuesta=='3' && action=='1'){
             $scope.cliente.id_client=response.data.id_client;
-            alert('Cliente actualizado exitosamente');      
+            alert('Cliente actualizado exitosamente');
+            if(tipo_notificacion=='4' || tipo_notificacion=='5'){
+              var mensaje = response.data.cuerpo_mensaje;
+              url_whatsapp+='phone=+57';
+              url_whatsapp+=telefono_movil;
+              url_whatsapp+='&text=';
+              url_whatsapp+=mensaje;     
+              //console.log(url_whatsapp);         
+              var win = window.open(url_whatsapp, '_blank');
+              win.focus();              
+            }   
             
           }
           else if(response.data.respuesta=='4' && action=='1'){
@@ -2847,8 +3479,8 @@ app.controller("siniController",
           }
         })
         .catch(function(data){
-          alert(response.data);
-
+          //alert(response.data);
+          console.log('error inesperado');
         });
       }     
 
@@ -2933,6 +3565,146 @@ app.controller('ContrladorModalRequerimientoCliente', function($scope, $http, cl
 
 });
 
+app.controller('ContrladorModalCargaImagenesInmueble', function($scope, close, id_property, $http) {  
+  //$scope.galeriaActiva = []; 
+  $scope.endpoint = "http://localhost/sonia/backend/controllers/"; 
+  //$scope.carga_imagenes_inmueble = [];
+  $scope.imagenesInmueble = [];
+  $scope.imagenesInmueble.id_property = id_property;  
+  $scope.result=[];
+  //console.log($scope.informacion_adicional_inmueble);
+
+
+  $scope.limpiarImagenesInmueble = function(){
+    document.getElementById('fileInmueble').value = '';
+    //$scope.imagenesInmueble.descripcion = '';
+    //input.files[0].name='';
+    var output = document.getElementById('imagen_inmueble_carga_show');
+    output.src = undefined;
+    output.style.display = "none"; 
+  }
+
+  //Guarda las imágenes de los inmuebles
+  $scope.saveImage = function(){
+
+    var imagen = document.getElementById('fileInmueble');
+    var extension = imagen.value.substring(imagen.value.length-3,imagen.value.length);
+    var foto = {};    
+    var foto1 = {};
+    var base64StringFile = '';
+    var fileName = '';
+    var fileType = '';
+
+    if(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG'){
+      var file = document.querySelector('input[type="file"]').files[0];   
+      console.log(file);
+      $scope.getFile(file).then((customJsonFile) => {
+        //customJsonFile is your newly constructed file.
+        foto.base64StringFile = customJsonFile.base64StringFile;
+        foto.fileName = customJsonFile.fileName;
+        foto.fileType = customJsonFile.fileType;        
+
+        $http.post($scope.endpoint,{'accion':'saveImagenInmueble','id_property':$scope.imagenesInmueble.id_property,'foto':foto})
+        .then(function(response){          
+          if(response.data.respuesta=='1'){ 
+            $scope.asesor.id_asesor=response.data.id_asesor;
+            $scope.asesor.empleado_activo=response.data.empleado_activo;
+            $scope.asesor.usuario_activo=response.data.usuario_activo;
+            $scope.asesor.foto_asesor=response.data.fotoAsesor;
+
+            document.formularioAsesor.file.value = '';
+            var output = document.getElementById('output');      
+            output.style.display = "none";
+
+            alert('Imagen almacenada exitosamente');                 
+              
+          }
+          else if(response.data.respuesta=='2'){
+            alert('Ya existe un asesor con ese número de documento, por favor verifique');          
+          }
+          else if(response.data.respuesta=='3'){
+            $scope.asesor.id_asesor=response.data.id_asesor;
+            $scope.asesor.empleado_activo=response.data.empleado_activo;
+            $scope.asesor.usuario_activo=response.data.usuario_activo;
+            $scope.asesor.foto_asesor=response.data.fotoAsesor;
+
+            document.formularioAsesor.file.value = '';
+            var output = document.getElementById('output');      
+            output.style.display = "none";
+
+            alert('Asesor actualizado exitosamente');      
+          
+          }
+          else if(response.data.respuesta=='4'){
+            alert('No se ha podido actualizar el asesor, por favor verifique');            
+          }  
+          else if(response.data.respuesta=='5'){ 
+            $scope.asesor.id_asesor=response.data.id_asesor;
+            $scope.asesor.empleado_activo=response.data.empleado_activo;
+            $scope.asesor.usuario_activo=response.data.usuario_activo;
+            alert('Asesor almacenado exitosamente, pero el usuario para el aplicativo ingresado ya existe para otro empleado, por favor verifique');                 
+          
+          }  
+          else if(response.data.respuesta=='6'){ 
+            $scope.asesor.id_asesor=response.data.id_asesor;
+            $scope.asesor.empleado_activo=response.data.empleado_activo;
+            $scope.asesor.usuario_activo=response.data.usuario_activo;
+            alert('Asesor almacenado exitosamente, pero ya ha alcanzado la cantidad límite de usuarios del aplicativo permitidos para este tipo. Contacte al administrador');                 
+          
+          }       
+        })
+        .catch(function(data){
+          alert(response.data);
+        });            
+             
+      });
+          
+    }  
+    else{
+      alert("La foto debe ser de uno de los formatos permitidos (jpg, bmp o png)");
+      document.getElementById('fileInmueble').value = '';
+      //input.files[0].name='';
+      var output = document.getElementById('imagen_inmueble_carga_show');
+      output.src = undefined;
+      output.style.display = "none"; 
+      return false;
+    }
+
+  }
+
+  
+
+  //take a single JavaScript File object
+  $scope.getFile = function(file) {
+    var reader = new FileReader();
+    return new Promise((resolve, reject) => {
+        reader.onerror = () => { reader.abort(); reject(new Error("Error parsing file"));}
+        reader.onload = function () {
+
+            //This will result in an array that will be recognized by C#.NET WebApi as a byte[]
+            let bytes = Array.from(new Uint8Array(this.result));
+
+            //if you want the base64encoded file you would use the below line:
+            let base64StringFile = btoa(bytes.map((item) => String.fromCharCode(item)).join(""));
+
+            //Resolve the promise with your custom file structure
+            resolve({ 
+                bytes: bytes,
+                base64StringFile: base64StringFile,
+                fileName: file.name, 
+                fileType: file.type
+            });
+        }
+        reader.readAsArrayBuffer(file);
+    });
+  }
+
+  $scope.cerrarModal = function() {
+    close($scope.result);
+  };  
+
+});
+
 app.controller('ContrladorModalInfoAdicInmueble', function($scope, close, lista_clientes_propiedad, visitas, link, title, sale_price_label, id_property, usuario_inmueble, usuario_inmueble_telefono, usuario_inmueble_email) {  
   //$scope.galeriaActiva = []; 
   $scope.informacion_adicional_inmueble = []; 
@@ -2946,10 +3718,16 @@ app.controller('ContrladorModalInfoAdicInmueble', function($scope, close, lista_
   $scope.informacion_adicional_inmueble.usuario_inmueble_email=usuario_inmueble_email;
   $scope.informacion_adicional_inmueble.sale_price_label=sale_price_label;
   $scope.informacion_adicional_inmueble.cantidad_clientes = lista_clientes_propiedad.length;
-  console.log($scope.informacion_adicional_inmueble);
+  $scope.result=[];
+  //console.log($scope.informacion_adicional_inmueble);
 
   $scope.cerrarModal = function() {
     close($scope.result);
   };
+
+  $scope.verInformacionClienteInmueble = function(lista_clientes_prop){      
+    $scope.result.cliente = lista_clientes_prop;
+    $scope.cerrarModal();
+  }
 
 });

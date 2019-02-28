@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html ng-app="siniModule">
 <head>
   <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
@@ -30,6 +29,33 @@
         else{
           var output = document.getElementById('output');
           document.formularioAsesor.foto = dataURL;
+          output.src = dataURL;
+          output.style.display = "block";  
+        }            
+        //$scope.imgAsesorTemp = dataURL;
+      };
+      reader.readAsDataURL(input.files[0]);
+    };
+
+    // muestra vista previa de la imagen del inmueble cargada
+    function openFileInmueble(event) {            
+      var input = event.target;      
+      var reader = new FileReader();
+      reader.onload = function(){
+        var dataURL = reader.result; 
+        var extension = input.files[0].name.substring(input.files[0].name.length-3,input.files[0].name.length); 
+        if(!(extension == 'jpg' || extension == 'JPG' || extension == 'bmp' || extension == 'BMP' || extension == 'png' || extension == 'PNG')){
+          alert("La foto debe ser de uno de los formatos permitidos (jpg, bmp o png)");
+          document.getElementById('fileInmueble').value = '';
+          //input.files[0].name='';
+          var output = document.getElementById('imagen_inmueble_carga_show');
+          output.src = undefined;
+          output.style.display = "none"; 
+          return false;
+        } 
+        else{
+          var output = document.getElementById('imagen_inmueble_carga_show');
+          //document.formularioAsesor.foto = dataURL;
           output.src = dataURL;
           output.style.display = "block";  
         }            
@@ -118,12 +144,56 @@
 <!-- Button Mixin-->
 <!-- Pen Title-->
 <div class="pen-title" style="background-color:#1137AD;height:9em;">
-  <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="logo_empresa" src="{{logo_empresa}}">  
+  <img class="responsive" title="{{nombre_inmobiliaria}}" style="width:7em;height:7em;margin-top:1em;margin-right:2em;" ng-if="logo_empresa" src="{{logo_empresa}}">  
   <img class="responsive" style="width:7em;height:7em;margin-top:1em;" ng-if="!logo_empresa&&showContent!='../login/formularioLogin.html'" src="../../form-images/inmobiliaria/97805.png">
-  <img class="responsive" style="width:41em;height:7em;margin-top:1em;" src="../../form-images/montes_avila_banner.png">  
+  <img class="responsive" style="width:41em;height:7em;margin-top:1em;" src="../../form-images/montes_avila_banner.png">   
+  <img class="responsive" style="width:6em;height:7em;margin-top:1em;border-radius: 50%;margin-left:2em;" alt="Avatar" title="{{nombre_asesor}} - Fecha de acceso: {{fecha_acceso}}" ng-if="foto_asesor&&nombre_asesor" src="{{foto_asesor}}"> 
 </div>
 <!-- Form Module-->
 <div class="module form-module" ng-controller="setContentDiv" id="formulario" ng-include="showContent">
 </div>
 </body>
+<script type="text/javascript">
+  
+  function getLocationInmueble() {
+    
+    document.getElementById("inmueble_latitud").value = "";
+    document.getElementById("inmueble_longitud").value = "";
+  
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPositione);
+    } else { 
+      document.getElementById("inmueble_latitud").value = "Este navegador no soporta Geolocation.";
+      document.getElementById("inmueble_longitud").value = "Este navegador no soporta Geolocation.";
+    }
+  }
+
+  function showPositione(position) {    
+    
+    document.getElementById("inmueble_latitud").value = position.coords.latitude;
+    document.getElementById("inmueble_longitud").value = position.coords.longitude;
+
+    var longitude='';
+    var latitude = '';
+    //getLocation();
+  
+    var mapProp= {
+      center:new google.maps.LatLng(position.coords.latitude,position.coords.longitude),
+      zoom:15,
+    };
+
+    //document.getElementById("coords").value = "("+latitude+","+longitude+")";
+    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var marker=new google.maps.Marker({position:map.getCenter(), map:map, draggable:true});
+    google.maps.event.addListener(marker,'dragend',function(event) {
+      var position = this.getPosition().toString().replace(" ","").replace("(","").replace(")","");
+      var position_sep = position.split(",");          
+      document.getElementById("inmueble_latitud").value = position_sep[0];
+      document.getElementById("inmueble_longitud").value = position_sep[1];
+    });  
+
+  }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2Y8qOk0181ZAS_WgGSK2RBK7heuK-T_E&callback=getLocation"></script>
 </html>

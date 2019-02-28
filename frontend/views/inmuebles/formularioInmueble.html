@@ -1,52 +1,67 @@
 <div class="toggle">
     <div class="tooltip1" style="color:black;width:8em;font-weight:bold;font-family:Verdana;font-size:1em;left:-6em;position:absolute;"><a ng-click="closeSession()">Cerrar sesi&oacute;n</a></div>
 </div>
-<div class="form" ng-init="limpiarCaracteristicasTipoInmueble()">
-    <center><h2 style="font-family:Verdana;">INMUEBLES</h2></center>
+<div class="form" ng-init="limpiarCaracteristicasTipoInmueble()">  
+    <h2 ng-if="consultarInmuebles=='0'" style="font-family:Verdana;text-align: center;">DATOS INMUEBLE</h2>
+    <h2 ng-if="consultarInmuebles=='1'" style="font-family:Verdana;text-align: center;">CONSULTAR INMUEBLES</h2>
     <br />
     <form name="formularioInmueble" id="formularioInmueble" ng-model="formularioInmueble" method="post" NOVALIDATE>
-      <label>ID</label><input name="inmueble_ID" id="inmueble_ID" ng-model="inmueble.ID" ng-keyup="inactivarCamposInmuebles()" type="text"/>
-      <label>Pa&iacute;s</label>
+      <label ng-if="consultarInmuebles=='1'||inmueble.id_property">ID</label><input ng-if="consultarInmuebles=='1'||inmueble.id_property" ng-disabled="consultarInmuebles=='0'" name="inmueble_ID" id="inmueble_ID" ng-model="inmueble.ID" ng-keyup="inactivarCamposInmuebles()" type="text"/>
+      <label ng-if="inmueble.link&&inmueble.id_property">Anuncio WEB: <a href="{{inmueble.link}}">{{inmueble.link}}</a></label>
+      <label>Pa&iacute;s <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <select name="inmueble_codigoPais" id="codigoPais" ng-disabled="inmueble.camposInactivos=='1'" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmueble.codigoPais" ng-change="getDepartamentos(inmueble.codigoPais)" ng-init="getPaises()"/>  
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>      
       </select>
-      <label>Departamento</label>
+      <label>Departamento <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_departamento" ng-options="id_departamento as id_departamento.name for id_departamento in ids_departamentos track by id_departamento.id_departamento" ng-change="getCiudades(inmueble.codigoDepartamento)" ng-model="inmueble.codigoDepartamento"/>
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>
       </select>
-      <label>Ciudad</label>
+      <label>Ciudad <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_ciudad" ng-options="id_ciudad as id_ciudad.name for id_ciudad in ids_ciudades track by id_ciudad.id_ciudad" ng-model="inmueble.codigoCiudad" ng-change="getZonasSectores(inmueble.codigoCiudad)"/> 
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>       
       </select>      
-      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Sector&nbsp;/&nbsp;Zona</label>
-      <select ng-if="inmueble.codigoCiudad.id_ciudad=='132'" name="inmueble_sector" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-change="listarBarriosZona1(inmueble.codigoSector.id_sector,inmueble.codigoCiudad.id_ciudad)" ng-model="inmueble.codigoSector"/> 
-        <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>     
+      <label ng-if="inmueble.codigoCiudad&&inmueble.codigoCiudad!=''&&inmueble.codigoCiudad!=null">Sector&nbsp;/&nbsp;Zona</label>
+      <select name="inmueble_sector" ng-if="inmueble.codigoCiudad&&inmueble.codigoCiudad!=''&&inmueble.codigoCiudad!=null" ng-options="id_sector as id_sector.name for id_sector in ids_sectores track by id_sector.id_sector" ng-change="listarBarriosZona1(inmueble.codigoSector.id_sector,inmueble.codigoCiudad.id_ciudad)" ng-model="inmueble.codigoSector"/>         
+        <option label="Seleccione" value="">Seleccione</option>   
       </select>
+      <!--label ng-if="(!inmueble.codigoSector||inmueble.codigoSector==null||inmueble.codigoSector=='')&&consultarInmuebles=='0'&&inmueble.codigoCiudad">Nueva zona</label><input name="inmueble_direccion" ng-if="(!inmueble.codigoSector||inmueble.codigoSector==null||inmueble.codigoSector=='')&&consultarInmuebles=='0'&&inmueble.codigoCiudad" type="text" ng-model="inmueble.nueva_zona"/-->
       <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Estrato</label>
-      <select name="inmueble_codigoEstratoCali" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-disabled="inmueble.codigoSector" ng-change="getLocEstCali(inmueble.codigoEstrato)" ng-model="inmueble.codigoEstrato"/>
+      <select name="inmueble_codigoEstratoCali" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_estrato as id_estrato.nombre for id_estrato in lista_estratos_cali track by id_estrato.codigo" ng-change="getLocEstCali(inmueble.codigoEstrato)" ng-model="inmueble.codigoEstrato"/>
         <option value="" label="Seleccione">Sin&nbsp;informaci&oacute;n</option>            
       </select>
-      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'||inmueble.codigoCiudad.id_ciudad=='794'">Localidad / Comuna</label>
+      <label ng-if="inmueble.codigoCiudad.id_ciudad=='794'">Localidad</label>
       <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='794'" ng-options="id_zona as id_zona.name for id_zona in ids_zonas track by id_zona.id_zona" ng-model="inmueble.codigoZona"/> 
-        <!--option value="" label="Seleccione">Seleccione</option-->        
+        <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>       
       </select> 
-      <select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-disabled="(inmueble.codigoSector||inmueble.codigoEstrato)" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>   
+      <!--select name="inmueble_zona" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-disabled="(inmueble.codigoSector||inmueble.codigoEstrato)" ng-options="id_zona as id_zona.nombre for id_zona in lista_comunas_cali track by id_zona.codigo" ng-change="getBarriosLocCali(inmueble.codigoZona)" ng-model="inmueble.codigoZona"/>   
         <option value="" label="Seleccione">Sin&nbsp;informaci&oacute;n</option>     
-      </select>   
-      <label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Barrio</label>
+      </select-->   
+      <!--label ng-if="inmueble.codigoCiudad.id_ciudad=='132'">Barrio</label>
       <select name="inmueble_barrio" ng-if="inmueble.codigoCiudad.id_ciudad=='132'" ng-options="id_barrio as id_barrio.nombre for id_barrio in barrios_comunas_cali track by id_barrio.codigo" ng-change="getEstratoComunaCali(inmueble.codigoBarrio)" ng-model="inmueble.codigoBarrio"/> 
-        <!--option value="" label="Seleccione">Sin&nbsp;informaci&oacute;n</option-->        
-      </select>   
-      <label>Tipo inmueble</label>
+        <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>                 
+      </select--> 
+      <label ng-if="consultarInmuebles=='0'">Direcci&oacute;n</label><input name="inmueble_direccion" ng-if="consultarInmuebles=='0'" type="text" ng-model="inmueble.direccion"/> 
+      <label ng-if="consultarInmuebles=='0'">A&ntilde;adir localizaci&oacute;n de Google Maps</label>    
+      <label class="switch" ng-if="consultarInmuebles=='0'">
+        <input type="checkbox" id="inmueble_localizacion" name="inmueble_localizacion" ng-change="obtenerLocation()" ng-model="inmueble.localizacion">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label>
+      <div id="googleMap" ng-if="inmueble.localizacion" style="width:70%;height:20em;margin: auto;"></div>
+      <br ng-if="inmueble.localizacion" /><br ng-if="inmueble.localizacion" />
+      <label ng-show="inmueble.localizacion">latitud</label><input type="text" ng-show="inmueble.localizacion" ng-model="inmueble.latitud" ng-disabled="1" id="inmueble_latitud" />
+      <label ng-show="inmueble.localizacion">longitud</label><input type="text" ng-show="inmueble.localizacion" ng-model="inmueble.longitud" ng-disabled="1" id="inmueble_longitud" />
+      <label>Tipo inmueble <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>  
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option> 
       </select> 
-      <label ng-if="consultarInmuebles=='0'">T&iacute;tulo publicaci&oacute;n</label><input ng-if="consultarInmuebles=='0'" name="inmueble_titulo" id="inmueble_titulo" ng-model="inmueble.titulo" type="text"/>
-      <label>Condición</label>
+      <label ng-if="consultarInmuebles=='0'">T&iacute;tulo publicaci&oacute;n <span ng-if="consultarInmuebles=='0'">(*)</span></label><input ng-if="consultarInmuebles=='0'" name="inmueble_titulo" id="inmueble_titulo" ng-model="inmueble.titulo" type="text"/>
+      <label>Condición <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_condicion" ng-model="inmueble.condicion" />    
         <option value="" label="Seleccione">Sin&nbsp;informaci&oacute;n</option>     
         <option value="1" label="Nuevo">Nuevo</option>  
         <option value="2" label="Usado">Usado</option>  
+        <option value="3" label="Proyecto">Proyecto</option>  
+        <option value="4" label="En Construccion">En Construccion</option> 
       </select>  
       <label>&Aacute;reas o hect&aacute;reas</label><input ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_area" type="number" ng-model="inmueble.area"/> 
       <label ng-if="1==0">Prioridad o urgencia de negocio</label>
@@ -60,7 +75,8 @@
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>    
       </select>
       <label ng-if="inmueble.moneda">{{conversion_pesos}}</label>  
-      <label ng-if="consultarInmuebles=='0'">Precio inmueble</label><input name="inmueble_precio" ng-if="consultarInmuebles=='0'" type="number" ng-model="inmueble.precio"/>
+      <label ng-if="consultarInmuebles=='0'">Precio inmueble <span ng-if="consultarInmuebles=='0'">(*)</span></label><input name="inmueble_precio" ng-if="consultarInmuebles=='0'" type="number" ng-model="inmueble.precio"/>
+      <label ng-if="consultarInmuebles=='0'">Valor administraci&oacute;n</label><input name="inmueble_valor_administracion" ng-if="consultarInmuebles=='0'" type="number" ng-model="inmueble.valor_administracion"/>
       <label ng-if="consultarInmuebles=='1'">Rango de precios</label>    
       <label class="switch" ng-if="consultarInmuebles=='1'">
         <input type="checkbox" id="inmueble_rango_precios" name="inmueble_rango_precios" ng-change="cambiarValorRangosPrecios()" ng-disabled="inmueble.camposInactivos=='1'" ng-model="inmueble.rango_precios">
@@ -127,30 +143,48 @@
       <label ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'">Cantidad ba&ntilde;os</label><input ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'" name="inmueble_banos" id="inmueble_banos" ng-model="inmueble.banos" type="number"/>    
       <label ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'">Parqueaderos o garajes</label><input ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'" name="inmueble_parqueadero" id="inmueble_parqueadero" ng-model="inmueble.parqueadero" type="number"/> 
       <label ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'">Piso o cantidad de pisos</label><input ng-if="inmueble.tipoInmueble.id_tipo_inmueble&&inmueble.tipoInmueble.id_tipo_inmueble!='5'&&inmueble.tipoInmueble.id_tipo_inmueble!='32'" name="inmueble_piso" id="inmueble_piso" ng-model="inmueble.piso" type="number"/>
-      <label ng-if="consultarInmuebles=='1'">Estado</label>
-      <select ng-if="consultarInmuebles=='1'" ng-options="id_estado as id_estado.nombre for id_estado in estados_inmueble track by id_estado.id_estado" ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_estado" id="inmueble_estado" ng-model="inmueble.estado" />          
+      <label>Disponibilidad</label>
+      <select ng-options="id_estado as id_estado.nombre for id_estado in estados_inmueble track by id_estado.id_estado" ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_estado" id="inmueble_estado" ng-model="inmueble.estado" />          
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>  
       </select>
-      <label>Creador(a)</label>
-      <select name="inmueble_usuario_creador" ng-disabled="inmueble.camposInactivos=='1'" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="inmueble.usuario_creador"/> 
+      <label ng-if="consultarInmuebles=='1'||inmueble.id_property">Estado inmueble</label>
+      <select name="inmueble_status" id="inmueble_status" ng-disabled="inmueble.camposInactivos=='1'" ng-model="inmueble.status" ng-if="consultarInmuebles=='1'||inmueble.id_property" />          
+        <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>  
+        <option label="Activo" ng-if="consultarInmuebles=='0'" value="1">Activo</option>
+        <option label="Inactivo" ng-if="consultarInmuebles=='0'" value="2">Inactivo</option>
+        <option label="Destacado" ng-if="consultarInmuebles=='0'" value="3">Destacado</option>
+        <option label="Eliminado" ng-if="consultarInmuebles=='0'" value="4">Eliminado</option>
+        <option label="Activo o Destacado" ng-if="consultarInmuebles=='1'" value="5">Activo o Destacado</option>
+      </select>
+      <label ng-if="consultarInmuebles=='1'">Creador(a)</label>
+      <select ng-if="consultarInmuebles=='1'" name="inmueble_usuario_creador" ng-disabled="inmueble.camposInactivos=='1'" ng-options="id_asesor as id_asesor.asesor for id_asesor in lista_asesores_wasi track by id_asesor.id_asesor" ng-model="inmueble.usuario_creador"/> 
         <option value="" label="Sin informaci&oacute;n">Sin informaci&oacute;n</option> 
       </select>
-      <label ng-if="consultarInmuebles=='0'">Observaciones o descripci&oacute;n</label>
+      <label ng-if="consultarInmuebles=='0'">Observaciones o descripci&oacute;n <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <textarea name="inmueble_observaciones" ng-if="consultarInmuebles=='0'" ng-model="inmueble.observaciones"></textarea>   
       <label ng-if="consultarInmuebles=='0'">Comentario adicional</label>
-      <textarea ng-if="consultarInmuebles=='0'" name="inmueble_comentario" ng-model="inmueble.comentario"></textarea>  
+      <textarea ng-if="consultarInmuebles=='0'" name="inmueble_comentario" ng-model="inmueble.comentario"></textarea> 
+      <label ng-if="consultarInmuebles=='0'">Referencia</label>
+      <textarea ng-if="consultarInmuebles=='0'" name="inmueble_referencia" ng-model="inmueble.referencia"></textarea> 
+      <label ng-if="consultarInmuebles=='0'">(*) Informaci&oacute;n requerida</label> 
       <!--br ng-if="cant_caract_inm_obl_show!='0'" /-->       
       <br />  
-      <center><button style="width:15em;" type="submit" id="consultaInmuebles" class="consultar" ng-click="consultarInmueblesCaracteristicas()">Consultar</button>
+      <input type="hidden" id="inmueble_id_property" name="inmueble_id_property" ng-model="inmueble.id_property">
+      <center><button style="width:15em;" type="submit" ng-if="consultarInmuebles=='1'" id="consultaInmuebles" class="consultar" ng-click="consultarInmueblesCaracteristicas()">Consultar</button>
+      <button style="width:15em;" ng-if="consultarInmuebles=='0'" class="consultar" ng-click="guardarInmueble()">Guardar</button>
       <br />
       <br />  
-      <button style="width:15em;" class="limpiar" ng-click="limpiarCaracteristicasTipoInmueble()">Limpiar</button>
+      <button style="width:15em;" ng-if="consultarInmuebles=='0'&&inmueble.id_property" class="crear_cliente" ng-click="relacionarClienteInmueble(inmueble.id_property)">Relacionar Cliente</button>
+      <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />
+      <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />
+      <button style="width:15em;" ng-if="consultarInmuebles=='0'&&inmueble.id_property" class="crear_cliente" ng-click="cargarImagenesInmueble(inmueble.id_property)">Subir Im&aacute;genes</button>
+      <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />
+      <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />      
+      <button style="width:15em;" class="limpiar" ng-click="limpiarCaracteristicasTipoInmueble()">Limpiar</button>      
       <br />
-      <br /> 
-      <button style="width:15em;" class="crear_cliente" ng-click="showInmueblesCreate()">Crear inmueble</button>
       <br />
-      <br />
-      <button style="width:15em;" class="volver" ng-click="returnMenuIndex()");return false">Volver</button></center>
+      <button style="width:15em;" ng-if="!consultarInmuebles1&&consultarInmuebles1!='0'" class="volver" ng-click="showInmueblesAdmIndex()">Volver</button>
+      <button style="width:15em;" ng-if="consultarInmuebles1&&consultarInmuebles1=='0'" class="volver" ng-click="showInmueblesList1()">Volver</button></center>
     </form>
   </div>
   <div class="cta">SONIA<br />Sistema Organizador de Negocios Inmobiliarios Asistidos<br />
