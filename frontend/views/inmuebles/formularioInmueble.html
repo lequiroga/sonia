@@ -7,7 +7,7 @@
     <br />
     <form name="formularioInmueble" id="formularioInmueble" ng-model="formularioInmueble" method="post" NOVALIDATE>
       <label ng-if="consultarInmuebles=='1'||inmueble.id_property">ID</label><input ng-if="consultarInmuebles=='1'||inmueble.id_property" ng-disabled="consultarInmuebles=='0'" name="inmueble_ID" id="inmueble_ID" ng-model="inmueble.ID" ng-keyup="inactivarCamposInmuebles()" type="text"/>
-      <label ng-if="inmueble.link&&inmueble.id_property">Anuncio WEB: <a href="{{inmueble.link}}">{{inmueble.link}}</a></label>
+      <label ng-if="inmueble.link&&inmueble.id_property">Anuncio WEB: <a href="{{inmueble.link}}" target="_blank">{{inmueble.link}}</a></label>
       <label>Pa&iacute;s <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <select name="inmueble_codigoPais" id="codigoPais" ng-disabled="inmueble.camposInactivos=='1'" ng-options="id_pais as id_pais.name for id_pais in ids_paises track by id_pais.id_pais" ng-model="inmueble.codigoPais" ng-change="getDepartamentos(inmueble.codigoPais)" ng-init="getPaises()"/>  
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>      
@@ -41,15 +41,19 @@
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option>                 
       </select--> 
       <label ng-if="consultarInmuebles=='0'">Direcci&oacute;n</label><input name="inmueble_direccion" ng-if="consultarInmuebles=='0'" type="text" ng-model="inmueble.direccion"/> 
-      <label ng-if="consultarInmuebles=='0'">A&ntilde;adir localizaci&oacute;n de Google Maps</label>    
-      <label class="switch" ng-if="consultarInmuebles=='0'">
+      <label ng-if="consultarInmuebles=='0'">A&ntilde;adir / Cambiar localizaci&oacute;n de Google Maps</label>    
+      <label class="switch" ng-if="consultarInmuebles=='0'&&!inmueble.latitud">
         <input type="checkbox" id="inmueble_localizacion" name="inmueble_localizacion" ng-change="obtenerLocation()" ng-model="inmueble.localizacion">
         <span style="width: 4.5em;" class="slider round"></span>
       </label>
-      <div id="googleMap" ng-if="inmueble.localizacion" style="width:70%;height:20em;margin: auto;"></div>
+      <label class="switch" ng-if="consultarInmuebles=='0'&&inmueble.latitud">
+        <input type="checkbox" id="inmueble_localizacion" name="inmueble_localizacion" ng-change="obtenerLocationDada()" ng-model="inmueble.localizacion">
+        <span style="width: 4.5em;" class="slider round"></span>
+      </label>
+      <div id="googleMap" ng-if="inmueble.localizacion||inmueble.latitud" ng-show="inmueble.localizacion" style="width:70%;height:20em;margin: auto;"></div>
       <br ng-if="inmueble.localizacion" /><br ng-if="inmueble.localizacion" />
-      <label ng-show="inmueble.localizacion">latitud</label><input type="text" ng-show="inmueble.localizacion" ng-model="inmueble.latitud" ng-disabled="1" id="inmueble_latitud" />
-      <label ng-show="inmueble.localizacion">longitud</label><input type="text" ng-show="inmueble.localizacion" ng-model="inmueble.longitud" ng-disabled="1" id="inmueble_longitud" />
+      <label ng-show="inmueble.localizacion||inmueble.latitud">latitud</label><input type="text" ng-show="inmueble.localizacion||inmueble.latitud" ng-model="inmueble.latitud" ng-disabled="1" id="inmueble_latitud" />
+      <label ng-show="inmueble.localizacion||inmueble.longitud">longitud</label><input type="text" ng-show="inmueble.localizacion||inmueble.longitud" ng-model="inmueble.longitud" ng-disabled="1" id="inmueble_longitud" />
       <label>Tipo inmueble <span ng-if="consultarInmuebles=='0'">(*)</span></label>
       <select ng-disabled="inmueble.camposInactivos=='1'" name="inmueble_tipo_inmueble" ng-options="id_tipo_inmueble as id_tipo_inmueble.name for id_tipo_inmueble in ids_tipo_inmuebles track by id_tipo_inmueble.id_tipo_inmueble" ng-model="inmueble.tipoInmueble" ng-change="getCaracteristicasTiposInmuebles(inmueble.tipoInmueble.id_tipo_inmueble,inmueble.tipoInmueble.name)" ng-init="getTiposInmuebles()"/>  
         <option label="Seleccione" value="">Sin&nbsp;informaci&oacute;n</option> 
@@ -177,10 +181,10 @@
       <button style="width:15em;" ng-if="consultarInmuebles=='0'&&inmueble.id_property" class="crear_cliente" ng-click="relacionarClienteInmueble(inmueble.id_property)">Relacionar Cliente</button>
       <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />
       <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />
-      <button style="width:15em;" ng-if="consultarInmuebles=='0'&&inmueble.id_property" class="crear_cliente" ng-click="cargarImagenesInmueble(inmueble.id_property)">Subir Im&aacute;genes</button>
+      <button style="width:15em;" ng-if="consultarInmuebles=='0'&&inmueble.id_property" class="limpiar" ng-click="cargarImagenesInmueble(inmueble.id_property)">Subir Im&aacute;genes</button>
       <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />
       <br ng-if="consultarInmuebles=='0'&&inmueble.id_property" />      
-      <button style="width:15em;" class="limpiar" ng-click="limpiarCaracteristicasTipoInmueble()">Limpiar</button>      
+      <button style="width:15em;" class="limpiar" ng-if="!inmueble.id_property" ng-click="limpiarCaracteristicasTipoInmueble()">Limpiar</button>      
       <br />
       <br />
       <button style="width:15em;" ng-if="!consultarInmuebles1&&consultarInmuebles1!='0'" class="volver" ng-click="showInmueblesAdmIndex()">Volver</button>

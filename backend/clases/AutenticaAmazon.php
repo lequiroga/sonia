@@ -98,6 +98,7 @@
         		'Baz' => '123'
     		)
 	    ));	
+      //print_r($result);exit;
 	    unlink($output);
 
         $iterator = $s3->getIterator('ListObjects', array(
@@ -109,7 +110,7 @@
         return $signedUrl;		
 
 	  } catch(S3Exception $e){
-	  	die("There was an error uploading that file");
+	  	die($e);
 	  }
             
 

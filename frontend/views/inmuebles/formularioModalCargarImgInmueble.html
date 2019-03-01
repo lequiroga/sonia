@@ -10,7 +10,9 @@
     <form name="formularioImagenesInmueble" ng-model="formularioImagenesInmueble" id="formularioImagenesInmueble" method="post" NOVALIDATE>
       <label>Imagen inmueble (*)</label><input name="fileInmueble" id="fileInmueble" type="file" onchange="openFileInmueble(event)" ng-model="imagenesInmueble.fileInmueble"/>
       
-      <img id="imagen_inmueble_carga_show" style="display: none;top: 0;left: 0;right: 0;bottom: 0;margin: auto;" name="imagen_inmueble_carga_show" width="55%" height="55%">       
+      <img id="imagen_inmueble_carga_show" style="display: none;top: 0;left: 0;right: 0;bottom: 0;margin: auto;" name="imagen_inmueble_carga_show" width="55%" height="55%"> 
+      <br />      
+      <br />
       <label>(*) Informaci&oacute;n requerida</label> 
       <input name="id_property" id="id_property" ng-model="imagenesInmueble.id_property" type="hidden">
       <br />
@@ -23,6 +25,26 @@
       <br />
       </center>
     </form>
+  </div>
+  <div ng-if="lista_imagenes">
+          <table ng-init='configPages()' style="width:80%;">
+            <thead>
+              <tr>       
+                <th style="width:10%;">Id Imagen</th>         
+                <th style="width:10%;">Posici&oacute;n</th>
+                <th style="width:30%;">Descripci&oacute;n</th> 
+                <th style="width:50%;">URL</th>                          
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat='imagen in lista_imagenes'>    
+                <td style="text-align: left;">{{imagen.id}}</td>     
+                <td style="text-align: left;">{{imagen.position}}</td>
+                <td style="text-align: left;">{{imagen.description}}</td>  
+                <td style="text-align: left;"><a href="{{imagen.url_big}}" target="_blank">{{imagen.url_big}}</a></td>                    
+              </tr>
+            </tbody>
+          </table>  
   </div>
   
 </div>

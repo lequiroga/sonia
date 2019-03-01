@@ -242,15 +242,24 @@
     }
 
     function guardarImagenInmueble($id_property,$foto){      
-//print_r($foto->fileType);exit;
+
       if(isset($foto->fileName)){
 
           $autAPI   = new AutenticaAPI();
-          $datosAPI = $autAPI->retornarDatosAPI('wasi','galerias_propiedad');       
-          $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_por_id');
+          $data3 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip=0&take=1'), true );
 
-          $posicion = $data['total']+1;      
-          $descripcion='Foto '.$posicion;
+          if(isset($data3['galleries'][0])){
+            $images=$data3['galleries'][0];
+            unset($images['id']);            
+            $posicion = count($images)+1;         
+            $descripcion='Foto '.$posicion; 
+          }
+          else{
+            $posicion = 1;         
+            $descripcion='Foto 1'; 
+          }
+          
 
           $output1 = '../tmp_files/'.$foto->fileName; 
           $outputFile = $this->base64_to_jpeg($foto->base64StringFile, $output1);    
@@ -260,15 +269,15 @@
           $ch = curl_init();
 
           $path = realpath($output1);
-          //print_r("@".$output1);exit;
-          $post = ['image' => "@".$output1,
+          
+          $post = ['image' => new \CURLFile($path, 'text/plain', $foto->fileName),
                    'position' => $posicion,
                    'description' => $descripcion
                   ];
           
           curl_setopt($ch, CURLOPT_URL, $datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]);
           curl_setopt($ch, CURLOPT_POST,1);
-          curl_setopt($ch, CURLOPT_POSTFIELDS, $foto);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
           curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
           $result=curl_exec ($ch);
           curl_close ($ch);
@@ -276,7 +285,29 @@
           $datosAPI = $autAPI->retornarDatosAPI('wasi','actualizar_imagen_propiedad');       
           $data = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"]), true );
 
-          echo "Operacion exitosa";exit;
+          $datosAPI = $autAPI->retornarDatosAPI('wasi','propiedad_por_id');
+          $data3 = json_decode( file_get_contents($datosAPI["uri"].$datosAPI["uri_compl"].$id_property.'?'.$datosAPI["id_api"].'&'.$datosAPI["token_api"].'&skip=0&take=1'), true );
+
+          unset($data3['galleries'][0]['id']);
+
+          $fotos_inmueble = array();
+
+          for($i=0;$i<count($data3['galleries'][0]);$i++){
+            $fotos_inmueble[$i]['id']=$data3['galleries'][0][$i]['id'];
+            $fotos_inmueble[$i]['url']=$data3['galleries'][0][$i]['url'];
+            $fotos_inmueble[$i]['url_big']=$data3['galleries'][0][$i]['url_big'];
+            $fotos_inmueble[$i]['description']=$data3['galleries'][0][$i]['description'];
+            $fotos_inmueble[$i]['position']=$data3['galleries'][0][$i]['position'];            
+          }
+
+          unlink($path);
+
+          $output = array();
+          $output['respuesta']='1';
+          $output['galeria']=$fotos_inmueble; 
+          $data = json_encode($output);
+
+          echo $data;
 
       }
 

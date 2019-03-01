@@ -26,8 +26,7 @@
     }
 
     //Guardar imágenes de los inmuebles
-    if($request->accion=='saveImagenInmueble'){     
-    print_r($request->foto);exit; 
+    if($request->accion=='saveImagenInmueble'){    
       require_once('services/Inmuebles.php');        
       $obj = new Inmuebles();       
       $obj->guardarImagenInmueble($request->id_property,$request->foto);

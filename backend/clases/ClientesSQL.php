@@ -701,8 +701,8 @@
             $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
 
             $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);   
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);   
 
             $autAPI   = new AutenticaAPI();
             $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
@@ -768,8 +768,8 @@
               $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
               $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />"; 
 
-              $emai = new NotificacionSNS(); 
-              $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+              //$emai = new NotificacionSNS(); 
+              //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
             }
             if($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5'){
 
@@ -800,8 +800,8 @@
             $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
 
             $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);   
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);   
 
             $autAPI   = new AutenticaAPI();
             $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
@@ -867,8 +867,8 @@
 
             $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
 
-            $emai = new NotificacionSNS(); 
-            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);  
+            //$emai = new NotificacionSNS(); 
+            //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);  
 
           }    
           else if(($datosCliente->id_tipo_notificacion=='2')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
@@ -883,8 +883,8 @@
 
             $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
 
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);            
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);            
 
           } 
           else if(($datosCliente->id_tipo_notificacion=='1')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
@@ -953,8 +953,8 @@
 
             $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
 
-            $emai = new NotificacionSNS(); 
-            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);     
+            //$emai = new NotificacionSNS(); 
+            //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);     
 
           }         
 
@@ -1024,8 +1024,8 @@
             $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
 
             $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);   
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);   
 
             $autAPI   = new AutenticaAPI();
             $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
@@ -1091,8 +1091,8 @@
               $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
               $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />"; 
 
-              $emai = new NotificacionSNS(); 
-              $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+              //$emai = new NotificacionSNS(); 
+              //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
             }
             if($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5'){
 
@@ -1121,8 +1121,8 @@
             $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
 
             $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);   
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);   
 
             $autAPI   = new AutenticaAPI();
             $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
@@ -1188,8 +1188,8 @@
 
             $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
 
-            $emai = new NotificacionSNS(); 
-            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+            //$emai = new NotificacionSNS(); 
+            //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
 
           }    
           else if(($datosCliente->id_tipo_notificacion=='2')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
@@ -1204,8 +1204,8 @@
 
             $message = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
 
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cel_asesor,$message);            
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cel_asesor,$message);            
 
           } 
           else if(($datosCliente->id_tipo_notificacion=='1')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
@@ -1271,8 +1271,8 @@
             
 
             $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $emai = new NotificacionSNS(); 
-            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);  
+            //$emai = new NotificacionSNS(); 
+            //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);  
 
           } 
 
@@ -1346,8 +1346,8 @@
             $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
 
             $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha actualizado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);   
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);   
 
             $autAPI   = new AutenticaAPI();
             $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
@@ -1413,8 +1413,8 @@
               $cuerpo_mensaje .= "Sistema Organizacional de Negocios Inmobiliarios Asistidos - SONIA<br />";
               $cuerpo_mensaje .= "Sistema de Informaci&oacute;n 100% hecho en Colombia.<br />"; 
 
-              $emai = new NotificacionSNS(); 
-              $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+              //$emai = new NotificacionSNS(); 
+              //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
             }
             if($datosCliente->id_tipo_notificacion=='4'||$datosCliente->id_tipo_notificacion=='5'){
 
@@ -1443,8 +1443,8 @@
             $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
 
             $message = 'Hola '.strtoupper($datosCliente->first_name).' '.strtoupper($datosCliente->last_name).'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);   
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);   
 
             $autAPI   = new AutenticaAPI();
             $datosAPI = $autAPI->retornarDatosAPI('wasi','usuarios_por_id');
@@ -1510,8 +1510,8 @@
 
             $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
 
-            $emai = new NotificacionSNS(); 
-            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+            //$emai = new NotificacionSNS(); 
+            //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
 
           }    
           else if(($datosCliente->id_tipo_notificacion=='2')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
@@ -1525,8 +1525,8 @@
             $inmobiliaria = $_SESSION['nombre_inmobiliaria'];
 
             $message = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $sms = new NotificacionSNS(); 
-            $sms->notificaSMS($cell_phone,$message);            
+            //$sms = new NotificacionSNS(); 
+            //$sms->notificaSMS($cell_phone,$message);            
 
           } 
           else if(($datosCliente->id_tipo_notificacion=='1')&&($datosCliente->id_client_type==1||$datosCliente->id_client_type==7)){
@@ -1594,8 +1594,8 @@
             
 
             $mensaje = 'Hola '.$datosCliente->first_name.' '.$datosCliente->last_name.'. '.$inmobiliaria.' ha registrado tu solicitud de compra de inmueble con numero '.$datosCliente->id_client.'. Mayor informacion: '.$cel_asesor;
-            $emai = new NotificacionSNS(); 
-            $emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
+            //$emai = new NotificacionSNS(); 
+            //$emai->notificaEmailClienteNuevo($email,$cuerpo_mensaje,$titulo);
 
           }      
 

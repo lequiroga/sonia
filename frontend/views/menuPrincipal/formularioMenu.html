@@ -194,6 +194,32 @@
 
   }
 
+  function showPositioneUpd(latitude,longitude) {    
+    
+    //document.getElementById("inmueble_latitud").value = latitude;
+    //document.getElementById("inmueble_longitud").value = longitude;
+
+    //var longitude='';
+    //var latitude = '';
+    //getLocation();
+  
+    var mapProp= {
+      center:new google.maps.LatLng(latitude,longitude),
+      zoom:15,
+    };
+
+    //document.getElementById("coords").value = "("+latitude+","+longitude+")";
+    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var marker=new google.maps.Marker({position:map.getCenter(), map:map, draggable:true});
+    google.maps.event.addListener(marker,'dragend',function(event) {
+      var position = this.getPosition().toString().replace(" ","").replace("(","").replace(")","");
+      var position_sep = position.split(",");          
+      document.getElementById("inmueble_latitud").value = position_sep[0];
+      document.getElementById("inmueble_longitud").value = position_sep[1];
+    });  
+
+  }
+
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2Y8qOk0181ZAS_WgGSK2RBK7heuK-T_E&callback=getLocation"></script>
 </html>

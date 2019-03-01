@@ -588,39 +588,92 @@ app.controller("siniController",
     }
 
     //Carga los datos de la lista de los inmuebles en el formulario de edición
-    $scope.cambiarInformacionInmueble = function(inmuebleRespuesta){
+    $scope.cambiarInformacionInmueble = function(inmuebleRespuesta){      
       
-      //console.log(inmuebleRespuesta);
       $scope.inmueble=[]; 
       $scope.consultarInmuebles = '0'; 
       $scope.consultarInmuebles1 = '0'; 
-         
+      $scope.inmueble.galerias = inmuebleRespuesta.galleries[0];
+      $scope.inmueble.link = inmuebleRespuesta.link;
+      if(inmuebleRespuesta.id_availability=='1')
+        $scope.inmueble.estado = {'id_estado':inmuebleRespuesta.id_availability,'nombre':'Disponible'};
+      else if(inmuebleRespuesta.id_availability=='2')
+        $scope.inmueble.estado = {'id_estado':inmuebleRespuesta.id_availability,'nombre':'Vendido'};
+      else if(inmuebleRespuesta.id_availability=='3')
+        $scope.inmueble.estado = {'id_estado':inmuebleRespuesta.id_availability,'nombre':'Alquilado'};
+      
+      $scope.inmueble.status = inmuebleRespuesta.id_status_on_page;
+      
+      //console.log($scope.inmueble.galerias);   
       /*$scope.inmuebleGestion.direccion='3';
       $scope.inmueble.id_property='3';*/
       $scope.inmueble.ID=inmuebleRespuesta.id_property;
+      $scope.inmueble.titulo=inmuebleRespuesta.title;
+      $scope.inmueble.precio=parseFloat(inmuebleRespuesta.sale_price);
+      $scope.inmueble.valor_administracion=parseFloat(inmuebleRespuesta.maintenance_fee);
+      $scope.inmueble.habitaciones=parseFloat(inmuebleRespuesta.bedrooms);
+      $scope.inmueble.banos=parseFloat(inmuebleRespuesta.bathrooms);
+      $scope.inmueble.parqueadero=parseFloat(inmuebleRespuesta.garages);
+      $scope.inmueble.piso=parseFloat(inmuebleRespuesta.floor);
+      $scope.inmueble.area=parseFloat(inmuebleRespuesta.area);
+      $scope.inmueble.observaciones=inmuebleRespuesta.observations;
+      $scope.inmueble.comentario=inmuebleRespuesta.comment;
+      $scope.inmueble.referencia=inmuebleRespuesta.reference;
+      $scope.inmueble.condicion=inmuebleRespuesta.id_property_condition;
       $scope.inmueble.id_property=inmuebleRespuesta.id_property;
-      $scope.inmueble.direccion=inmuebleRespuesta.address;      
+      $scope.inmueble.direccion=inmuebleRespuesta.address;  
+      $scope.getPaises();    
       $scope.inmueble.codigoPais={'id_pais':inmuebleRespuesta.id_country,'name':inmuebleRespuesta.country_label};
+      $scope.getDepartamentosCliente(inmuebleRespuesta.id_country);
       $scope.inmueble.codigoDepartamento={'id_departamento':inmuebleRespuesta.id_region,'name':inmuebleRespuesta.region_label};
+      $scope.getCiudadesCliente(inmuebleRespuesta.id_region);
       $scope.inmueble.codigoCiudad={'id_ciudad':inmuebleRespuesta.id_city,'name':inmuebleRespuesta.city_label};
-      $scope.inmueble.codigoSector={'id_sector':inmuebleRespuesta.id_zone,'name':inmuebleRespuesta.zone_label};
-      $scope.inmueble.codigoZona={'id_zona':inmuebleRespuesta.id_location,'name':inmuebleRespuesta.location_label};
+      $scope.inmueble.tipoInmueble={'id_tipo_inmueble':inmuebleRespuesta.id_property_type,'name':inmuebleRespuesta.property_type_label};
+      if(inmuebleRespuesta.id_city=='132'||inmuebleRespuesta.id_city=='794'){
+        $scope.getZonasSectores($scope.inmueble.codigoCiudad);
+        if(inmuebleRespuesta.id_city=='132'){          
+          if(inmuebleRespuesta.id_zone!='0'){
+            $scope.inmueble.codigoSector={'id_sector':inmuebleRespuesta.id_zone,'name':inmuebleRespuesta.zone_label};
+          }
+          else{
+            $scope.inmueble.codigoSector=undefined; 
+          }
+        }
+        else{
+          if(inmuebleRespuesta.id_location!='0'){
+            $scope.inmueble.codigoZona={'id_zona':inmuebleRespuesta.id_location,'name':inmuebleRespuesta.location_label};
+          }
+          else{
+            $scope.inmueble.codigoZona=undefined; 
+          }
+        }  
+      }
+      if(!isNaN(inmuebleRespuesta.stratum)&&inmuebleRespuesta.stratum>0){
+        $scope.inmueble.codigoEstrato={'codigo':inmuebleRespuesta.stratum,'nombre':inmuebleRespuesta.stratum};
+      }
+      //$scope.inmueble.codigoZona={'id_zona':inmuebleRespuesta.id_location,'name':inmuebleRespuesta.location_label};
       $scope.inmueble.moneda={};
       $scope.inmueble.moneda.id_moneda=inmuebleRespuesta.id_currency;
       $scope.inmueble.moneda.denominacion=inmuebleRespuesta.iso_currency+' - '+inmuebleRespuesta.name_currency;
+      
       $scope.showContent = '../inmuebles/formularioInmueble.html'; 
-      console.log($scope.inmuebleGestion);     
+      if(inmuebleRespuesta.id_publish_on_map=='3'){
+        $scope.inmueble.latitud=inmuebleRespuesta.latitude;
+        $scope.inmueble.longitud=inmuebleRespuesta.longitude;
+        //$scope.inmueble.localizacion=true;
+        //showPositioneUpd(inmuebleRespuesta.latitude,inmuebleRespuesta.longitude);
+      }
+
     }
 
-    $scope.cargarImagenesInmueble = function(id_property){           
-
+    $scope.cargarImagenesInmueble = function(id_property){
       //$scope.seleccionarImagenInmueble('1');
       // Debes proveer un controlador y una plantilla.
       ModalService.showModal({
         templateUrl: '../inmuebles/formularioModalCargarImgInmueble.html',
         controller: "ContrladorModalCargaImagenesInmueble",
         inputs: {
-          id_property: id_property            
+          id_property: id_property             
         }
       }).then(function(modal) {
         modal.close.then(function(result) {
@@ -868,6 +921,17 @@ app.controller("siniController",
         document.getElementById("inmueble_latitud").value = "";
         document.getElementById("inmueble_longitud").value = "";
       }
+      
+    }
+
+    //Función invocada desde el switche de inmuebles para obtener la localización ya dada
+    $scope.obtenerLocationDada = function(){
+      if($scope.inmueble.localizacion){ 
+        var latitud=document.getElementById("inmueble_latitud").value;  
+        var longitud=document.getElementById("inmueble_longitud").value; 
+        //console.log(latitud);    
+        showPositioneUpd(latitud,longitud);           
+      }     
       
     }
 
@@ -1926,7 +1990,7 @@ app.controller("siniController",
       });
     }
 
-    $scope.getZonasSectores = function(codigoCiudad){  
+    $scope.getZonasSectores = function(codigoCiudad){    
       $scope.ids_zonas=null; 
       $scope.ids_sectores=null;	
       $scope.clasificacionBarrios.codigoBarrio = undefined;
@@ -3565,15 +3629,20 @@ app.controller('ContrladorModalRequerimientoCliente', function($scope, $http, cl
 
 });
 
-app.controller('ContrladorModalCargaImagenesInmueble', function($scope, close, id_property, $http) {  
+app.controller('ContrladorModalCargaImagenesInmueble', function($scope, $http, close, id_property) {  
   //$scope.galeriaActiva = []; 
   $scope.endpoint = "http://localhost/sonia/backend/controllers/"; 
-  //$scope.carga_imagenes_inmueble = [];
+  $scope.carga_imagenes_inmueble = [];
   $scope.imagenesInmueble = [];
-  $scope.imagenesInmueble.id_property = id_property;  
+  $scope.imagenesInmueble.id_property = id_property; 
+  $scope.lista_imagenes = [];
   $scope.result=[];
-  //console.log($scope.informacion_adicional_inmueble);
 
+  $http.post($scope.endpoint,{'accion':'consultarInmueblesID','id_property':id_property})
+  .then(function(response){     
+    $scope.lista_imagenes = response.data.inmueblesResp[0]['galleries'][0];
+    //console.log($scope.lista_imagenes);
+  }); 
 
   $scope.limpiarImagenesInmueble = function(){
     document.getElementById('fileInmueble').value = '';
@@ -3604,17 +3673,18 @@ app.controller('ContrladorModalCargaImagenesInmueble', function($scope, close, i
         foto.fileName = customJsonFile.fileName;
         foto.fileType = customJsonFile.fileType;        
 
-        $http.post($scope.endpoint,{'accion':'saveImagenInmueble','id_property':$scope.imagenesInmueble.id_property,'foto':foto})
+        $http.post($scope.endpoint,{'accion':'saveImagenInmueble','id_property':id_property,'foto':foto})
         .then(function(response){          
-          if(response.data.respuesta=='1'){ 
-            $scope.asesor.id_asesor=response.data.id_asesor;
-            $scope.asesor.empleado_activo=response.data.empleado_activo;
-            $scope.asesor.usuario_activo=response.data.usuario_activo;
-            $scope.asesor.foto_asesor=response.data.fotoAsesor;
+          if(response.data.respuesta=='1'){             
 
-            document.formularioAsesor.file.value = '';
-            var output = document.getElementById('output');      
-            output.style.display = "none";
+            document.getElementById('fileInmueble').value = '';
+            //input.files[0].name='';
+            var output = document.getElementById('imagen_inmueble_carga_show');
+            output.src = undefined;
+            output.style.display = "none"; 
+
+            $scope.imagenesInmueble = response.data.galeria;
+            $scope.lista_imagenes =$scope.imagenesInmueble;
 
             alert('Imagen almacenada exitosamente');                 
               

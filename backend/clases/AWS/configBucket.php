@@ -8,9 +8,9 @@
 
       $this->s3 = [
             's3' => [
-                'key' => 'AKIAIPNFEYQXARRVI7ZA',
-                'secret' => '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',
-                'bucket' => 'lquiroga1130612'
+                'key' => 'AKIAINIFSAL2RIPJGPOQ',
+                'secret' => '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',
+                'bucket' => 's0n14'
             ]		
           ];
 
